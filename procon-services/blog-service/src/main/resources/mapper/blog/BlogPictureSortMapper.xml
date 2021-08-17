@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.huangpuguang.blog.mapper.BlogPictureSortMapper">
+
+    <resultMap type="com.huangpuguang.blog.domain.BlogPictureSort" id="BlogPictureSortResult">
+        <result property="id"    column="id"    />
+        <result property="fileId" column="file_id"    />
+        <result property="name"    column="name"    />
+        <result property="status"    column="status"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="parentId" column="parent_id"    />
+        <result property="sort"    column="sort"    />
+        <result property="isShow"    column="is_show"    />
+    </resultMap>
+
+    <sql id="selectBlogPictureSortVo">
+        select id, file_id, name, status, create_time, update_time, parent_id, sort, is_show from blog_picture_sort
+    </sql>
+
+    <select id="selectBlogPictureSortList" parameterType="com.huangpuguang.blog.domain.BlogPictureSort" resultMap="BlogPictureSortResult">
+        <include refid="selectBlogPictureSortVo"/>
+        <where>
+            <if test="fileId != null  and fileId != ''">
+                and file_id = #{fileId}</if>
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="status != null "> and status = #{status}</if>
+            <if test="parentId != null  and parentId != ''">
+                and parent_id = #{parentId}</if>
+            <if test="sort != null "> and sort = #{sort}</if>
+            <if test="isShow != null "> and is_show = #{isShow}</if>
+        </where>
+    </select>
+
+    <select id="selectBlogPictureSortById" parameterType="Long" resultMap="BlogPictureSortResult">
+        <include refid="selectBlogPictureSortVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertBlogPictureSort" parameterType="com.huangpuguang.blog.domain.BlogPictureSort" useGeneratedKeys="true" keyProperty="id">
+        insert into blog_picture_sort
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="fileId != null">file_id,</if>
+            <if test="name != null">name,</if>
+            <if test="status != null">status,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="parentId != null">parent_id,</if>
+            <if test="sort != null">sort,</if>
+            <if test="isShow != null">is_show,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="fileId != null">#{fileId},</if>
+            <if test="name != null">#{name},</if>
+            <if test="status != null">#{status},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="parentId != null">#{parentId},</if>
+            <if test="sort != null">#{sort},</if>
+            <if test="isShow != null">#{isShow},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBlogPictureSort" parameterType="com.huangpuguang.blog.domain.BlogPictureSort">
+        update blog_picture_sort
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="fileId != null">file_id = #{fileId},</if>
+            <if test="name != null">name = #{name},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="parentId != null">parent_id = #{parentId},</if>
+            <if test="sort != null">sort = #{sort},</if>
+            <if test="isShow != null">is_show = #{isShow},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteBlogPictureSortById" parameterType="Long">
+        delete from blog_picture_sort where id = #{id}
+    </delete>
+
+    <delete id="deleteBlogPictureSortByIds" parameterType="String">
+        delete from blog_picture_sort where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

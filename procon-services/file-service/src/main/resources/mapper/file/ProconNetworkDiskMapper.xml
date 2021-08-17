@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.huangpuguang.file.mapper.ProconNetworkDiskMapper">
+
+    <resultMap type="com.huangpuguang.system.api.domain.ProconNetworkDisk" id="NetworkDiskResult">
+        <result property="id"    column="id"    />
+        <result property="adminId" column="admin_id"    />
+        <result property="extendName"    column="extend_name"    />
+        <result property="fileName"    column="file_name"    />
+        <result property="filePath"    column="file_path"    />
+        <result property="fileSize"    column="file_size"    />
+        <result property="isDir"    column="is_dir"    />
+        <result property="status"    column="status"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="localUrl"    column="local_url"    />
+        <result property="remoteUrl"    column="remote_url"    />
+        <result property="fileOldName"    column="file_old_name"    />
+    </resultMap>
+
+    <sql id="selectNetworkDiskVo">
+        select id, admin_id, extend_name, file_name, file_path, file_size, is_dir, status, create_time, update_time, local_url, remote_url, file_old_name from t_procon_network_disk
+    </sql>
+
+    <select id="selectNetworkDiskList" parameterType="com.huangpuguang.system.api.domain.ProconNetworkDisk" resultMap="NetworkDiskResult">
+        <include refid="selectNetworkDiskVo"/>
+        <where>
+            <if test="adminId != null  and adminId != ''">
+                and admin_id = #{adminId}</if>
+            <if test="extendName != null  and extendName != ''"> and extend_name like concat('%', #{extendName}, '%')</if>
+            <if test="fileName != null  and fileName != ''"> and file_name like concat('%', #{fileName}, '%')</if>
+            <if test="filePath != null  and filePath != ''"> and file_path = #{filePath}</if>
+            <if test="fileSize != null "> and file_size = #{fileSize}</if>
+            <if test="isDir != null "> and is_dir = #{isDir}</if>
+            <if test="status != null "> and status = #{status}</if>
+            <if test="localUrl != null  and localUrl != ''"> and local_url = #{localUrl}</if>
+            <if test="qiNiuUrl != null  and qiNiuUrl != ''"> and remote_url = #{qiNiuUrl}</if>
+            <if test="fileOldName != null  and fileOldName != ''"> and file_old_name like concat('%', #{fileOldName}, '%')</if>
+        </where>
+    </select>
+
+    <select id="selectNetworkDiskById" parameterType="Long" resultMap="NetworkDiskResult">
+        <include refid="selectNetworkDiskVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertNetworkDisk" parameterType="com.huangpuguang.system.api.domain.ProconNetworkDisk" useGeneratedKeys="true" keyProperty="id">
+        insert into t_procon_network_disk
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="adminId != null and adminId != ''">admin_id,</if>
+            <if test="extendName != null">extend_name,</if>
+            <if test="fileName != null">file_name,</if>
+            <if test="filePath != null">file_path,</if>
+            <if test="fileSize != null">file_size,</if>
+            <if test="isDir != null">is_dir,</if>
+            <if test="status != null">status,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="localUrl != null">local_url,</if>
+            <if test="qiNiuUrl != null">remote_url,</if>
+            <if test="fileOldName != null">file_old_name,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="adminId != null and adminId != ''">#{adminId},</if>
+            <if test="extendName != null">#{extendName},</if>
+            <if test="fileName != null">#{fileName},</if>
+            <if test="filePath != null">#{filePath},</if>
+            <if test="fileSize != null">#{fileSize},</if>
+            <if test="isDir != null">#{isDir},</if>
+            <if test="status != null">#{status},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="localUrl != null">#{localUrl},</if>
+            <if test="qiNiuUrl != null">#{qiNiuUrl},</if>
+            <if test="fileOldName != null">#{fileOldName},</if>
+         </trim>
+    </insert>
+
+    <update id="updateNetworkDisk" parameterType="com.huangpuguang.system.api.domain.ProconNetworkDisk">
+        update t_procon_network_disk
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="adminId != null and adminId != ''">admin_id = #{adminId},</if>
+            <if test="extendName != null">extend_name = #{extendName},</if>
+            <if test="fileName != null">file_name = #{fileName},</if>
+            <if test="filePath != null">file_path = #{filePath},</if>
+            <if test="fileSize != null">file_size = #{fileSize},</if>
+            <if test="isDir != null">is_dir = #{isDir},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="localUrl != null">local_url = #{localUrl},</if>
+            <if test="qiNiuUrl != null">remote_url = #{qiNiuUrl},</if>
+            <if test="fileOldName != null">file_old_name = #{fileOldName},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteNetworkDiskById" parameterType="Long">
+        delete from t_procon_network_disk where id = #{id}
+    </delete>
+
+    <delete id="deleteNetworkDiskByIds" parameterType="String">
+        delete from t_procon_network_disk where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

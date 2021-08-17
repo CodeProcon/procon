@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.huangpuguang.file.mapper.ProconFileSortMapper">
+
+    <resultMap type="com.huangpuguang.system.api.domain.ProconFileSort" id="FileSortResult">
+        <result property="id"    column="id"    />
+        <result property="projectName"    column="project_name"    />
+        <result property="sortName"    column="sort_name"    />
+        <result property="url"    column="url"    />
+        <result property="status"    column="status"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectFileSortVo">
+        select id, project_name, sort_name, url, status, create_time, update_time from t_procon_file_sort
+    </sql>
+
+    <select id="selectFileSortList" parameterType="com.huangpuguang.system.api.domain.ProconFileSort" resultMap="FileSortResult">
+        <include refid="selectFileSortVo"/>
+        <where>
+            <if test="projectName != null  and projectName != ''"> and project_name like concat('%', #{projectName}, '%')</if>
+            <if test="sortName != null  and sortName != ''"> and sort_name like concat('%', #{sortName}, '%')</if>
+            <if test="url != null  and url != ''"> and url = #{url}</if>
+            <if test="status != null "> and status = #{status}</if>
+        </where>
+    </select>
+
+    <select id="selectFileSortById" parameterType="Long" resultMap="FileSortResult">
+        <include refid="selectFileSortVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertFileSort" parameterType="com.huangpuguang.system.api.domain.ProconFileSort" useGeneratedKeys="true" keyProperty="id">
+        insert into t_procon_file_sort
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="projectName != null">project_name,</if>
+            <if test="sortName != null">sort_name,</if>
+            <if test="url != null">url,</if>
+            <if test="status != null">status,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="projectName != null">#{projectName},</if>
+            <if test="sortName != null">#{sortName},</if>
+            <if test="url != null">#{url},</if>
+            <if test="status != null">#{status},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateFileSort" parameterType="com.huangpuguang.system.api.domain.ProconFileSort">
+        update t_procon_file_sort
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="projectName != null">project_name = #{projectName},</if>
+            <if test="sortName != null">sort_name = #{sortName},</if>
+            <if test="url != null">url = #{url},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteFileSortById" parameterType="Long">
+        delete from t_procon_file_sort where id = #{id}
+    </delete>
+
+    <delete id="deleteFileSortByIds" parameterType="String">
+        delete from t_procon_file_sort where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

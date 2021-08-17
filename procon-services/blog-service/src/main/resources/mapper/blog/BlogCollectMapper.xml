@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.huangpuguang.blog.mapper.BlogCollectMapper">
+
+    <resultMap type="com.huangpuguang.blog.domain.BlogCollect" id="BlogCollectResult">
+        <result property="id"    column="id"    />
+        <result property="userId" column="user_id"    />
+        <result property="blogId" column="blog_id"    />
+        <result property="status"    column="status"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectBlogCollectVo">
+        select id, user_id, blog_id, status, create_time, update_time from blog_collect
+    </sql>
+
+    <select id="selectBlogCollectList" parameterType="com.huangpuguang.blog.domain.BlogCollect" resultMap="BlogCollectResult">
+        <include refid="selectBlogCollectVo"/>
+        <where>
+            <if test="userId != null  and userId != ''">
+                and user_id = #{userId}</if>
+            <if test="blogId != null  and blogId != ''">
+                and blog_id = #{blogId}</if>
+            <if test="status != null "> and status = #{status}</if>
+        </where>
+    </select>
+
+    <select id="selectBlogCollectById" parameterType="Long" resultMap="BlogCollectResult">
+        <include refid="selectBlogCollectVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertBlogCollect" parameterType="com.huangpuguang.blog.domain.BlogCollect" useGeneratedKeys="true" keyProperty="id">
+        insert into blog_collect
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null and userId != ''">user_id,</if>
+            <if test="blogId != null and blogId != ''">blog_id,</if>
+            <if test="status != null">status,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId != null and userId != ''">#{userId},</if>
+            <if test="blogId != null and blogId != ''">#{blogId},</if>
+            <if test="status != null">#{status},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBlogCollect" parameterType="com.huangpuguang.blog.domain.BlogCollect">
+        update blog_collect
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userId != null and userId != ''">user_id = #{userId},</if>
+            <if test="blogId != null and blogId != ''">blog_id = #{blogId},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteBlogCollectById" parameterType="Long">
+        delete from blog_collect where id = #{id}
+    </delete>
+
+    <delete id="deleteBlogCollectByIds" parameterType="String">
+        delete from blog_collect where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

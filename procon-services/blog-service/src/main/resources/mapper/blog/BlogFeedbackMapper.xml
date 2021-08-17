@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.huangpuguang.blog.mapper.BlogFeedbackMapper">
+
+    <resultMap type="com.huangpuguang.blog.domain.BlogFeedback" id="BlogFeedbackResult">
+        <result property="id"    column="id"    />
+        <result property="userId" column="user_id"    />
+        <result property="content"    column="content"    />
+        <result property="status"    column="status"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="title"    column="title"    />
+        <result property="feedbackStatus"    column="feedback_status"    />
+        <result property="reply"    column="reply"    />
+        <result property="adminId" column="admin_id"    />
+    </resultMap>
+
+    <sql id="selectBlogFeedbackVo">
+        select id, user_id, content, status, create_time, update_time, title, feedback_status, reply, admin_id from blog_feedback
+    </sql>
+
+    <select id="selectBlogFeedbackList" parameterType="com.huangpuguang.blog.domain.BlogFeedback" resultMap="BlogFeedbackResult">
+        <include refid="selectBlogFeedbackVo"/>
+        <where>
+            <if test="userId != null  and userId != ''">
+                and user_id = #{userId}</if>
+            <if test="content != null  and content != ''"> and content = #{content}</if>
+            <if test="status != null "> and status = #{status}</if>
+            <if test="title != null  and title != ''"> and title = #{title}</if>
+            <if test="feedbackStatus != null "> and feedback_status = #{feedbackStatus}</if>
+            <if test="reply != null  and reply != ''"> and reply = #{reply}</if>
+            <if test="adminId != null  and adminId != ''">
+                and admin_id = #{adminId}</if>
+        </where>
+    </select>
+
+    <select id="selectBlogFeedbackById" parameterType="Long" resultMap="BlogFeedbackResult">
+        <include refid="selectBlogFeedbackVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertBlogFeedback" parameterType="com.huangpuguang.blog.domain.BlogFeedback" useGeneratedKeys="true" keyProperty="id">
+        insert into blog_feedback
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null and userId != ''">user_id,</if>
+            <if test="content != null">content,</if>
+            <if test="status != null">status,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="title != null">title,</if>
+            <if test="feedbackStatus != null">feedback_status,</if>
+            <if test="reply != null">reply,</if>
+            <if test="adminId != null">admin_id,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId != null and userId != ''">#{userId},</if>
+            <if test="content != null">#{content},</if>
+            <if test="status != null">#{status},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="title != null">#{title},</if>
+            <if test="feedbackStatus != null">#{feedbackStatus},</if>
+            <if test="reply != null">#{reply},</if>
+            <if test="adminId != null">#{adminId},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBlogFeedback" parameterType="com.huangpuguang.blog.domain.BlogFeedback">
+        update blog_feedback
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userId != null and userId != ''">user_id = #{userId},</if>
+            <if test="content != null">content = #{content},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="title != null">title = #{title},</if>
+            <if test="feedbackStatus != null">feedback_status = #{feedbackStatus},</if>
+            <if test="reply != null">reply = #{reply},</if>
+            <if test="adminId != null">admin_id = #{adminId},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteBlogFeedbackById" parameterType="Long">
+        delete from blog_feedback where id = #{id}
+    </delete>
+
+    <delete id="deleteBlogFeedbackByIds" parameterType="String">
+        delete from blog_feedback where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.huangpuguang.blog.mapper.BlogCommentMapper">
+
+    <resultMap type="com.huangpuguang.blog.domain.BlogComment" id="BlogCommentResult">
+        <result property="id"    column="id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="toId" column="to_id"    />
+        <result property="toUserId" column="to_user_id"    />
+        <result property="content"    column="content"    />
+        <result property="blogId" column="blog_id"    />
+        <result property="status"    column="status"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="source"    column="source"    />
+        <result property="commentType" column="comment_type"    />
+        <result property="firstCommentId" column="first_comment_id"    />
+    </resultMap>
+
+    <sql id="selectBlogCommentVo">
+        select id, user_id, to_id, to_user_id, content, blog_id, status, create_time, update_time, source, comment_type, first_comment_id from blog_comment
+    </sql>
+
+    <select id="selectBlogCommentList" parameterType="com.huangpuguang.blog.domain.BlogComment" resultMap="BlogCommentResult">
+        <include refid="selectBlogCommentVo"/>
+        <where>
+            <if test="userId != null  and userId != ''"> and user_id = #{userId}</if>
+            <if test="toId != null  and toId != ''">
+                and to_id = #{toId}</if>
+            <if test="toUserId != null  and toUserId != ''">
+                and to_user_id = #{toUserId}</if>
+            <if test="content != null  and content != ''"> and content = #{content}</if>
+            <if test="blogId != null  and blogId != ''">
+                and blog_id = #{blogId}</if>
+            <if test="status != null "> and status = #{status}</if>
+            <if test="source != null  and source != ''"> and source = #{source}</if>
+            <if test="commentType != null">
+                and comment_type = #{commentType}</if>
+            <if test="firstCommentId != null  and firstCommentId != ''">
+                and first_comment_id = #{firstCommentId}</if>
+        </where>
+    </select>
+
+    <select id="selectBlogCommentById" parameterType="Long" resultMap="BlogCommentResult">
+        <include refid="selectBlogCommentVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertBlogComment" parameterType="com.huangpuguang.blog.domain.BlogComment" useGeneratedKeys="true" keyProperty="id">
+        insert into blog_comment
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null">user_id,</if>
+            <if test="toId != null">to_id,</if>
+            <if test="toUserId != null">to_user_id,</if>
+            <if test="content != null">content,</if>
+            <if test="blogId != null">blog_id,</if>
+            <if test="status != null">status,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="source != null and source != ''">source,</if>
+            <if test="commentType != null">comment_type,</if>
+            <if test="firstCommentId != null">first_comment_id,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId != null">#{userId},</if>
+            <if test="toId != null">#{toId},</if>
+            <if test="toUserId != null">#{toUserId},</if>
+            <if test="content != null">#{content},</if>
+            <if test="blogId != null">#{blogId},</if>
+            <if test="status != null">#{status},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="source != null and source != ''">#{source},</if>
+            <if test="commentType != null">#{commentType},</if>
+            <if test="firstCommentId != null">#{firstCommentId},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBlogComment" parameterType="com.huangpuguang.blog.domain.BlogComment">
+        update blog_comment
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="toId != null">to_id = #{toId},</if>
+            <if test="toUserId != null">to_user_id = #{toUserId},</if>
+            <if test="content != null">content = #{content},</if>
+            <if test="blogId != null">blog_id = #{blogId},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="source != null and source != ''">source = #{source},</if>
+            <if test="commentType != null">comment_type = #{commentType},</if>
+            <if test="firstCommentId != null">first_comment_id = #{firstCommentId},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteBlogCommentById" parameterType="Long">
+        delete from blog_comment where id = #{id}
+    </delete>
+
+    <delete id="deleteBlogCommentByIds" parameterType="String">
+        delete from blog_comment where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="selectFirstBlogCommentList" resultMap="BlogCommentResult">
+
+        <include refid="selectBlogCommentVo"/>
+        <where>
+            <if test="userId != null  and userId != ''"> and user_id = #{userId}</if>
+            <if test="toId != null  and toId != ''">
+                and to_id = #{toId}</if>
+            <if test="toUserId != null  and toUserId != ''">
+                and to_user_id = #{toUserId}</if>
+            <if test="content != null  and content != ''"> and content = #{content}</if>
+            <if test="blogId != null  and blogId != ''">
+                and blog_id = #{blogId}</if>
+            <if test="status != null "> and status = #{status}</if>
+            <if test="source != null  and source != ''"> and source = #{source}</if>
+            <if test="commentType != null">
+                and comment_type = #{commentType}</if>
+
+            <if test="firstCommentId != null  and firstCommentId != ''">
+                and first_comment_id = #{firstCommentId}</if>
+            <if test="firstCommentFlag == 0"> and to_id is null </if>
+            <if test="firstCommentFlag == 1"> and to_id is not null </if>
+        </where>
+    </select>
+
+
+    <select id="selectUserCommentList" resultMap="BlogCommentResult">
+
+        <include refid="selectBlogCommentVo"/>
+        <where>
+            <if test="userId != null  and userId != ''"> and user_id = #{userId}</if>
+
+            <if test="toUserId != null  and toUserId != ''">
+                or to_user_id = #{toUserId}</if>
+
+        </where>
+    </select>
+</mapper>

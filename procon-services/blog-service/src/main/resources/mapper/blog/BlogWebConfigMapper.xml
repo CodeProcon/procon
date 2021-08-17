@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.huangpuguang.blog.mapper.BlogWebConfigMapper">
+
+    <resultMap type="com.huangpuguang.blog.domain.BlogWebConfig" id="BlogWebConfigResult">
+        <result property="id"    column="id"    />
+        <result property="logo"    column="logo"    />
+        <result property="name"    column="name"    />
+        <result property="summary"    column="summary"    />
+        <result property="keyword"    column="keyword"    />
+        <result property="author"    column="author"    />
+        <result property="recordNum"    column="record_num"    />
+        <result property="startComment"    column="start_comment"    />
+        <result property="status"    column="status"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="title"    column="title"    />
+        <result property="aliPay"    column="ali_pay"    />
+        <result property="weixinPay"    column="weixin_pay"    />
+        <result property="github"    column="github"    />
+        <result property="gitee"    column="gitee"    />
+        <result property="qqNumber"    column="qq_number"    />
+        <result property="qqGroup"    column="qq_group"    />
+        <result property="weChat"    column="we_chat"    />
+        <result property="email"    column="email"    />
+        <result property="showList"    column="show_list"    />
+        <result property="loginTypeList"    column="login_type_list"    />
+        <result property="configType"    column="config_type"    />
+    </resultMap>
+
+    <sql id="selectBlogWebConfigVo">
+        select id, logo, name, config_type, summary, keyword, author, record_num, start_comment, status, create_time, update_time, title, ali_pay, weixin_pay, github, gitee, qq_number, qq_group, we_chat, email, show_list, login_type_list from blog_web_config
+    </sql>
+
+    <select id="selectBlogWebConfigList" parameterType="com.huangpuguang.blog.domain.BlogWebConfig" resultMap="BlogWebConfigResult">
+        <include refid="selectBlogWebConfigVo"/>
+        <where>
+            <if test="logo != null  and logo != ''"> and logo = #{logo}</if>
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="summary != null  and summary != ''"> and summary = #{summary}</if>
+            <if test="keyword != null  and keyword != ''"> and keyword = #{keyword}</if>
+            <if test="author != null  and author != ''"> and author = #{author}</if>
+            <if test="recordNum != null  and recordNum != ''"> and record_num = #{recordNum}</if>
+            <if test="startComment != null  and startComment != ''"> and start_comment = #{startComment}</if>
+            <if test="status != null "> and status = #{status}</if>
+            <if test="title != null  and title != ''"> and title = #{title}</if>
+            <if test="aliPay != null  and aliPay != ''"> and ali_pay = #{aliPay}</if>
+            <if test="weixinPay != null  and weixinPay != ''"> and weixin_pay = #{weixinPay}</if>
+            <if test="github != null  and github != ''"> and github = #{github}</if>
+            <if test="gitee != null  and gitee != ''"> and gitee = #{gitee}</if>
+            <if test="qqNumber != null  and qqNumber != ''"> and qq_number = #{qqNumber}</if>
+            <if test="qqGroup != null  and qqGroup != ''"> and qq_group = #{qqGroup}</if>
+            <if test="weChat != null  and weChat != ''"> and we_chat = #{weChat}</if>
+            <if test="email != null  and email != ''"> and email = #{email}</if>
+            <if test="configType != null  and configType != ''"> and config_type = #{configType}</if>
+            <if test="showList != null  and showList != ''"> and show_list = #{showList}</if>
+            <if test="loginTypeList != null  and loginTypeList != ''"> and login_type_list = #{loginTypeList}</if>
+        </where>
+    </select>
+
+    <select id="selectBlogWebConfigById" parameterType="Long" resultMap="BlogWebConfigResult">
+        <include refid="selectBlogWebConfigVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertBlogWebConfig" parameterType="com.huangpuguang.blog.domain.BlogWebConfig" useGeneratedKeys="true" keyProperty="id">
+        insert into blog_web_config
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="logo != null and logo != ''">logo,</if>
+            <if test="name != null and name != ''">name,</if>
+            <if test="summary != null and summary != ''">summary,</if>
+            <if test="keyword != null and keyword != ''">keyword,</if>
+            <if test="author != null and author != ''">author,</if>
+            <if test="recordNum != null and recordNum != ''">record_num,</if>
+            <if test="startComment != null">start_comment,</if>
+            <if test="status != null">status,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="title != null">title,</if>
+            <if test="aliPay != null">ali_pay,</if>
+            <if test="weixinPay != null">weixin_pay,</if>
+            <if test="github != null">github,</if>
+            <if test="gitee != null">gitee,</if>
+            <if test="qqNumber != null">qq_number,</if>
+            <if test="qqGroup != null">qq_group,</if>
+            <if test="weChat != null">we_chat,</if>
+            <if test="email != null">email,</if>
+            <if test="configType != null">config_type,</if>
+            <if test="showList != null">show_list,</if>
+            <if test="loginTypeList != null">login_type_list,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="logo != null and logo != ''">#{logo},</if>
+            <if test="name != null and name != ''">#{name},</if>
+            <if test="summary != null and summary != ''">#{summary},</if>
+            <if test="keyword != null and keyword != ''">#{keyword},</if>
+            <if test="author != null and author != ''">#{author},</if>
+            <if test="recordNum != null and recordNum != ''">#{recordNum},</if>
+            <if test="startComment != null">#{startComment},</if>
+            <if test="status != null">#{status},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="title != null">#{title},</if>
+            <if test="aliPay != null">#{aliPay},</if>
+            <if test="weixinPay != null">#{weixinPay},</if>
+            <if test="github != null">#{github},</if>
+            <if test="gitee != null">#{gitee},</if>
+            <if test="qqNumber != null">#{qqNumber},</if>
+            <if test="qqGroup != null">#{qqGroup},</if>
+            <if test="weChat != null">#{weChat},</if>
+            <if test="email != null">#{email},</if>
+            <if test="configType != null">#{configType},</if>
+            <if test="showList != null">#{showList},</if>
+            <if test="loginTypeList != null">#{loginTypeList},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBlogWebConfig" parameterType="com.huangpuguang.blog.domain.BlogWebConfig">
+        update blog_web_config
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="logo != null and logo != ''">logo = #{logo},</if>
+            <if test="name != null and name != ''">name = #{name},</if>
+            <if test="summary != null and summary != ''">summary = #{summary},</if>
+            <if test="keyword != null and keyword != ''">keyword = #{keyword},</if>
+            <if test="author != null and author != ''">author = #{author},</if>
+            <if test="recordNum != null and recordNum != ''">record_num = #{recordNum},</if>
+            <if test="startComment != null">start_comment = #{startComment},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="title != null">title = #{title},</if>
+            <if test="aliPay != null">ali_pay = #{aliPay},</if>
+            <if test="weixinPay != null">weixin_pay = #{weixinPay},</if>
+            <if test="github != null">github = #{github},</if>
+            <if test="gitee != null">gitee = #{gitee},</if>
+            <if test="qqNumber != null">qq_number = #{qqNumber},</if>
+            <if test="qqGroup != null">qq_group = #{qqGroup},</if>
+            <if test="weChat != null">we_chat = #{weChat},</if>
+            <if test="email != null">email = #{email},</if>
+            <if test="configType != null"> config_type = #{configType},</if>
+            <if test="showList != null">show_list = #{showList},</if>
+            <if test="loginTypeList != null">login_type_list = #{loginTypeList},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteBlogWebConfigById" parameterType="Long">
+        delete from blog_web_config where id = #{id}
+    </delete>
+
+    <delete id="deleteBlogWebConfigByIds" parameterType="String">
+        delete from blog_web_config where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

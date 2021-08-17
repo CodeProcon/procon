@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.huangpuguang.blog.mapper.BlogContentMapper">
+
+    <resultMap type="com.huangpuguang.blog.domain.BlogContent" id="BlogContentResult">
+        <result property="id"    column="id"    />
+        <result property="title"    column="title"    />
+        <result property="summary"    column="summary"    />
+        <result property="content"    column="content"    />
+        <result property="tagId" column="tag_id"    />
+        <result property="clickCount"    column="click_count"    />
+        <result property="collectCount"    column="collect_count"    />
+        <result property="fileId" column="file_id"    />
+        <result property="status"    column="status"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="adminId" column="admin_id"    />
+        <result property="isOriginal"    column="is_original"    />
+        <result property="author"    column="author"    />
+        <result property="articlesPart"    column="articles_part"    />
+        <result property="blogSortId" column="blog_sort_id"    />
+        <result property="level"    column="level"    />
+        <result property="isPublish"    column="is_publish"    />
+        <result property="sort"    column="sort"    />
+        <result property="startComment"    column="start_comment"    />
+    </resultMap>
+
+    <sql id="selectBlogContentVo">
+        select id, title, summary, content, tag_id, click_count, collect_count, file_id, status, create_time, update_time, admin_id, is_original, author, articles_part, blog_sort_id, level, is_publish, sort, start_comment from blog_content
+    </sql>
+
+    <select id="selectBlogContentList" parameterType="com.huangpuguang.blog.domain.BlogContent" resultMap="BlogContentResult">
+        <include refid="selectBlogContentVo"/>
+        <where>
+            <if test="title != null  and title != ''"> and title = #{title}</if>
+            <if test="summary != null  and summary != ''"> and summary = #{summary}</if>
+            <if test="content != null  and content != ''"> and content = #{content}</if>
+            <if test="tagId != null  and tagId != ''">
+                and tag_id = #{tagId}</if>
+            <if test="clickCount != null "> and click_count = #{clickCount}</if>
+            <if test="collectCount != null "> and collect_count = #{collectCount}</if>
+            <if test="fileId != null  and fileId != ''">
+                and file_id = #{fileId}</if>
+            <if test="status != null "> and status = #{status}</if>
+            <if test="adminId != null  and adminId != ''">
+                and admin_id = #{adminId}</if>
+            <if test="isOriginal != null  and isOriginal != ''"> and is_original = #{isOriginal}</if>
+            <if test="author != null  and author != ''"> and author = #{author}</if>
+            <if test="articlesPart != null  and articlesPart != ''"> and articles_part = #{articlesPart}</if>
+            <if test="blogSortId != null  and blogSortId != ''">
+                and blog_sort_id = #{blogSortId}</if>
+            <if test="level != null "> and level = #{level}</if>
+            <if test="isPublish != null  and isPublish != ''"> and is_publish = #{isPublish}</if>
+            <if test="sort != null "> and sort = #{sort}</if>
+            <if test="startComment != null "> and start_comment = #{startComment}</if>
+        </where>
+    </select>
+
+    <select id="selectBlogContentById" parameterType="Long" resultMap="BlogContentResult">
+        <include refid="selectBlogContentVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertBlogContent" parameterType="com.huangpuguang.blog.domain.BlogContent" useGeneratedKeys="true" keyProperty="id">
+        insert into blog_content
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="title != null">title,</if>
+            <if test="summary != null">summary,</if>
+            <if test="content != null">content,</if>
+            <if test="tagId != null">tag_id,</if>
+            <if test="clickCount != null">click_count,</if>
+            <if test="collectCount != null">collect_count,</if>
+            <if test="fileId != null">file_id,</if>
+            <if test="status != null">status,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="adminId != null">admin_id,</if>
+            <if test="isOriginal != null">is_original,</if>
+            <if test="author != null">author,</if>
+            <if test="articlesPart != null">articles_part,</if>
+            <if test="blogSortId != null">blog_sort_id,</if>
+            <if test="level != null">level,</if>
+            <if test="isPublish != null">is_publish,</if>
+            <if test="sort != null">sort,</if>
+            <if test="startComment != null">start_comment,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="title != null">#{title},</if>
+            <if test="summary != null">#{summary},</if>
+            <if test="content != null">#{content},</if>
+            <if test="tagId != null">#{tagId},</if>
+            <if test="clickCount != null">#{clickCount},</if>
+            <if test="collectCount != null">#{collectCount},</if>
+            <if test="fileId != null">#{fileId},</if>
+            <if test="status != null">#{status},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="adminId != null">#{adminId},</if>
+            <if test="isOriginal != null">#{isOriginal},</if>
+            <if test="author != null">#{author},</if>
+            <if test="articlesPart != null">#{articlesPart},</if>
+            <if test="blogSortId != null">#{blogSortId},</if>
+            <if test="level != null">#{level},</if>
+            <if test="isPublish != null">#{isPublish},</if>
+            <if test="sort != null">#{sort},</if>
+            <if test="startComment != null">#{startComment},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBlogContent" parameterType="com.huangpuguang.blog.domain.BlogContent">
+        update blog_content
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="title != null">title = #{title},</if>
+            <if test="summary != null">summary = #{summary},</if>
+            <if test="content != null">content = #{content},</if>
+            <if test="tagId != null">tag_id = #{tagId},</if>
+            <if test="clickCount != null">click_count = #{clickCount},</if>
+            <if test="collectCount != null">collect_count = #{collectCount},</if>
+            <if test="fileId != null">file_id = #{fileId},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="adminId != null">admin_id = #{adminId},</if>
+            <if test="isOriginal != null">is_original = #{isOriginal},</if>
+            <if test="author != null">author = #{author},</if>
+            <if test="articlesPart != null">articles_part = #{articlesPart},</if>
+            <if test="blogSortId != null">blog_sort_id = #{blogSortId},</if>
+            <if test="level != null">level = #{level},</if>
+            <if test="isPublish != null">is_publish = #{isPublish},</if>
+            <if test="sort != null">sort = #{sort},</if>
+            <if test="startComment != null">start_comment = #{startComment},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+
+    <delete id="deleteBlogContentById" parameterType="Long">
+        delete from blog_content where id = #{id}
+    </delete>
+
+    <delete id="deleteBlogContentByIds" parameterType="String">
+        delete from blog_content where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="selectBlogContentByIds" parameterType="java.util.List" resultMap="BlogContentResult">
+        <include refid="selectBlogContentVo"/>
+        where id in
+        <foreach item="id" collection="list" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
+
+
+    <select id="selectBlogContentByTag" parameterType="String" resultMap="BlogContentResult">
+        <include refid="selectBlogContentVo"/>
+        where FIND_IN_SET(#{tagId},tag_id)
+
+    </select>
+
+
+
+
+</mapper>

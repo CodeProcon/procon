@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.huangpuguang.blog.mapper.BlogLinkMapper">
+
+    <resultMap type="com.huangpuguang.blog.domain.BlogLink" id="BlogLinkResult">
+        <result property="id"    column="id"    />
+        <result property="title"    column="title"    />
+        <result property="summary"    column="summary"    />
+        <result property="url"    column="url"    />
+        <result property="clickCount"    column="click_count"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="status"    column="status"    />
+        <result property="sort"    column="sort"    />
+        <result property="linkStatus"    column="link_status"    />
+        <result property="userId" column="user_id"    />
+        <result property="adminId" column="admin_id"    />
+    </resultMap>
+
+    <sql id="selectBlogLinkVo">
+        select id, title, summary, url, click_count, create_time, update_time, status, sort, link_status, user_id, admin_id from blog_link
+    </sql>
+
+    <select id="selectBlogLinkList" parameterType="com.huangpuguang.blog.domain.BlogLink" resultMap="BlogLinkResult">
+        <include refid="selectBlogLinkVo"/>
+        <where>
+            <if test="title != null  and title != ''"> and title = #{title}</if>
+            <if test="summary != null  and summary != ''"> and summary = #{summary}</if>
+            <if test="url != null  and url != ''"> and url = #{url}</if>
+            <if test="clickCount != null "> and click_count = #{clickCount}</if>
+            <if test="status != null "> and status = #{status}</if>
+            <if test="sort != null "> and sort = #{sort}</if>
+            <if test="linkStatus != null "> and link_status = #{linkStatus}</if>
+            <if test="userId != null  and userId != ''">
+                and user_id = #{userId}</if>
+            <if test="adminId != null  and adminId != ''">
+                and admin_id = #{adminId}</if>
+        </where>
+    </select>
+
+    <select id="selectBlogLinkById" parameterType="Long" resultMap="BlogLinkResult">
+        <include refid="selectBlogLinkVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertBlogLink" parameterType="com.huangpuguang.blog.domain.BlogLink" useGeneratedKeys="true" keyProperty="id">
+        insert into blog_link
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="title != null">title,</if>
+            <if test="summary != null">summary,</if>
+            <if test="url != null">url,</if>
+            <if test="clickCount != null">click_count,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="status != null">status,</if>
+            <if test="sort != null">sort,</if>
+            <if test="linkStatus != null">link_status,</if>
+            <if test="userId != null">user_id,</if>
+            <if test="adminId != null">admin_id,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="title != null">#{title},</if>
+            <if test="summary != null">#{summary},</if>
+            <if test="url != null">#{url},</if>
+            <if test="clickCount != null">#{clickCount},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="status != null">#{status},</if>
+            <if test="sort != null">#{sort},</if>
+            <if test="linkStatus != null">#{linkStatus},</if>
+            <if test="userId != null">#{userId},</if>
+            <if test="adminId != null">#{adminId},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBlogLink" parameterType="com.huangpuguang.blog.domain.BlogLink">
+        update blog_link
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="title != null">title = #{title},</if>
+            <if test="summary != null">summary = #{summary},</if>
+            <if test="url != null">url = #{url},</if>
+            <if test="clickCount != null">click_count = #{clickCount},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="sort != null">sort = #{sort},</if>
+            <if test="linkStatus != null">link_status = #{linkStatus},</if>
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="adminId != null">admin_id = #{adminId},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteBlogLinkById" parameterType="Long">
+        delete from blog_link where id = #{id}
+    </delete>
+
+    <delete id="deleteBlogLinkByIds" parameterType="String">
+        delete from blog_link where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

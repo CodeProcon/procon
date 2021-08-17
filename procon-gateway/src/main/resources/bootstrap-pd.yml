@@ -1,0 +1,36 @@
+spring:
+  cloud:
+    nacos:
+      discovery:
+        # 服务注册地址
+        server-addr: 127.0.0.1:8848
+        namespace: e4f9a9b5-1344-4b0c-a9a9-141e92703ce1
+        group: BLOG_GROUP
+      config:
+        # 配置中心地址
+        server-addr: 127.0.0.1:8848
+        namespace: e4f9a9b5-1344-4b0c-a9a9-141e92703ce1
+        group: BLOG_GROUP
+        # 配置文件格式
+        file-extension: yml
+        # 共享配置
+        shared-configs[0]:
+          data-id: application-${spring.profiles.active}.${spring.cloud.nacos.config.file-extension}
+          group: BLOG_GROUP   # 默认为DEFAULT_GROUP
+          refresh: true   # 是否动态刷新，默认为false
+    sentinel:
+      # 取消控制台懒加载
+      eager: true
+      transport:
+        # 控制台地址
+        dashboard: 127.0.0.1:8718
+      # nacos配置持久化
+      datasource:
+        ds1:
+          nacos:
+            server-addr: 127.0.0.1:8848
+            dataId: sentinel-procon-gateway
+            namespace: e4f9a9b5-1344-4b0c-a9a9-141e92703ce1
+            groupId: BLOG_GROUP
+            data-type: json
+            rule-type: flow

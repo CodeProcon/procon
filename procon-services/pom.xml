@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <groupId>com.huangpuguang</groupId>
+        <artifactId>procon</artifactId>
+        <version>2.5.0</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <modules>
+        <module>system-service</module>
+        <module>gen-service</module>
+        <module>job-service</module>
+        <module>monitor-service</module>
+        <module>file-service</module>
+        <module>blog-service</module>
+        <module>sms-service</module>
+        <module>pay-service</module>
+    </modules>
+
+    <artifactId>procon-services</artifactId>
+    <packaging>pom</packaging>
+
+    <description>
+        procon-services业务模块
+    </description>
+    <dependencies>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-all</artifactId>
+        </dependency>
+        <!-- Swagger UI -->
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger-ui</artifactId>
+        </dependency>
+        <!-- procon Common Swagger -->
+        <dependency>
+            <groupId>com.huangpuguang</groupId>
+            <artifactId>common-swagger</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
+        </dependency>
+    </dependencies>
+</project>
