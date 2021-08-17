@@ -1,20 +1,20 @@
 package com.huangpuguang.system.service.impl;
 
-import java.util.List;
-import javax.annotation.PostConstruct;
-
-import com.huangpuguang.system.api.domain.SysDictData;
-import com.huangpuguang.system.api.domain.SysDictType;
-import com.huangpuguang.system.service.SysDictTypeService;
-import com.huangpuguang.common.security.utils.DictUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import com.huangpuguang.common.core.constant.UserConstants;
 import com.huangpuguang.common.core.exception.CustomException;
 import com.huangpuguang.common.core.utils.StringUtils;
+import com.huangpuguang.common.security.utils.DictUtils;
+import com.huangpuguang.system.api.domain.SysDictData;
+import com.huangpuguang.system.api.domain.SysDictType;
 import com.huangpuguang.system.mapper.SysDictDataMapper;
 import com.huangpuguang.system.mapper.SysDictTypeMapper;
+import com.huangpuguang.system.service.SysDictTypeService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.annotation.PostConstruct;
+import java.util.List;
 
 /**
  * 字典 业务层处理
@@ -133,6 +133,7 @@ public class SysDictTypeServiceImpl implements SysDictTypeService
     /**
      * 加载字典缓存数据
      */
+    @Override
     public void loadingDictCache()
     {
         List<SysDictType> dictTypeList = dictTypeMapper.selectDictTypeAll();
@@ -146,6 +147,7 @@ public class SysDictTypeServiceImpl implements SysDictTypeService
     /**
      * 清空字典缓存数据
      */
+    @Override
     public void clearDictCache()
     {
         DictUtils.clearDictCache();
@@ -154,6 +156,7 @@ public class SysDictTypeServiceImpl implements SysDictTypeService
     /**
      * 重置字典缓存数据
      */
+    @Override
     public void resetDictCache()
     {
         clearDictCache();

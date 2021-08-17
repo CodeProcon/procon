@@ -1,12 +1,13 @@
 package com.huangpuguang.system.api.domain;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
 import com.huangpuguang.common.core.annotation.Excel;
 import com.huangpuguang.common.core.annotation.Excel.ColumnType;
 import com.huangpuguang.common.core.web.domain.BaseEntity;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 /**
  * 角色表 sys_role
@@ -204,6 +205,7 @@ public class SysRole extends BaseEntity
         this.deptIds = deptIds;
     }
 
+    @Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
             .append("roleId", getRoleId())

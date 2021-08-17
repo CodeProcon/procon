@@ -1,6 +1,6 @@
 ﻿/**
  * 通用js方法封装处理
- * Copyright (c) 2019 procon
+ * Copyright (c) 2019 Procon
  */
 
 const baseURL = process.env.VUE_APP_BASE_API
@@ -58,7 +58,7 @@ export function addDateRange(params, dateRange, propName) {
   var search = params;
   search.params = {};
   if (null != dateRange && '' != dateRange) {
-    if (typeof(propName) === "undefined") {
+    if (typeof (propName) === "undefined") {
       search.params["beginTime"] = dateRange[0];
       search.params["endTime"] = dateRange[1];
     } else {
@@ -183,12 +183,14 @@ export function tansParams(params) {
   for (const propName of Object.keys(params)) {
     const value = params[propName];
     var part = encodeURIComponent(propName) + "=";
-    if (value !== null && typeof(value) !== "undefined") {
+    if (value !== null && typeof (value) !== "undefined") {
       if (typeof value === 'object') {
         for (const key of Object.keys(value)) {
-          let params = propName + '[' + key + ']';
-          var subPart = encodeURIComponent(params) + "=";
-          result += subPart + encodeURIComponent(value[key]) + "&";
+          if (value[key] !== null && typeof (value[key]) !== 'undefined') {
+            let params = propName + '[' + key + ']';
+            var subPart = encodeURIComponent(params) + "=";
+            result += subPart + encodeURIComponent(value[key]) + "&";
+          }
         }
       } else {
         result += part + encodeURIComponent(value) + "&";
