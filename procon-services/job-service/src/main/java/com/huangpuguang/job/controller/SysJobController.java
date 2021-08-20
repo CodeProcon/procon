@@ -1,7 +1,5 @@
 package com.huangpuguang.job.controller;
 
-import com.huangpuguang.job.domain.SysJob;
-import com.huangpuguang.job.service.SysJobService;
 import com.huangpuguang.common.core.constant.Constants;
 import com.huangpuguang.common.core.exception.job.TaskException;
 import com.huangpuguang.common.core.utils.SecurityUtils;
@@ -13,6 +11,8 @@ import com.huangpuguang.common.core.web.page.TableDataInfo;
 import com.huangpuguang.common.log.annotation.Log;
 import com.huangpuguang.common.log.enums.BusinessType;
 import com.huangpuguang.common.security.annotation.PreAuthorize;
+import com.huangpuguang.job.domain.SysJob;
+import com.huangpuguang.job.service.SysJobService;
 import com.huangpuguang.job.util.CronUtils;
 import org.quartz.SchedulerException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -86,6 +86,10 @@ public class SysJobController extends BaseController
         {
             return error("新增任务'" + job.getJobName() + "'失败，目标字符串不允许'rmi://'调用");
         }
+        else if (StringUtils.containsIgnoreCase(job.getInvokeTarget(), Constants.LOOKUP_LDAP))
+        {
+            return error("新增任务'" + job.getJobName() + "'失败，目标字符串不允许'ldap://'调用");
+        }
         else if (StringUtils.containsAnyIgnoreCase(job.getInvokeTarget(), new String[] { Constants.HTTP, Constants.HTTPS }))
         {
             return error("新增任务'" + job.getJobName() + "'失败，目标字符串不允许'http(s)//'调用");
@@ -109,6 +113,10 @@ public class SysJobController extends BaseController
         else if (StringUtils.containsIgnoreCase(job.getInvokeTarget(), Constants.LOOKUP_RMI))
         {
             return error("修改任务'" + job.getJobName() + "'失败，目标字符串不允许'rmi://'调用");
+        }
+        else if (StringUtils.containsIgnoreCase(job.getInvokeTarget(), Constants.LOOKUP_LDAP))
+        {
+            return error("修改任务'" + job.getJobName() + "'失败，目标字符串不允许'ldap://'调用");
         }
         else if (StringUtils.containsAnyIgnoreCase(job.getInvokeTarget(), new String[] { Constants.HTTP, Constants.HTTPS }))
         {
