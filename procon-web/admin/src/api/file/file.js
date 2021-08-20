@@ -29,6 +29,14 @@ export function addFile(data) {
   })
 }
 
+export function saveFile(data) {
+  return request({
+    url: '/file/file/save',
+    method: 'post',
+    data: data
+  })
+}
+
 // 修改文件
 export function updateFile(data) {
   return request({

@@ -82,10 +82,11 @@ public class FileController extends BaseController
     @PostMapping("/add")
     public AjaxResult add(@RequestParam MultipartFile upload,
                           @RequestParam Integer uploadType,
+                          @RequestParam (required = false) boolean notSave,
                           HttpServletRequest request)
     {
         try {
-            return fileService.insertFile(upload,uploadType,destPath,request);
+            return fileService.insertFile(upload,uploadType,destPath,notSave,request);
         } catch (IOException e) {
            log.error("===文件上传异常==={}",e.getMessage());
            return AjaxResult.error(e.getMessage());

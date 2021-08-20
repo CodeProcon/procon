@@ -1,4 +1,4 @@
-package com.ruoyi.common.security.handler;
+package com.huangpuguang.common.security.handler;
 
 import com.huangpuguang.common.core.constant.HttpStatus;
 import com.huangpuguang.common.core.exception.DemoModeException;
@@ -67,8 +67,8 @@ public class GlobalExceptionHandler
     @ExceptionHandler(RuntimeException.class)
     public AjaxResult handleRuntimeException(RuntimeException e, HttpServletRequest request)
     {
-        String requestURI = request.getRequestURI();
-        log.error("请求地址'{}',发生未知异常.", requestURI, e);
+        String requestUri = request.getRequestURI();
+        log.error("请求地址'{}',发生未知异常.", requestUri, e);
         return AjaxResult.error(e.getMessage());
     }
 

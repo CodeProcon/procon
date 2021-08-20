@@ -178,11 +178,12 @@
 </template>
 
 <script>
-import { listTable, previewTable, delTable, genCode, synchDb } from "@/api/tool/gen";
+import {delTable, genCode, listTable, previewTable, synchDb} from "@/api/tool/gen";
 import importTable from "./importTable";
-import { downLoadZip } from "@/utils/zipdownload";
+import {downLoadZip} from "@/utils/zipdownload";
 import hljs from "highlight.js/lib/highlight";
 import "highlight.js/styles/github-gist.css";
+
 hljs.registerLanguage("java", require("highlight.js/lib/languages/java"));
 hljs.registerLanguage("xml", require("highlight.js/lib/languages/xml"));
 hljs.registerLanguage("html", require("highlight.js/lib/languages/xml"));
@@ -269,7 +270,7 @@ export default {
           this.msgSuccess("成功生成到自定义路径：" + row.genPath);
         });
       } else {
-        downLoadZip("/code/gen/batchGenCode?tables=" + tableNames, "ruoyi");
+        downLoadZip("/code/gen/batchGenCode?tables=" + tableNames, "Procon");
       }
     },
     /** 同步数据库操作 */

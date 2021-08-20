@@ -42,7 +42,7 @@ public interface ProconFileService
      * @param request http请求
      * @return 结果
      */
-    AjaxResult insertFile(MultipartFile file, Integer uploadType, String destPath, HttpServletRequest request) throws IOException;
+    AjaxResult insertFile(MultipartFile file, Integer uploadType, String destPath,boolean notSave, HttpServletRequest request) throws IOException;
 
     /**
      * 保存文件

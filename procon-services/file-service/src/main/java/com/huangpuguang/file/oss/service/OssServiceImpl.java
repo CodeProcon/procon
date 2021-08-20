@@ -68,7 +68,7 @@ public class OssServiceImpl implements OssService {
             metadata.setCacheControl("no-cache");
             metadata.setHeader("Pragma", "no-cache");
             metadata.setContentEncoding("utf-8");
-            metadata.setContentType(getContentType(fileUrl));
+            //metadata.setContentType(getContentType(fileUrl));
             metadata.setContentDisposition("filename/filesize=" + fileName + "/" + fileSize + "Byte.");
             //上传文件
             ossClient.putObject(bucketName, fileUrl, inputStream, metadata);
@@ -135,7 +135,7 @@ public class OssServiceImpl implements OssService {
 
         } catch (Exception e) {
             log.error(e.getMessage());
-            throw new ServiceException(e.getMessage(),e);
+            throw new ServiceException(e.getMessage());
         } finally {
             // 关闭OSSClient。
             assert ossClient != null;

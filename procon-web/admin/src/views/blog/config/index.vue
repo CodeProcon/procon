@@ -213,9 +213,10 @@
 </template>
 
 <script>
-import {getConfigList,updateConfig} from "@/api/blog/config"
+import {getConfigList, updateConfig} from "@/api/blog/config"
 import {getDataByTypeList} from "@/api/system/dict/data"
 import {fileUpload} from "@/api/blog/content";
+
 export default {
   name: "Config",
   data(){
@@ -344,11 +345,9 @@ export default {
       formData.append('upload', content.file)
       formData.append('uploadType', '1')
       fileUpload(formData).then(response => {
-        console.log(this.form)
         _this.imageUrl = response.data.fileUrl;
         _this.form.logo = response.data.id;
         _this.indexLogo = response.data.id;
-        debugger
       });
     },
     submitWeChat(content) {

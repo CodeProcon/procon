@@ -1,8 +1,8 @@
 package com.huangpuguang.file.controller;
 
-import com.huangpuguang.file.service.ProconFileService;
 import com.huangpuguang.common.core.web.controller.BaseController;
 import com.huangpuguang.common.core.web.domain.AjaxResult;
+import com.huangpuguang.file.service.ProconFileService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -44,7 +44,7 @@ public class CKEditorController extends BaseController {
                           HttpServletRequest request)
     {
         try {
-            AjaxResult result = fileService.insertFile(upload, uploadType, destPath, request);
+            AjaxResult result = fileService.insertFile(upload, uploadType, destPath,false, request);
             Object data = result.get("data");
             return String.format("{\"url\":\"%s\"}", data);
         } catch (IOException e) {

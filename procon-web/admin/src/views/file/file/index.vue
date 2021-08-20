@@ -77,7 +77,7 @@
           <template v-if="scope.row.fileType === 0">
             <span>本地</span>
           </template>
-          <template v-if="scope.row.status === 1">
+          <template v-if="scope.row.fileType === 1">
             <span>阿里oss</span>
           </template>
         </template>
@@ -85,16 +85,16 @@
       <el-table-column label="文件扩展名" align="center" prop="fileExpandedName"/>
       <el-table-column label="文件大小(MB)" align="center">
         <template slot-scope="scope">
-          <span>{{(scope.row.fileSize/(1024*1024)).toFixed(2)}}</span>
+          <span>{{ (scope.row.fileSize / (1024 * 1024)).toFixed(2) }}</span>
         </template>
       </el-table-column>
 
       <el-table-column label="状态" align="center">
         <template slot-scope="scope">
-          <template v-if="scope.row.status === 1">
+          <template v-if="scope.row.status === 0">
             <span>正常</span>
           </template>
-          <template v-if="scope.row.status === 2">
+          <template v-if="scope.row.status === 1">
             <span>停用</span>
           </template>
         </template>
@@ -133,23 +133,56 @@
     <!-- 添加或修改文件对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item lable="上传文件">
-          <FileUpload ref="fileUpload"></FileUpload>
-        </el-form-item>
-        <el-form-item label="保存方式" prop="fileType">
-          <el-select v-model="form.fileType" placeholder="请选择文件保存方式(0:本地 1:阿里OSS)">
-            <el-option label="请选择字典生成" value=""/>
-          </el-select>
-        </el-form-item>
+
+        <div class="imgBody" v-if="form.fileUrl">
+          <el-form-item label="文件">
+            <div v-if="picArray.indexOf(form.fileExpandedName) > -1">
+              <img alt="logo"  v-bind:src="form.fileUrl" style="display:inline; width: 320px;height: 180px;">
+            </div>
+            <div v-else-if="videoArray.indexOf(form.fileExpandedName) > -1">
+              <video width="320" height="180" controls>
+                <source src="form.fileUrl" type="video/mp4" />
+              </video>
+            </div>
+
+          </el-form-item>
+
+        </div>
+        <div v-else>
+          <el-form-item label="上传">
+            <el-upload
+              action=""
+              :http-request="submitUpload"
+              :file-list="uploadFileList"
+              :limit = "1"
+              :before-remove="beforeRemove"
+              :before-upload="beforeFileUpload">
+              <el-button size="small" type="primary" icon="el-icon-upload">点击上传</el-button>
+            </el-upload>
+          </el-form-item>
+        </div>
+
         <el-form-item label="文件分类" prop="fileSortId">
-          <el-input v-model="form.fileSortId" placeholder="请输入文件分类uid"/>
+          <el-select v-model="form.fileSortId" placeholder="请选择">
+            <el-option
+              v-for="item in sortList"
+              :key="item.id.toString()"
+              :label="item.sortName"
+              :value="item.id.toString()">
+            </el-option>
+          </el-select>
         </el-form-item>
 
         <el-form-item label="状态">
-          <el-radio-group v-model="form.status">
-            <el-radio label="1">请选择字典生成</el-radio>
-          </el-radio-group>
+          <el-select v-model="form.status">
+            <el-option v-for="dict in statusOptions"
+                       :key="dict.dictValue"
+                       :label="dict.dictLabel"
+                       :value="dict.dictValue">
+            </el-option>
+          </el-select>
         </el-form-item>
+
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="submitForm">确 定</el-button>
@@ -160,8 +193,11 @@
 </template>
 
 <script>
-import {listFile, getFile, delFile, addFile, updateFile} from "@/api/file/file";
+import {delFile, getFile, listFile, saveFile, updateFile} from "@/api/file/file";
 import FileUpload from "@/components/FileUpload"
+import {listSort} from "@/api/file/sort";
+import {fileUpload} from "@/api/blog/content";
+
 export default {
   name: "File",
   components: {
@@ -181,6 +217,8 @@ export default {
       showSearch: true,
       // 总条数
       total: 0,
+      // 文件分类表格数据
+      sortList: [],
       // 文件表格数据
       fileList: [],
       // 弹出层标题
@@ -188,22 +226,33 @@ export default {
       // 是否显示弹出层
       open: false,
       // 查询参数
+      querySortParams: {
+        pageNum: 1,
+        pageSize: 100,
+      },
       queryParams: {
         pageNum: 1,
         pageSize: 10,
-        fileOldName: null,
         fileName: null,
         fileType: null,
-        fileUrl: null,
-        fileExpandedName: null,
-        fileSize: null,
         fileSortId: null,
-        adminId: null,
-        userId: null,
         status: null,
       },
+      statusOptions: [],
       // 表单参数
-      form: {},
+      form: {
+        id: null,
+        fileName: null,
+        fileUrl: null,
+        fileType: 1,
+        fileSortId: null,
+        status: null,
+      },
+      uploadFileList: [],
+      fileUrl:"",
+      //图片数组
+      picArray:["jpg","png","jpeg","gif","bmp"],
+      videoArray:["mp4","avi","mov","flv","rmvb"],
       // 表单校验
       rules: {
         // fileType: [
@@ -216,9 +265,22 @@ export default {
     };
   },
   created() {
+    this.getDicts("sys_normal_disable").then(response => {
+      this.statusOptions = response.data;
+    });
+    this.getSortList();
     this.getList();
   },
   methods: {
+    /** 查询文件分类列表*/
+    getSortList() {
+      this.loading = true;
+      listSort(this.querySortParams).then(response => {
+        this.sortList = response.rows;
+        this.total = response.total;
+        this.loading = false;
+      });
+    },
     /** 查询文件列表 */
     getList() {
       this.loading = true;
@@ -237,14 +299,14 @@ export default {
     reset() {
       this.form = {
         id: null,
-        fileOldName: null,
+        fileOldName:null,
+        fileSize:null,
+        fileExpandedName:null,
         fileName: null,
-        fileType: null,
         fileUrl: null,
-        fileExpandedName: null,
-        fileSize: null,
+        fileType: 1,
         fileSortId: null,
-        status: "1"
+        status: null,
       };
       this.resetForm("form");
     },
@@ -275,7 +337,9 @@ export default {
       this.reset();
       const id = row.id || this.ids
       getFile(id).then(response => {
-        this.form = response.data;
+        debugger
+        this.form = response;
+        this.form.status = response.status.toString();
         this.open = true;
         this.title = "修改文件";
       });
@@ -291,9 +355,7 @@ export default {
               this.getList();
             });
           } else {
-            addFile(this.form).then(response => {
-              debugger
-              console.log(this.$refs.fileUpload)
+            saveFile(this.form).then(response => {
               this.msgSuccess("新增成功");
               this.open = false;
               this.getList();
@@ -322,7 +384,46 @@ export default {
       this.download('file/file/export', {
         ...this.queryParams
       }, `file_file.xlsx`)
-    }
+    },
+
+    /**
+     * 文件上传前校验
+     **/
+    beforeFileUpload(file){
+      let isRightSize = file.size / 1024 / 1024 < 200
+      if (!isRightSize) {
+        this.$message.error('文件大小超过 200MB')
+      }
+      return isRightSize
+    },
+    beforeRemove(file, uploadFileList) {
+      return this.$confirm(`确定移除 ${ file.name }？`);
+    },
+    //文件上传
+    submitUpload(content){
+      let _this = this
+      const formData = new FormData()
+      formData.append('upload', content.file)
+      formData.append('uploadType', '1')
+      formData.append('notSave',"true")
+      fileUpload(formData).then(response => {
+        debugger
+        _this.fileUrl = response.data.fileUrl;
+        _this.form.fileUrl = response.data.fileUrl;
+        _this.form.fileName = response.data.fileName;
+        _this.form.fileOldName = response.data.fileOldName;
+        _this.form.fileSize = response.data.fileSize;
+        _this.form.fileExpandedName = response.data.fileExpandedName;
+
+      });
+    },
+    /** 删除图片*/
+    deletePhoto: function() {
+      this.form.fileUrl = null;
+    },
+
+
+
   }
 };
 </script>

@@ -82,7 +82,7 @@ public class ProconFileServiceImpl implements ProconFileService {
     }
 
     @Override
-    public AjaxResult insertFile(MultipartFile file, Integer uploadType, String destPath, HttpServletRequest request) throws IOException {
+    public AjaxResult insertFile(MultipartFile file, Integer uploadType, String destPath, boolean notSave,HttpServletRequest request) throws IOException {
 
         //如果是用户上传，则包含用户uid
         Long userUid = null;
@@ -142,6 +142,9 @@ public class ProconFileServiceImpl implements ProconFileService {
         fileStorage.setCreateTime(DateUtils.getNowDate());
         fileStorage.setFileSortId(fileSort.getId().toString());
         insertFileStorage(userUid, adminUid, oldName, size, picExpandedName, newFileName, saveUrl, fileStorage);
+        if(notSave){
+            return AjaxResult.success("文件上传成功！",fileStorage);
+        }
         fileMapper.insertFile(fileStorage);
         return AjaxResult.success("文件上传成功！",fileStorage);
     }
