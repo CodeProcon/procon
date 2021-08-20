@@ -5,9 +5,9 @@ import com.aliyun.oss.OSSClientBuilder;
 import com.aliyun.oss.model.GetObjectRequest;
 import com.aliyun.oss.model.OSSObject;
 import com.aliyun.oss.model.ObjectMetadata;
-import com.huangpuguang.file.oss.config.OssConfig;
-import com.huangpuguang.common.core.exception.CustomException;
+import com.huangpuguang.common.core.exception.ServiceException;
 import com.huangpuguang.common.core.utils.DateUtils;
+import com.huangpuguang.file.oss.config.OssConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -79,7 +79,7 @@ public class OssServiceImpl implements OssService {
             ossFileKey = url;
         } catch (Exception e) {
             log.error(e.getMessage(),e);
-            throw new CustomException("文件上传异常");
+            throw new ServiceException("文件上传异常");
         }finally {
             // 关闭OSSClient。
             if(ossClient != null){
@@ -101,7 +101,7 @@ public class OssServiceImpl implements OssService {
             ossClient.shutdown();
         } catch (Exception e) {
             log.error(e.getMessage(),e);
-            throw new CustomException(e.getMessage());
+            throw new ServiceException(e.getMessage());
         }
     }
 
@@ -135,7 +135,7 @@ public class OssServiceImpl implements OssService {
 
         } catch (Exception e) {
             log.error(e.getMessage());
-            throw new CustomException(e.getMessage(),e);
+            throw new ServiceException(e.getMessage(),e);
         } finally {
             // 关闭OSSClient。
             assert ossClient != null;

@@ -2,7 +2,7 @@ package com.huangpuguang.system.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
 import com.huangpuguang.common.core.constant.UserConstants;
-import com.huangpuguang.common.core.exception.CustomException;
+import com.huangpuguang.common.core.exception.ServiceException;
 import com.huangpuguang.common.core.utils.StringUtils;
 import com.huangpuguang.common.datascope.annotation.DataScope;
 import com.huangpuguang.system.api.domain.SysDept;
@@ -185,7 +185,7 @@ public class SysDeptServiceImpl implements SysDeptService
         // 如果父节点不为正常状态,则不允许新增子节点
         if (!UserConstants.DEPT_NORMAL.equals(info.getStatus()))
         {
-            throw new CustomException("部门停用，不允许新增");
+            throw new ServiceException("部门停用，不允许新增");
         }
         dept.setAncestors(info.getAncestors() + "," + dept.getParentId());
         return deptMapper.insertDept(dept);

@@ -1,6 +1,6 @@
 package com.huangpuguang.common.core.exception.file;
 
-import com.huangpuguang.common.core.exception.BaseException;
+import com.huangpuguang.common.core.exception.base.BaseException;
 
 /**
  * 文件信息异常类

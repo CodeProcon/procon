@@ -1,5 +1,6 @@
 package com.huangpuguang.file.service;
 
+import com.huangpuguang.common.core.domain.ResultModel;
 import com.huangpuguang.common.core.web.domain.AjaxResult;
 import com.huangpuguang.system.api.domain.ProconFile;
 import org.springframework.web.multipart.MultipartFile;
@@ -23,7 +24,7 @@ public interface ProconFileService
      * @param id 文件ID
      * @return 文件
      */
-    public ProconFile selectFileById(Long id);
+    ProconFile selectFileById(Long id);
 
     /**
      * 查询文件列表
@@ -31,7 +32,7 @@ public interface ProconFileService
      * @param file 文件
      * @return 文件集合
      */
-    public List<ProconFile> selectFileList(ProconFile file);
+    List<ProconFile> selectFileList(ProconFile file);
 
     /**
      * 新增文件
@@ -41,15 +42,20 @@ public interface ProconFileService
      * @param request http请求
      * @return 结果
      */
-    public AjaxResult insertFile(MultipartFile file, Integer uploadType, String destPath, HttpServletRequest request) throws IOException;
+    AjaxResult insertFile(MultipartFile file, Integer uploadType, String destPath, HttpServletRequest request) throws IOException;
 
     /**
-     * 修改文件
+     * 保存文件
+     * @param file  文件参数
+     * @return 结果
+     */
+    ResultModel<String> saveFile(ProconFile file);
+    /**   * 修改文件
      *
      * @param file 文件
      * @return 结果
      */
-    public int updateFile(ProconFile file);
+    int updateFile(ProconFile file);
 
     /**
      * 批量删除文件
@@ -57,7 +63,7 @@ public interface ProconFileService
      * @param ids 需要删除的文件ID
      * @return 结果
      */
-    public int deleteFileByIds(Long[] ids);
+    int deleteFileByIds(Long[] ids);
 
     /**
      * 删除文件信息
@@ -65,23 +71,7 @@ public interface ProconFileService
      * @param id 文件ID
      * @return 结果
      */
-    public int deleteFileById(Long id);
-
-    /**
-     * <p> 上传图片 </p>
-     * @param request 请求参数
-     * @return java.lang.Object
-     * @date 2020/11/5 16:52
-     */
-    public Object imgUpload(HttpServletRequest request) throws IOException;
-
-    /**
-     * <p> 多图上传 </p>
-     * @param uploadType, request, fileDatas
-     * @return com.huangpuguang.common.core.web.domain.AjaxResult
-     * @date 2020/11/5 17:47
-     */
-    public AjaxResult uploadImages(String path, Integer uploadType, HttpServletRequest request, List<MultipartFile> fileDatas) throws IOException;
+    int deleteFileById(Long id);
 
 
     /**

@@ -1,6 +1,8 @@
 package com.huangpuguang.system.mapper;
 
 import com.huangpuguang.system.api.domain.SysLogininfor;
+import org.springframework.stereotype.Repository;
+
 import java.util.List;
 
 
@@ -9,6 +11,7 @@ import java.util.List;
  *
  * @author procon
  */
+@Repository
 public interface SysLogininforMapper
 {
     /**

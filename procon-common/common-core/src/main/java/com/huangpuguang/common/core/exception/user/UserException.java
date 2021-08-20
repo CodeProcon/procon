@@ -1,6 +1,6 @@
 package com.huangpuguang.common.core.exception.user;
 
-import com.huangpuguang.common.core.exception.BaseException;
+import com.huangpuguang.common.core.exception.base.BaseException;
 
 /**
  * 用户信息异常类

@@ -1,8 +1,7 @@
 package com.huangpuguang.system.service.impl;
 
-import com.huangpuguang.system.mapper.*;
 import com.huangpuguang.common.core.constant.UserConstants;
-import com.huangpuguang.common.core.exception.CustomException;
+import com.huangpuguang.common.core.exception.ServiceException;
 import com.huangpuguang.common.core.utils.SecurityUtils;
 import com.huangpuguang.common.core.utils.StringUtils;
 import com.huangpuguang.common.datascope.annotation.DataScope;
@@ -11,6 +10,7 @@ import com.huangpuguang.system.api.domain.SysUser;
 import com.huangpuguang.system.domain.SysPost;
 import com.huangpuguang.system.domain.SysUserPost;
 import com.huangpuguang.system.domain.SysUserRole;
+import com.huangpuguang.system.mapper.*;
 import com.huangpuguang.system.service.SysConfigService;
 import com.huangpuguang.system.service.SysUserService;
 import org.slf4j.Logger;
@@ -220,7 +220,7 @@ public class SysUserServiceImpl implements SysUserService
     {
         if (StringUtils.isNotNull(user.getUserId()) && user.isAdmin())
         {
-            throw new CustomException("不允许操作超级管理员用户");
+            throw new ServiceException("不允许操作超级管理员用户");
         }
     }
 
@@ -482,7 +482,7 @@ public class SysUserServiceImpl implements SysUserService
     {
         if (StringUtils.isNull(userList) || userList.size() == 0)
         {
-            throw new CustomException("导入用户数据不能为空！");
+            throw new ServiceException("导入用户数据不能为空！");
         }
         int successNum = 0;
         int failureNum = 0;
@@ -527,7 +527,7 @@ public class SysUserServiceImpl implements SysUserService
         if (failureNum > 0)
         {
             failureMsg.insert(0, "很抱歉，导入失败！共 " + failureNum + " 条数据格式不正确，错误如下：");
-            throw new CustomException(failureMsg.toString());
+            throw new ServiceException(failureMsg.toString());
         }
         else
         {

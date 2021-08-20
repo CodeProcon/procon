@@ -1,20 +1,20 @@
 package com.huangpuguang.system.service.impl;
 
-import java.util.Collection;
-import java.util.List;
-import javax.annotation.PostConstruct;
-
-import com.huangpuguang.system.service.SysConfigService;
-import com.huangpuguang.system.domain.SysConfig;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import com.huangpuguang.common.core.constant.Constants;
 import com.huangpuguang.common.core.constant.UserConstants;
-import com.huangpuguang.common.core.exception.CustomException;
+import com.huangpuguang.common.core.exception.ServiceException;
 import com.huangpuguang.common.core.text.Convert;
 import com.huangpuguang.common.core.utils.StringUtils;
 import com.huangpuguang.common.redis.service.RedisService;
+import com.huangpuguang.system.domain.SysConfig;
 import com.huangpuguang.system.mapper.SysConfigMapper;
+import com.huangpuguang.system.service.SysConfigService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.PostConstruct;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * 参数配置 服务层实现
@@ -138,7 +138,7 @@ public class SysConfigServiceImpl implements SysConfigService
             SysConfig config = selectConfigById(configId);
             if (StringUtils.equals(UserConstants.YES, config.getConfigType()))
             {
-                throw new CustomException(String.format("内置参数【%1$s】不能删除 ", config.getConfigKey()));
+                throw new ServiceException(String.format("内置参数【%1$s】不能删除 ", config.getConfigKey()));
             }
             configMapper.deleteConfigById(configId);
             redisService.deleteObject(getCacheKey(config.getConfigKey()));

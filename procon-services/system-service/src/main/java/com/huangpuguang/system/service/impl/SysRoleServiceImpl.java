@@ -1,7 +1,7 @@
 package com.huangpuguang.system.service.impl;
 
 import com.huangpuguang.common.core.constant.UserConstants;
-import com.huangpuguang.common.core.exception.CustomException;
+import com.huangpuguang.common.core.exception.ServiceException;
 import com.huangpuguang.common.core.utils.SpringUtils;
 import com.huangpuguang.common.core.utils.StringUtils;
 import com.huangpuguang.common.datascope.annotation.DataScope;
@@ -179,7 +179,7 @@ public class SysRoleServiceImpl implements SysRoleService
     {
         if (StringUtils.isNotNull(role.getRoleId()) && role.isAdmin())
         {
-            throw new CustomException("不允许操作超级管理员角色");
+            throw new ServiceException("不允许操作超级管理员角色");
         }
     }
 
@@ -338,7 +338,7 @@ public class SysRoleServiceImpl implements SysRoleService
             SysRole role = selectRoleById(roleId);
             if (countUserRoleByRoleId(roleId) > 0)
             {
-                throw new CustomException(String.format("%1$s已分配,不能删除", role.getRoleName()));
+                throw new ServiceException(String.format("%1$s已分配,不能删除", role.getRoleName()));
             }
         }
         // 删除角色与菜单关联

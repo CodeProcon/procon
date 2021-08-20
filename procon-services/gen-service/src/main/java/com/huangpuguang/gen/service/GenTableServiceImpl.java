@@ -1,29 +1,10 @@
 package com.huangpuguang.gen.service;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.IOException;
-import java.io.StringWriter;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipOutputStream;
-import org.apache.commons.io.IOUtils;
-import org.apache.velocity.Template;
-import org.apache.velocity.VelocityContext;
-import org.apache.velocity.app.Velocity;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.huangpuguang.common.core.constant.Constants;
 import com.huangpuguang.common.core.constant.GenConstants;
-import com.huangpuguang.common.core.exception.CustomException;
+import com.huangpuguang.common.core.exception.ServiceException;
 import com.huangpuguang.common.core.text.CharsetKit;
 import com.huangpuguang.common.core.utils.SecurityUtils;
 import com.huangpuguang.common.core.utils.StringUtils;
@@ -35,6 +16,26 @@ import com.huangpuguang.gen.mapper.GenTableMapper;
 import com.huangpuguang.gen.util.GenUtils;
 import com.huangpuguang.gen.util.VelocityInitializer;
 import com.huangpuguang.gen.util.VelocityUtils;
+import org.apache.commons.io.IOUtils;
+import org.apache.velocity.Template;
+import org.apache.velocity.VelocityContext;
+import org.apache.velocity.app.Velocity;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.StringWriter;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 /**
  * 业务 服务层实现
@@ -180,7 +181,7 @@ public class GenTableServiceImpl implements GenTableService
         }
         catch (Exception e)
         {
-            throw new CustomException("导入失败：" + e.getMessage());
+            throw new ServiceException("导入失败：" + e.getMessage());
         }
     }
 
@@ -269,7 +270,7 @@ public class GenTableServiceImpl implements GenTableService
                 }
                 catch (IOException e)
                 {
-                    throw new CustomException("渲染模板失败，表名：" + table.getTableName());
+                    throw new ServiceException("渲染模板失败，表名：" + table.getTableName());
                 }
             }
         }
@@ -291,7 +292,7 @@ public class GenTableServiceImpl implements GenTableService
         List<GenTableColumn> dbTableColumns = genTableColumnMapper.selectDbTableColumnsByName(tableName);
         if (StringUtils.isEmpty(dbTableColumns))
         {
-            throw new CustomException("同步数据失败，原表结构不存在");
+            throw new ServiceException("同步数据失败，原表结构不存在");
         }
         List<String> dbTableColumnNames = dbTableColumns.stream().map(GenTableColumn::getColumnName).collect(Collectors.toList());
 
@@ -383,25 +384,25 @@ public class GenTableServiceImpl implements GenTableService
             JSONObject paramsObj = JSONObject.parseObject(options);
             if (StringUtils.isEmpty(paramsObj.getString(GenConstants.TREE_CODE)))
             {
-                throw new CustomException("树编码字段不能为空");
+                throw new ServiceException("树编码字段不能为空");
             }
             else if (StringUtils.isEmpty(paramsObj.getString(GenConstants.TREE_PARENT_CODE)))
             {
-                throw new CustomException("树父编码字段不能为空");
+                throw new ServiceException("树父编码字段不能为空");
             }
             else if (StringUtils.isEmpty(paramsObj.getString(GenConstants.TREE_NAME)))
             {
-                throw new CustomException("树名称字段不能为空");
+                throw new ServiceException("树名称字段不能为空");
             }
             else if (GenConstants.TPL_SUB.equals(genTable.getTplCategory()))
             {
                 if (StringUtils.isEmpty(genTable.getSubTableName()))
                 {
-                    throw new CustomException("关联子表的表名不能为空");
+                    throw new ServiceException("关联子表的表名不能为空");
                 }
                 else if (StringUtils.isEmpty(genTable.getSubTableFkName()))
                 {
-                    throw new CustomException("子表关联的外键名不能为空");
+                    throw new ServiceException("子表关联的外键名不能为空");
                 }
             }
         }

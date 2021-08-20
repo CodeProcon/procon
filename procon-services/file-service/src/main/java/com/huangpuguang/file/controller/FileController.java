@@ -1,11 +1,12 @@
 package com.huangpuguang.file.controller;
 
 
-import com.huangpuguang.file.service.ProconFileService;
+import com.huangpuguang.common.core.domain.ResultModel;
 import com.huangpuguang.common.core.utils.poi.ExcelUtil;
 import com.huangpuguang.common.core.web.controller.BaseController;
 import com.huangpuguang.common.core.web.domain.AjaxResult;
 import com.huangpuguang.common.core.web.page.TableDataInfo;
+import com.huangpuguang.file.service.ProconFileService;
 import com.huangpuguang.system.api.domain.ProconFile;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -89,6 +90,13 @@ public class FileController extends BaseController
            log.error("===文件上传异常==={}",e.getMessage());
            return AjaxResult.error(e.getMessage());
         }
+    }
+
+
+    @PostMapping("/save")
+    public ResultModel<String> save(@RequestBody ProconFile file)
+    {
+        return fileService.saveFile(file);
     }
 
     /**

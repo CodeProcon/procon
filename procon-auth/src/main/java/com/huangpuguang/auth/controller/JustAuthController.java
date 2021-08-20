@@ -5,7 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.huangpuguang.auth.cache.AuthStateRedisCache;
 import com.huangpuguang.common.core.constant.*;
 import com.huangpuguang.common.core.domain.ResultModel;
-import com.huangpuguang.common.core.exception.CustomException;
+import com.huangpuguang.common.core.exception.ServiceException;
 import com.huangpuguang.common.core.utils.JsonUtils;
 import com.huangpuguang.common.core.utils.SecurityUtils;
 import com.huangpuguang.common.core.utils.StringUtils;
@@ -180,7 +180,7 @@ public class JustAuthController {
                 break;
         }
         if (null == authRequest) {
-            throw new CustomException("请求授权失败");
+            throw new ServiceException("请求授权失败");
         }
         return authRequest;
     }

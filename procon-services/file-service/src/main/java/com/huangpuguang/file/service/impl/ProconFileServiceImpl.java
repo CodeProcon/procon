@@ -2,7 +2,7 @@ package com.huangpuguang.file.service.impl;
 
 import cn.hutool.core.collection.ListUtil;
 import com.huangpuguang.common.core.constant.BlogConstants;
-import com.huangpuguang.common.core.constant.Constants;
+import com.huangpuguang.common.core.domain.ResultModel;
 import com.huangpuguang.common.core.text.UUID;
 import com.huangpuguang.common.core.utils.*;
 import com.huangpuguang.common.core.web.domain.AjaxResult;
@@ -18,14 +18,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -74,6 +70,16 @@ public class ProconFileServiceImpl implements ProconFileService {
         return fileMapper.selectFileList(file);
     }
 
+    @Override
+    public ResultModel<String> saveFile(ProconFile file) {
+        Long userId = SecurityUtils.getUserId();
+        file.setUserId(userId);
+        int ret = fileMapper.insertFile(file);
+        if (ret > 0){
+            return ResultModel.ok("保存成功！");
+        }
+        return ResultModel.fail("文件保存异常!");
+    }
 
     @Override
     public AjaxResult insertFile(MultipartFile file, Integer uploadType, String destPath, HttpServletRequest request) throws IOException {
@@ -172,136 +178,6 @@ public class ProconFileServiceImpl implements ProconFileService {
     @Override
     public int deleteFileById(Long id) {
         return fileMapper.deleteFileById(id);
-    }
-
-    @Override
-    public Object imgUpload(HttpServletRequest request) throws IOException {
-        // 转换成多部分request
-        MultipartHttpServletRequest multiRequest = (MultipartHttpServletRequest) request;
-        // 取得request中的所有文件名
-        Iterator<String> iter = multiRequest.getFileNames();
-        while (iter.hasNext()){
-            MultipartFile file = multiRequest.getFile(iter.next());
-            if(file !=null){
-                //获取旧名称
-                // 设置图片上传服务必要的信息
-                request.setAttribute(BlogConstants.USER_ID, 1);
-                request.setAttribute(BlogConstants.ADMIN_UID, 1);
-                request.setAttribute(BlogConstants.PROJECT_NAME, BlogConstants.BLOG);
-                request.setAttribute(BlogConstants.SORT_NAME, BlogConstants.ADMIN);
-
-                List<MultipartFile> fileData = new ArrayList<>();
-                fileData.add(file);
-                AjaxResult result = uploadImages(path,BlogConstants.UPLOAD_OSS, request, fileData);
-
-                if(result.get("code").toString().equals(Constants.FAILED.toString())){
-
-                }
-
-
-            }
-
-
-        }
-
-        return null;
-    }
-
-
-    @Override
-    public AjaxResult uploadImages(String path, Integer uploadType, HttpServletRequest request, List<MultipartFile> fileDatas) throws IOException {
-
-
-
-        // 判断来源
-        String source = request.getParameter(BlogConstants.SOURCE);
-        //如果是用户上传，则包含用户uid
-        Long userId = null;
-        //如果是管理员上传，则包含管理员uid
-        Long adminId = null;
-
-        // 判断图片来源
-        if (BlogConstants.PICTURE.equals(source)) {
-            userId = SecurityUtils.getUserId();
-            adminId = SecurityUtils.getUserId();
-        }
-
-
-
-        ProconFileSort fileSort = new ProconFileSort();
-        List<ProconFileSort> fileSorts = fileSortService.selectFileSortList(fileSort);
-
-        if (!fileSorts.isEmpty()) {
-            fileSort = fileSorts.get(0);
-            log.info("====fileSort====" + JsonUtils.objectToJson(fileSort));
-        } else {
-            return new AjaxResult(Constants.FAILED,"禁止上传");
-        }
-
-        String sortUrl = fileSort.getUrl();
-
-        //判断url是否为空，如果为空，使用默认
-        if (StringUtils.isEmpty(sortUrl)) {
-            sortUrl = "base/common/";
-        } else {
-            sortUrl = fileSort.getUrl();
-        }
-        List<ProconFile> lists = new ArrayList<>();
-        //文件上传
-        if (fileDatas != null && !fileDatas.isEmpty()) {
-            for (MultipartFile fileData : fileDatas) {
-
-                String oldName = fileData.getOriginalFilename();
-                long size = fileData.getSize();
-
-                //以前的文件名
-                log.info("上传文件====：" + oldName);
-
-                //文件大小
-                log.info("文件大小====：" + size);
-
-                //获取扩展名，默认是jpg
-                String picExpandedName = FileUtils.getPicExpandedName(oldName);
-
-                //获取新文件名
-                String newFileName = System.currentTimeMillis() + "." + picExpandedName;
-                log.info(newFileName + ":" + oldName);
-
-                //文件路径问题
-                log.info("path====" + path);
-                String newPath = path + sortUrl + File.separator + picExpandedName + File.separator + DateUtils.dateTime() + File.separator;
-
-                log.info("newPath====" + newPath);
-                String saveUrl = newPath + newFileName;
-                ProconFile fileStorage = new ProconFile();
-                //本地上次
-                if (uploadType.equals(BlogConstants.UPLOAD_LOCAL)) {
-                    // 保存本地，创建目录
-                    java.io.File file1 = new java.io.File(newPath);
-                    if (!file1.exists()) {
-                        file1.mkdirs();
-                    }
-                    java.io.File saveFile;
-                    saveFile = new java.io.File(saveUrl);
-                    saveFile.createNewFile();
-                    fileData.transferTo(saveFile);
-                    fileStorage.setFileType(BlogConstants.UPLOAD_LOCAL);
-                } else if (uploadType.equals(BlogConstants.UPLOAD_OSS)) {
-                    saveUrl = ossService.upload(fileData, saveUrl);
-                    fileStorage.setFileType(BlogConstants.UPLOAD_OSS);
-                }
-
-                fileStorage.setCreateTime(new Date(System.currentTimeMillis()));
-                fileStorage.setFileSortId(String.valueOf(fileSort.getId()));
-                insertFileStorage(userId, adminId, oldName, size, picExpandedName, newFileName, saveUrl, fileStorage);
-                fileStorage.setFileType(uploadType);
-                fileMapper.insertFile(fileStorage);
-                lists.add(fileStorage);
-            }
-            //保存成功返回数据
-            return new AjaxResult(Constants.SUCCESS,"上传成功",lists);
-        }
-        return new AjaxResult(Constants.FAILED,"请上传图片");
     }
 
     /**

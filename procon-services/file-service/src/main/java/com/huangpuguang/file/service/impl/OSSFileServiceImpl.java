@@ -4,7 +4,7 @@ import cn.hutool.core.date.DateUtil;
 import com.aliyun.oss.OSS;
 import com.aliyun.oss.OSSClientBuilder;
 import com.aliyun.oss.model.ObjectMetadata;
-import com.huangpuguang.common.core.exception.CustomException;
+import com.huangpuguang.common.core.exception.ServiceException;
 import com.huangpuguang.common.core.utils.DateUtils;
 import com.huangpuguang.file.oss.config.OssConfig;
 import com.huangpuguang.file.oss.service.OssService;
@@ -71,7 +71,7 @@ public class OSSFileServiceImpl implements SysFileService {
             ossFileKey = ossClient.generatePresignedUrl(bucketName, fileUrl, DateUtil.offsetDay(new Date(),36500)).toString();
         } catch (Exception e) {
             log.error(e.getMessage(),e);
-            throw new CustomException("文件上传异常");
+            throw new ServiceException("文件上传异常");
         }finally {
             // 关闭OSSClient。
             if(ossClient != null){

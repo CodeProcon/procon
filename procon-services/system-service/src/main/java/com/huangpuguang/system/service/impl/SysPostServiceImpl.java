@@ -1,17 +1,16 @@
 package com.huangpuguang.system.service.impl;
 
-import java.util.List;
-
+import com.huangpuguang.common.core.constant.UserConstants;
+import com.huangpuguang.common.core.exception.ServiceException;
+import com.huangpuguang.common.core.utils.StringUtils;
 import com.huangpuguang.system.domain.SysPost;
 import com.huangpuguang.system.mapper.SysPostMapper;
+import com.huangpuguang.system.mapper.SysUserPostMapper;
 import com.huangpuguang.system.service.SysPostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.huangpuguang.common.core.constant.UserConstants;
-import com.huangpuguang.common.core.exception.CustomException;
-import com.huangpuguang.common.core.utils.StringUtils;
-import com.huangpuguang.system.mapper.SysUserPostMapper;
+import java.util.List;
 
 /**
  * 岗位信息 服务层处理
@@ -149,7 +148,7 @@ public class SysPostServiceImpl implements SysPostService
             SysPost post = selectPostById(postId);
             if (countUserPostById(postId) > 0)
             {
-                throw new CustomException(String.format("%1$s已分配,不能删除", post.getPostName()));
+                throw new ServiceException(String.format("%1$s已分配,不能删除", post.getPostName()));
             }
         }
         return postMapper.deletePostByIds(postIds);
