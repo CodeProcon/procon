@@ -43,8 +43,7 @@ node {
                 }
             //删除本地镜像
             sh "docker rmi -f ${imageName}"
-            sh "docker rmi -f
-            ${harbor_url}/${harbor_project_name}/${imageName}"
+            sh "docker rmi -f ${harbor_url}/${harbor_project_name}/${imageName}"
         //=====以下为远程调用进行项目部署========
         for(int j=0;j<selectedServers.size();j++){
             //每个服务名称
