@@ -2,6 +2,12 @@
 FROM openjdk:8-jdk-alpine
 # author
 MAINTAINER procon
+# 挂载目录
+VOLUME /home/procon
+# 创建目录
+RUN mkdir -p /home/procon
+# 指定路径
+WORKDIR /home/procon
 ARG JAR_FILE
 COPY ${JAR_FILE} gateway-service.jar
 EXPOSE 8080
