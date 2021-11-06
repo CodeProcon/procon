@@ -19,7 +19,7 @@ node {
 
     stage('编译，构建镜像，部署服务') {
         //编译并安装公共工程
-        sh "mvn -f procon clean install"
+        sh "mvn clean install"
         for(int i=0;i<selectedProjects.size();i++){
             //取出每个项目的名称和端口
             def currentProject = selectedProjects[i];
