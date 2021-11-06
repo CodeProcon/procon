@@ -85,6 +85,7 @@
     </dependencies>
 
     <build>
+        <finalName>${project.artifactId}</finalName>
         <plugins>
             <!--打包jar-->
             <plugin>
@@ -132,7 +133,6 @@
                     </execution>
                 </executions>
             </plugin>
-
 
             <!--spring boot repackage，依赖 maven-jar-plugin 打包的jar包 重新打包成 spring boot 的jar包-->
             <plugin>
