@@ -27,10 +27,18 @@ node {
             def currentProjectName = currentProject.split('@')[0]
             //项目启动端口
             def currentProjectPort = currentProject.split('@')[1]
+            echo "当前编译的项目是"+currentProjectName
             //定义镜像名称
             def imageName = "${currentProjectName}:${tag}"
             //编译，构建本地镜像
-            sh "mvn dockerfile:build"
+            if(currentProjectName == "procon-gateway" ){
+                sh "mvn -f procon-gateway clean package dockerfile:build"
+            }else if(currentProjectName == "procon-auth"){
+                sh "mvn -f procon-auth clean package dockerfile:build"
+            }else{
+                sh "mvn -f procon-services/${currentProjectName} clean package dockerfile:build"
+            }
+
             //给镜像打标签
             sh "docker tag ${imageName} ${harbor_url}/${harbor_project_name}/${imageName}"
             //登录Harbor，并上传镜像
