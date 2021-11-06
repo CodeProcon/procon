@@ -55,7 +55,7 @@ execCommand: "/home/docker/shell/deploy.sh $harbor_url $harbor_project_name $cur
 noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '',
 remoteDirectorySDF: false, removePrefix: '', sourceFiles: '')],
 usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
-
+            }
             echo "${currentProjectName}完成编译，构建镜像"
         }
     }
