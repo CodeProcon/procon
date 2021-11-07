@@ -59,7 +59,7 @@ node {
                     sshTransfer(cleanRemote: false,
                     excludes: '',
                     execCommand: "/home/docker/shell/deploy.sh $harbor_url $harbor_project_name $currentProjectName $tag $currentProjectPort",
-                    execTimeout: 120000,
+                    execTimeout: 12000000,
                     flatten: false,
                     makeEmptyDirs: false,
                     noDefaultExcludes: false,
