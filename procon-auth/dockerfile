@@ -2,14 +2,8 @@
 FROM openjdk:8-jdk-alpine
 # author
 MAINTAINER procon
-# 挂载目录
-VOLUME /home/procon
-# 创建目录
-RUN mkdir -p /home/procon
-# 指定路径
-WORKDIR /home/procon
 ARG JAR_FILE
-COPY ${JAR_FILE} auth-service.jar
+COPY ${JAR_FILE} /auth-service.jar
 EXPOSE 9200
 # 启动定时任务服务
 ENTRYPOINT ["java","-jar","/auth-service.jar"]
