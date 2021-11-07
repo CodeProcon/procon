@@ -72,6 +72,6 @@ node {
                 useWorkspaceInPromotion: false,
                 verbose: false)])
             echo "${currentProjectName}完成编译，构建镜像"
-
+        }
     }
 }
