@@ -52,25 +52,19 @@ node {
             //删除本地镜像
             sh "docker rmi -f ${imageName}"
             sh "docker rmi -f ${harbor_url}/${harbor_project_name}/${imageName}"
-//=====以下为远程调用进行项目部署========//
-            sshPublisher(publishers: [
-                    sshPublisherDesc(configName: 'app_server',
-                    transfers: [
-                    sshTransfer(cleanRemote: false,
-                    excludes: '',
-                    execCommand: "/home/docker/shell/deploy.sh $harbor_url $harbor_project_name $currentProjectName $tag $currentProjectPort",
-                    execTimeout: 1200000000,
-                    flatten: false,
-                    makeEmptyDirs: false,
-                    noDefaultExcludes: false,
-                    patternSeparator: '[,]+',
-                    remoteDirectory: '',
-                    remoteDirectorySDF: false,
-                    removePrefix: '',
-                    sourceFiles: '')],
-                usePromotionTimestamp: false,
-                useWorkspaceInPromotion: false,
-                verbose: false)])
+        //=====以下为远程调用进行项目部署========
+        for(int j=0;j<selectedServers.size();j++){
+            //每个服务名称
+            def currentServer = selectedServers[j]
+            echo "当前部署的服务器是"+currentServer
+            //添加微服务运行时的参数：spring.profiles.active
+            def activeProfile = "--spring.profiles.active=pd"
+            sshPublisher(publishers: [sshPublisherDesc(configName:"${currentServer}", transfers: [sshTransfer(cleanRemote: false, excludes: '',
+execCommand: "/home/docker/shell/deploy.sh $harbor_url $harbor_project_name $currentProjectName $tag $currentProjectPort $activeProfile", execTimeout: 120000000000, flatten: false, makeEmptyDirs: false,
+noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '',
+remoteDirectorySDF: false, removePrefix: '', sourceFiles: '')],
+usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
+            }
             echo "${currentProjectName}完成编译，构建镜像"
         }
     }
