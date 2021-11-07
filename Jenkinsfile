@@ -61,10 +61,7 @@ node {
             def activeProfile = "--spring.profiles.active=pd"
             sshPublisher(publishers: [sshPublisherDesc(configName:
 "${currentServer}", transfers: [sshTransfer(cleanRemote: false, excludes: '',
-execCommand: "/home/docker/shell/deploy.sh $harbor_url
-$harbor_project_name $currentProjectName $tag $currentProjectPort
-$activeProfile", execTimeout: 120000, flatten: false, makeEmptyDirs: false,
-noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '',
+execCommand: "/home/docker/shell/deploy.sh $harbor_url $harbor_project_name $currentProjectName $tag $currentProjectPort $activeProfile", execTimeout: 120000, flatten: false, makeEmptyDirs: false,noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '',
 remoteDirectorySDF: false, removePrefix: '', sourceFiles: '')],
 usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
             }
