@@ -1,14 +1,14 @@
 package com.huangpuguang.common.log.aspect;
 
-import java.lang.reflect.Method;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.Map;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
+import com.alibaba.fastjson.JSON;
+import com.huangpuguang.common.core.utils.SecurityUtils;
+import com.huangpuguang.common.core.utils.ServletUtils;
+import com.huangpuguang.common.core.utils.StringUtils;
+import com.huangpuguang.common.core.utils.ip.IpUtils;
 import com.huangpuguang.common.log.annotation.Log;
+import com.huangpuguang.common.log.enums.BusinessStatus;
 import com.huangpuguang.common.log.service.AsyncLogService;
+import com.huangpuguang.system.api.domain.SysOperLog;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.Signature;
 import org.aspectj.lang.annotation.AfterReturning;
@@ -23,18 +23,19 @@ import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.multipart.MultipartFile;
-import com.alibaba.fastjson.JSON;
-import com.huangpuguang.common.core.utils.SecurityUtils;
-import com.huangpuguang.common.core.utils.ServletUtils;
-import com.huangpuguang.common.core.utils.StringUtils;
-import com.huangpuguang.common.core.utils.ip.IpUtils;
-import com.huangpuguang.common.log.enums.BusinessStatus;
-import com.huangpuguang.system.api.domain.SysOperLog;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.lang.reflect.Method;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.Map;
+
 
 /**
  * 操作日志记录处理
  *
- * @author procon
+ * @author Procon
  */
 @Aspect
 @Component
@@ -91,9 +92,6 @@ public class LogAspect
             // 请求的地址
             String ip = IpUtils.getIpAddr(ServletUtils.getRequest());
             operLog.setOperIp(ip);
-            // 返回参数
-            operLog.setJsonResult(JSON.toJSONString(jsonResult));
-
             operLog.setOperUrl(ServletUtils.getRequest().getRequestURI());
             String username = SecurityUtils.getUsername();
             if (StringUtils.isNotBlank(username))
@@ -113,7 +111,7 @@ public class LogAspect
             // 设置请求方式
             operLog.setRequestMethod(ServletUtils.getRequest().getMethod());
             // 处理设置注解上的参数
-            getControllerMethodDescription(joinPoint, controllerLog, operLog);
+            getControllerMethodDescription(joinPoint, controllerLog, operLog, jsonResult);
             // 保存数据库
             asyncLogService.saveSysLog(operLog);
         }
@@ -133,7 +131,7 @@ public class LogAspect
      * @param operLog 操作日志
      * @throws Exception
      */
-    public void getControllerMethodDescription(JoinPoint joinPoint, Log log, SysOperLog operLog) throws Exception
+    public void getControllerMethodDescription(JoinPoint joinPoint, Log log, SysOperLog operLog, Object jsonResult) throws Exception
     {
         // 设置action动作
         operLog.setBusinessType(log.businessType().ordinal());
@@ -146,6 +144,11 @@ public class LogAspect
         {
             // 获取参数的信息，传入到数据库中。
             setRequestValue(joinPoint, operLog);
+        }
+        // 是否需要保存response，参数和值
+        if (log.isSaveResponseData() && StringUtils.isNotNull(jsonResult))
+        {
+            operLog.setJsonResult(StringUtils.substring(JSON.toJSONString(jsonResult), 0, 2000));
         }
     }
 
