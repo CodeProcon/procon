@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import com.huangpuguang.common.security.annotation.RequiresPermissions;
 import com.huangpuguang.system.api.model.LoginUser;
 import com.huangpuguang.system.domain.SysUserOnline;
 import com.huangpuguang.system.service.SysUserOnlineService;
@@ -22,7 +23,7 @@ import com.huangpuguang.common.core.web.page.TableDataInfo;
 import com.huangpuguang.common.log.annotation.Log;
 import com.huangpuguang.common.log.enums.BusinessType;
 import com.huangpuguang.common.redis.service.RedisService;
-import com.huangpuguang.common.security.annotation.PreAuthorize;
+
 
 /**
  * 在线用户监控
@@ -39,7 +40,7 @@ public class SysUserOnlineController extends BaseController
     @Autowired
     private RedisService redisService;
 
-    @PreAuthorize(hasPermi = "monitor:online:list")
+    @RequiresPermissions("monitor:online:list")
     @GetMapping("/list")
     public TableDataInfo list(String ipaddr, String userName)
     {
@@ -82,7 +83,7 @@ public class SysUserOnlineController extends BaseController
     /**
      * 强退用户
      */
-    @PreAuthorize(hasPermi = "monitor:online:forceLogout")
+    @RequiresPermissions("monitor:online:forceLogout")
     @Log(title = "在线用户", businessType = BusinessType.FORCE)
     @DeleteMapping("/{tokenId}")
     public AjaxResult forceLogout(@PathVariable String tokenId)

@@ -2,7 +2,7 @@ package com.huangpuguang.system.controller;
 
 import com.huangpuguang.common.core.constant.UserConstants;
 import com.huangpuguang.common.core.domain.ResultModel;
-import com.huangpuguang.common.core.utils.SecurityUtils;
+import com.huangpuguang.common.security.utils.SecurityUtils;
 import com.huangpuguang.common.core.utils.ServletUtils;
 import com.huangpuguang.common.core.utils.StringUtils;
 import com.huangpuguang.common.core.web.controller.BaseController;
@@ -71,7 +71,7 @@ public class SysProfileController extends BaseController
         {
             return AjaxResult.error("修改用户'" + user.getUserName() + "'失败，邮箱账号已存在");
         }
-        LoginUser loginUser = tokenService.getLoginUser();
+        LoginUser loginUser = SecurityUtils.getLoginUser();
         SysUser sysUser = loginUser.getSysUser();
         user.setUserId(sysUser.getUserId());
         user.setPassword(null);
@@ -109,7 +109,7 @@ public class SysProfileController extends BaseController
         if (userService.resetUserPwd(username, SecurityUtils.encryptPassword(newPassword)) > 0)
         {
             // 更新缓存用户密码
-            LoginUser loginUser = tokenService.getLoginUser();
+            LoginUser loginUser = SecurityUtils.getLoginUser();
             loginUser.getSysUser().setPassword(SecurityUtils.encryptPassword(newPassword));
             tokenService.setLoginUser(loginUser);
             return AjaxResult.success();
@@ -126,7 +126,7 @@ public class SysProfileController extends BaseController
     {
         if (!file.isEmpty())
         {
-            LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
+            LoginUser loginUser = SecurityUtils.getLoginUser();
             ResultModel<SysFile> fileResult = remoteFileService.upload(file);
             if (StringUtils.isNull(fileResult) || StringUtils.isNull(fileResult.getData()))
             {

@@ -2,6 +2,7 @@ package com.huangpuguang.system.controller;
 
 import java.util.List;
 
+import com.huangpuguang.common.security.annotation.RequiresPermissions;
 import com.huangpuguang.system.domain.SysNotice;
 import com.huangpuguang.system.service.SysNoticeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,13 +15,13 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import com.huangpuguang.common.core.utils.SecurityUtils;
+import com.huangpuguang.common.security.utils.SecurityUtils;
 import com.huangpuguang.common.core.web.controller.BaseController;
 import com.huangpuguang.common.core.web.domain.AjaxResult;
 import com.huangpuguang.common.core.web.page.TableDataInfo;
 import com.huangpuguang.common.log.annotation.Log;
 import com.huangpuguang.common.log.enums.BusinessType;
-import com.huangpuguang.common.security.annotation.PreAuthorize;
+
 
 /**
  * 公告 信息操作处理
@@ -37,7 +38,7 @@ public class SysNoticeController extends BaseController
     /**
      * 获取通知公告列表
      */
-    @PreAuthorize(hasPermi = "system:notice:list")
+    @RequiresPermissions("system:notice:list")
     @GetMapping("/list")
     public TableDataInfo list(SysNotice notice)
     {
@@ -49,7 +50,7 @@ public class SysNoticeController extends BaseController
     /**
      * 根据通知公告编号获取详细信息
      */
-    @PreAuthorize(hasPermi = "system:notice:query")
+    @RequiresPermissions("system:notice:query")
     @GetMapping(value = "/{noticeId}")
     public AjaxResult getInfo(@PathVariable Long noticeId)
     {
@@ -59,7 +60,7 @@ public class SysNoticeController extends BaseController
     /**
      * 新增通知公告
      */
-    @PreAuthorize(hasPermi = "system:notice:add")
+    @RequiresPermissions("system:notice:add")
     @Log(title = "通知公告", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@Validated @RequestBody SysNotice notice)
@@ -71,7 +72,7 @@ public class SysNoticeController extends BaseController
     /**
      * 修改通知公告
      */
-    @PreAuthorize(hasPermi = "system:notice:edit")
+    @RequiresPermissions("system:notice:edit")
     @Log(title = "通知公告", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@Validated @RequestBody SysNotice notice)
@@ -83,7 +84,7 @@ public class SysNoticeController extends BaseController
     /**
      * 删除通知公告
      */
-    @PreAuthorize(hasPermi = "system:notice:remove")
+    @RequiresPermissions("system:notice:remove")
     @Log(title = "通知公告", businessType = BusinessType.DELETE)
     @DeleteMapping("/{noticeIds}")
     public AjaxResult remove(@PathVariable Long[] noticeIds)

@@ -1,16 +1,17 @@
 package com.huangpuguang.system.controller;
 
+import com.huangpuguang.common.security.annotation.RequiresPermissions;
 import com.huangpuguang.system.domain.SysConfig;
 import com.huangpuguang.system.service.SysConfigService;
 import com.huangpuguang.common.core.constant.UserConstants;
-import com.huangpuguang.common.core.utils.SecurityUtils;
+import com.huangpuguang.common.security.utils.SecurityUtils;
 import com.huangpuguang.common.core.utils.poi.ExcelUtil;
 import com.huangpuguang.common.core.web.controller.BaseController;
 import com.huangpuguang.common.core.web.domain.AjaxResult;
 import com.huangpuguang.common.core.web.page.TableDataInfo;
 import com.huangpuguang.common.log.annotation.Log;
 import com.huangpuguang.common.log.enums.BusinessType;
-import com.huangpuguang.common.security.annotation.PreAuthorize;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -34,7 +35,7 @@ public class SysConfigController extends BaseController
     /**
      * 获取参数配置列表
      */
-    @PreAuthorize(hasPermi = "system:config:list")
+    @RequiresPermissions("system:config:list")
     @GetMapping("/list")
     public TableDataInfo list(SysConfig config)
     {
@@ -44,7 +45,7 @@ public class SysConfigController extends BaseController
     }
 
     @Log(title = "参数管理", businessType = BusinessType.EXPORT)
-    @PreAuthorize(hasPermi = "system:config:export")
+    @RequiresPermissions("system:config:export")
     @PostMapping("/export")
     public void export(HttpServletResponse response, SysConfig config) throws IOException
     {
@@ -74,7 +75,7 @@ public class SysConfigController extends BaseController
     /**
      * 新增参数配置
      */
-    @PreAuthorize(hasPermi = "system:config:add")
+    @RequiresPermissions("system:config:add")
     @Log(title = "参数管理", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@Validated @RequestBody SysConfig config)
@@ -90,7 +91,7 @@ public class SysConfigController extends BaseController
     /**
      * 修改参数配置
      */
-    @PreAuthorize(hasPermi = "system:config:edit")
+    @RequiresPermissions("system:config:edit")
     @Log(title = "参数管理", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@Validated @RequestBody SysConfig config)
@@ -106,7 +107,7 @@ public class SysConfigController extends BaseController
     /**
      * 删除参数配置
      */
-    @PreAuthorize(hasPermi = "system:config:remove")
+    @RequiresPermissions("system:config:remove")
     @Log(title = "参数管理", businessType = BusinessType.DELETE)
     @DeleteMapping("/{configIds}")
     public AjaxResult remove(@PathVariable Long[] configIds)
@@ -118,7 +119,7 @@ public class SysConfigController extends BaseController
     /**
      * 刷新参数缓存
      */
-    @PreAuthorize(hasPermi = "system:config:remove")
+    @RequiresPermissions("system:config:remove")
     @Log(title = "参数管理", businessType = BusinessType.CLEAN)
     @DeleteMapping("/refreshCache")
     public AjaxResult refreshCache()

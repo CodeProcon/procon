@@ -8,7 +8,8 @@ import com.huangpuguang.common.core.web.domain.AjaxResult;
 import com.huangpuguang.common.core.web.page.TableDataInfo;
 import com.huangpuguang.common.log.annotation.Log;
 import com.huangpuguang.common.log.enums.BusinessType;
-import com.huangpuguang.common.security.annotation.PreAuthorize;
+
+import com.huangpuguang.common.security.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,7 +21,7 @@ import java.util.List;
  * <p>网站配置</p>
  *
  * @author procon
- * @time 2020-11-26 11:42
+ * @since 2020-11-26 11:42
  */
 @RestController
 @RequestMapping("admin/config")
@@ -36,7 +37,7 @@ public class WebConfigController extends BaseController {
     /**
      * 查询博客配置列表
      */
-    @PreAuthorize(hasPermi = "blog:config:list")
+    @RequiresPermissions("blog:config:list")
     @GetMapping("/list")
     public TableDataInfo list(BlogWebConfig blogWebConfig)
     {
@@ -48,7 +49,7 @@ public class WebConfigController extends BaseController {
     /**
      * 导出【博客配置】列表
      */
-    @PreAuthorize(hasPermi = "blog:config:export")
+    @RequiresPermissions("blog:config:export")
     @Log(title = "导出【博客配置】列表", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(HttpServletResponse response, BlogWebConfig blogWebConfig) throws IOException
@@ -61,7 +62,7 @@ public class WebConfigController extends BaseController {
     /**
      * 获取【博客配置】详细信息
      */
-    @PreAuthorize(hasPermi = "blog:config:query")
+    @RequiresPermissions("blog:config:query")
     @GetMapping(value = "/{id}")
     public AjaxResult getInfo(@PathVariable("id") Long id)
     {
@@ -71,7 +72,7 @@ public class WebConfigController extends BaseController {
     /**
      * 新增【博客配置】
      */
-    @PreAuthorize(hasPermi = "blog:config:add")
+    @RequiresPermissions("blog:config:add")
     @Log(title = "新增【博客配置】", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody BlogWebConfig blogWebConfig)
@@ -93,7 +94,7 @@ public class WebConfigController extends BaseController {
     /**
      * 删除【博客配置】
      */
-    @PreAuthorize(hasPermi = "blog:config:remove")
+    @RequiresPermissions("blog:config:remove")
     @Log(title = "删除【博客配置】", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ids}")
     public AjaxResult remove(@PathVariable Long[] ids)

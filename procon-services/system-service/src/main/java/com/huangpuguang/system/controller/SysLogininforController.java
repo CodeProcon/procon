@@ -1,5 +1,6 @@
 package com.huangpuguang.system.controller;
 
+import com.huangpuguang.common.security.annotation.RequiresPermissions;
 import com.huangpuguang.system.api.domain.SysLogininfor;
 import com.huangpuguang.system.service.SysLogininforService;
 import com.huangpuguang.common.core.utils.poi.ExcelUtil;
@@ -9,7 +10,7 @@ import com.huangpuguang.common.core.web.page.TableDataInfo;
 import com.huangpuguang.common.log.annotation.Log;
 import com.huangpuguang.common.log.enums.BusinessType;
 import com.huangpuguang.common.security.annotation.InnerAuth;
-import com.huangpuguang.common.security.annotation.PreAuthorize;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,7 +30,7 @@ public class SysLogininforController extends BaseController
     @Autowired
     private SysLogininforService logininforService;
 
-    @PreAuthorize(hasPermi = "system:logininfor:list")
+    @RequiresPermissions("system:logininfor:list")
     @GetMapping("/list")
     public TableDataInfo list(SysLogininfor logininfor)
     {
@@ -39,7 +40,7 @@ public class SysLogininforController extends BaseController
     }
 
     @Log(title = "登录日志", businessType = BusinessType.EXPORT)
-    @PreAuthorize(hasPermi = "system:logininfor:export")
+    @RequiresPermissions("system:logininfor:export")
     @PostMapping("/export")
     public void export(HttpServletResponse response, SysLogininfor logininfor) throws IOException
     {
@@ -48,7 +49,7 @@ public class SysLogininforController extends BaseController
         util.exportExcel(response, list, "登录日志");
     }
 
-    @PreAuthorize(hasPermi = "system:logininfor:remove")
+    @RequiresPermissions("system:logininfor:remove")
     @Log(title = "登录日志", businessType = BusinessType.DELETE)
     @DeleteMapping("/{infoIds}")
     public AjaxResult remove(@PathVariable Long[] infoIds)
@@ -56,7 +57,7 @@ public class SysLogininforController extends BaseController
         return toAjax(logininforService.deleteLogininforByIds(infoIds));
     }
 
-    @PreAuthorize(hasPermi = "system:logininfor:remove")
+    @RequiresPermissions("system:logininfor:remove")
     @Log(title = "登录日志", businessType = BusinessType.DELETE)
     @DeleteMapping("/clean")
     public AjaxResult clean()

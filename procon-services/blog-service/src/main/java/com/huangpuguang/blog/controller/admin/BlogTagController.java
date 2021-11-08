@@ -8,7 +8,8 @@ import com.huangpuguang.common.core.web.domain.AjaxResult;
 import com.huangpuguang.common.core.web.page.TableDataInfo;
 import com.huangpuguang.common.log.annotation.Log;
 import com.huangpuguang.common.log.enums.BusinessType;
-import com.huangpuguang.common.security.annotation.PreAuthorize;
+
+import com.huangpuguang.common.security.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -46,7 +47,7 @@ public class BlogTagController extends BaseController {
     /**
      * 导出标签列表
      */
-    @PreAuthorize(hasPermi = "blog:tag:export")
+    @RequiresPermissions("blog:tag:export")
     @Log(title = "标签", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(HttpServletResponse response, BlogTag blogTag) throws IOException
@@ -59,7 +60,7 @@ public class BlogTagController extends BaseController {
     /**
      * 获取标签详细信息
      */
-    @PreAuthorize(hasPermi = "blog:tag:query")
+    @RequiresPermissions("blog:tag:query")
     @GetMapping(value = "/{id}")
     public AjaxResult getInfo(@PathVariable("id") Long id)
     {
@@ -69,7 +70,7 @@ public class BlogTagController extends BaseController {
     /**
      * 新增标签
      */
-    @PreAuthorize(hasPermi = "blog:tag:add")
+    @RequiresPermissions("blog:tag:add")
     @Log(title = "标签", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody BlogTag blogTag)
@@ -80,7 +81,7 @@ public class BlogTagController extends BaseController {
     /**
      * 修改标签
      */
-    @PreAuthorize(hasPermi = "blog:tag:edit")
+    @RequiresPermissions("blog:tag:edit")
     @Log(title = "标签", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody BlogTag blogTag)
@@ -91,7 +92,7 @@ public class BlogTagController extends BaseController {
     /**
      * 删除标签
      */
-    @PreAuthorize(hasPermi = "blog:tag:remove")
+    @RequiresPermissions("blog:tag:remove")
     @Log(title = "标签", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ids}")
     public AjaxResult remove(@PathVariable Long[] ids)

@@ -7,7 +7,7 @@ import com.huangpuguang.common.core.constant.*;
 import com.huangpuguang.common.core.domain.ResultModel;
 import com.huangpuguang.common.core.exception.ServiceException;
 import com.huangpuguang.common.core.utils.JsonUtils;
-import com.huangpuguang.common.core.utils.SecurityUtils;
+import com.huangpuguang.common.security.utils.SecurityUtils;
 import com.huangpuguang.common.core.utils.StringUtils;
 import com.huangpuguang.common.core.utils.bean.BeanUtils;
 import com.huangpuguang.common.core.utils.ip.IpUtils;

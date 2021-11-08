@@ -121,10 +121,7 @@ public class Constants
      */
     public static final long CAPTCHA_EXPIRATION = 2;
 
-    /**
-     * 令牌有效期（分钟）
-     */
-    public static final  long TOKEN_EXPIRE = 720;
+
 
     /**
      * 参数管理 cache key

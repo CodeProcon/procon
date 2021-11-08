@@ -6,7 +6,7 @@ import com.huangpuguang.common.core.constant.UserConstants;
 import com.huangpuguang.common.core.domain.ResultModel;
 import com.huangpuguang.common.core.enums.UserStatus;
 import com.huangpuguang.common.core.exception.ServiceException;
-import com.huangpuguang.common.core.utils.SecurityUtils;
+import com.huangpuguang.common.security.utils.SecurityUtils;
 import com.huangpuguang.common.core.utils.ServletUtils;
 import com.huangpuguang.common.core.utils.StringUtils;
 import com.huangpuguang.common.core.utils.ip.IpUtils;

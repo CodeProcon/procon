@@ -10,7 +10,7 @@ import com.huangpuguang.blog.service.BlogCommentService;
 import com.huangpuguang.blog.service.BlogContentService;
 import com.huangpuguang.blog.service.BlogWebConfigService;
 import com.huangpuguang.common.core.constant.BlogConstants;
-import com.huangpuguang.common.core.utils.SecurityUtils;
+import com.huangpuguang.common.security.utils.SecurityUtils;
 import com.huangpuguang.common.core.utils.StringUtils;
 import com.huangpuguang.common.core.web.controller.BaseController;
 import com.huangpuguang.common.core.web.domain.AjaxResult;

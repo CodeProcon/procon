@@ -6,7 +6,7 @@ import com.huangpuguang.common.core.constant.Constants;
 import com.huangpuguang.common.core.constant.GenConstants;
 import com.huangpuguang.common.core.exception.ServiceException;
 import com.huangpuguang.common.core.text.CharsetKit;
-import com.huangpuguang.common.core.utils.SecurityUtils;
+import com.huangpuguang.common.security.utils.SecurityUtils;
 import com.huangpuguang.common.core.utils.StringUtils;
 import com.huangpuguang.common.core.utils.file.FileUtils;
 import com.huangpuguang.gen.domain.GenTable;

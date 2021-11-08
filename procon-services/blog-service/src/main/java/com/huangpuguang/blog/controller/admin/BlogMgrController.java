@@ -6,7 +6,7 @@ import com.huangpuguang.blog.vo.BlogContentVo;
 import com.huangpuguang.common.core.web.controller.BaseController;
 import com.huangpuguang.common.core.web.domain.AjaxResult;
 import com.huangpuguang.common.core.web.page.TableDataInfo;
-import com.huangpuguang.common.security.annotation.PreAuthorize;
+import com.huangpuguang.common.security.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,7 +36,7 @@ public class BlogMgrController extends BaseController {
      * @param blogContent 参数
      * @return blogContents
      */
-    @PreAuthorize(hasPermi = "blog:content:list")
+    @RequiresPermissions("blog:content:list")
     @GetMapping("/getList")
     public TableDataInfo getBlogList(BlogContent blogContent) {
         startPage();
@@ -50,7 +50,7 @@ public class BlogMgrController extends BaseController {
      * @param id 参数
      * @return blogContents
      */
-    @PreAuthorize(hasPermi = "blog:content:query")
+    @RequiresPermissions("blog:content:query")
     @GetMapping("/get/{id}")
     public AjaxResult getBlogList(@PathVariable("id") Long id) {
         BlogContent blogContent = blogContentService.selectBlogContentById(id);
@@ -63,7 +63,7 @@ public class BlogMgrController extends BaseController {
      * @param blogContent 博客实体
      * @return add
      */
-    @PreAuthorize(hasPermi = "blog:content:add")
+    @RequiresPermissions("blog:content:add")
     @PostMapping("/add")
     public AjaxResult add(@RequestBody BlogContent blogContent) {
         return AjaxResult.success(blogContentService.insertBlogContent(blogContent));
@@ -77,7 +77,7 @@ public class BlogMgrController extends BaseController {
      * @author procon
      * @time 2020/11/24 16:55
      */
-    @PreAuthorize(hasPermi = "blog:content:edit")
+    @RequiresPermissions("blog:content:edit")
     @PostMapping("/update")
     public AjaxResult update(@RequestBody BlogContent blogContent) {
         return AjaxResult.success(blogContentService.updateBlogContent(blogContent));
@@ -90,13 +90,13 @@ public class BlogMgrController extends BaseController {
      * @author procon
      * @time 2020/11/24 17:17
      */
-    @PreAuthorize(hasPermi = "blog:content:remove")
+    @RequiresPermissions("blog:content:remove")
     @DeleteMapping("/{ids}")
     public AjaxResult delete(@PathVariable("ids") Long[] ids) {
         return AjaxResult.success(blogContentService.deleteBlogContentByIds(ids));
     }
 
-    @PreAuthorize(hasPermi = "blog:content:edit")
+    @RequiresPermissions("blog:content:edit")
     @PostMapping("/editBatch")
     public  AjaxResult editBatch(@RequestBody List<BlogContentVo> blogVOList){
         return AjaxResult.success(blogContentService.editBatch(blogVOList));

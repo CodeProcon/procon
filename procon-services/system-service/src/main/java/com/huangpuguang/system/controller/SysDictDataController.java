@@ -1,9 +1,10 @@
 package com.huangpuguang.system.controller;
 
+import com.huangpuguang.common.security.annotation.RequiresPermissions;
 import com.huangpuguang.system.api.domain.SysDictData;
 import com.huangpuguang.system.service.SysDictDataService;
 import com.huangpuguang.system.service.SysDictTypeService;
-import com.huangpuguang.common.core.utils.SecurityUtils;
+import com.huangpuguang.common.security.utils.SecurityUtils;
 import com.huangpuguang.common.core.utils.StringUtils;
 import com.huangpuguang.common.core.utils.poi.ExcelUtil;
 import com.huangpuguang.common.core.web.controller.BaseController;
@@ -11,7 +12,7 @@ import com.huangpuguang.common.core.web.domain.AjaxResult;
 import com.huangpuguang.common.core.web.page.TableDataInfo;
 import com.huangpuguang.common.log.annotation.Log;
 import com.huangpuguang.common.log.enums.BusinessType;
-import com.huangpuguang.common.security.annotation.PreAuthorize;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -36,7 +37,7 @@ public class SysDictDataController extends BaseController
     @Autowired
     private SysDictTypeService dictTypeService;
 
-    @PreAuthorize(hasPermi = "system:dict:list")
+    @RequiresPermissions("system:dict:list")
     @GetMapping("/list")
     public TableDataInfo list(SysDictData dictData)
     {
@@ -46,7 +47,7 @@ public class SysDictDataController extends BaseController
     }
 
     @Log(title = "字典数据", businessType = BusinessType.EXPORT)
-    @PreAuthorize(hasPermi = "system:dict:export")
+    @RequiresPermissions("system:dict:export")
     @PostMapping("/export")
     public void export(HttpServletResponse response, SysDictData dictData) throws IOException
     {
@@ -58,7 +59,7 @@ public class SysDictDataController extends BaseController
     /**
      * 查询字典数据详细
      */
-    @PreAuthorize(hasPermi = "system:dict:query")
+    @RequiresPermissions("system:dict:query")
     @GetMapping(value = "/{dictCode}")
     public AjaxResult getInfo(@PathVariable Long dictCode)
     {
@@ -82,7 +83,7 @@ public class SysDictDataController extends BaseController
     /**
      * 新增字典类型
      */
-    @PreAuthorize(hasPermi = "system:dict:add")
+    @RequiresPermissions("system:dict:add")
     @Log(title = "字典数据", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@Validated @RequestBody SysDictData dict)
@@ -94,7 +95,7 @@ public class SysDictDataController extends BaseController
     /**
      * 修改保存字典类型
      */
-    @PreAuthorize(hasPermi = "system:dict:edit")
+    @RequiresPermissions("system:dict:edit")
     @Log(title = "字典数据", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@Validated @RequestBody SysDictData dict)
@@ -106,7 +107,7 @@ public class SysDictDataController extends BaseController
     /**
      * 删除字典类型
      */
-    @PreAuthorize(hasPermi = "system:dict:remove")
+    @RequiresPermissions("system:dict:remove")
     @Log(title = "字典类型", businessType = BusinessType.DELETE)
     @DeleteMapping("/{dictCodes}")
     public AjaxResult remove(@PathVariable Long[] dictCodes)

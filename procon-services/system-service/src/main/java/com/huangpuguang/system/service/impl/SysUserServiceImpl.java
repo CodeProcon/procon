@@ -2,7 +2,7 @@ package com.huangpuguang.system.service.impl;
 
 import com.huangpuguang.common.core.constant.UserConstants;
 import com.huangpuguang.common.core.exception.ServiceException;
-import com.huangpuguang.common.core.utils.SecurityUtils;
+import com.huangpuguang.common.security.utils.SecurityUtils;
 import com.huangpuguang.common.core.utils.SpringUtils;
 import com.huangpuguang.common.core.utils.StringUtils;
 import com.huangpuguang.common.datascope.annotation.DataScope;

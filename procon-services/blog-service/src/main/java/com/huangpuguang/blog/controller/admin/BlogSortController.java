@@ -8,7 +8,8 @@ import com.huangpuguang.common.core.web.domain.AjaxResult;
 import com.huangpuguang.common.core.web.page.TableDataInfo;
 import com.huangpuguang.common.log.annotation.Log;
 import com.huangpuguang.common.log.enums.BusinessType;
-import com.huangpuguang.common.security.annotation.PreAuthorize;
+
+import com.huangpuguang.common.security.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -45,7 +46,7 @@ public class BlogSortController extends BaseController {
     /**
      * 导出博客分类列表
      */
-    @PreAuthorize(hasPermi = "blog:sort:export")
+    @RequiresPermissions("blog:sort:export")
     @Log(title = "博客分类", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(HttpServletResponse response, BlogSort blogSort) throws IOException
@@ -58,7 +59,7 @@ public class BlogSortController extends BaseController {
     /**
      * 获取博客分类详细信息
      */
-    @PreAuthorize(hasPermi = "blog:sort:query")
+    @RequiresPermissions("blog:sort:query")
     @GetMapping(value = "/{id}")
     public AjaxResult getInfo(@PathVariable("id") Long id)
     {
@@ -68,7 +69,7 @@ public class BlogSortController extends BaseController {
     /**
      * 新增博客分类
      */
-    @PreAuthorize(hasPermi = "blog:sort:add")
+    @RequiresPermissions("blog:sort:add")
     @Log(title = "博客分类", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody BlogSort blogSort)
@@ -79,7 +80,7 @@ public class BlogSortController extends BaseController {
     /**
      * 修改博客分类
      */
-    @PreAuthorize(hasPermi = "blog:sort:edit")
+    @RequiresPermissions("blog:sort:edit")
     @Log(title = "博客分类", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody BlogSort blogSort)
@@ -90,7 +91,7 @@ public class BlogSortController extends BaseController {
     /**
      * 删除博客分类
      */
-    @PreAuthorize(hasPermi = "blog:sort:remove")
+    @RequiresPermissions("blog:sort:remove")
     @Log(title = "博客分类", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ids}")
     public AjaxResult remove(@PathVariable Long[] ids)

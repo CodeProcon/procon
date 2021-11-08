@@ -5,7 +5,10 @@ import com.huangpuguang.auth.form.LoginBody;
 import com.huangpuguang.auth.form.RegisterBody;
 import com.huangpuguang.auth.service.SysLoginService;
 import com.huangpuguang.common.core.domain.ResultModel;
+import com.huangpuguang.common.core.utils.JwtUtils;
+import com.huangpuguang.common.security.utils.SecurityUtils;
 import com.huangpuguang.common.core.utils.StringUtils;
+import com.huangpuguang.common.security.auth.AuthUtil;
 import com.huangpuguang.common.security.service.TokenService;
 import com.huangpuguang.system.api.model.LoginUser;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,12 +45,12 @@ public class TokenController
     @DeleteMapping("logout")
     public ResultModel<?> logout(HttpServletRequest request)
     {
-        LoginUser loginUser = tokenService.getLoginUser(request);
-        if (StringUtils.isNotNull(loginUser))
+        String token = SecurityUtils.getToken(request);
+        if (StringUtils.isNotEmpty(token))
         {
-            String username = loginUser.getUsername();
+            String username = JwtUtils.getUserName(token);
             // 删除用户缓存记录
-            tokenService.delLoginUser(loginUser.getToken());
+            AuthUtil.logoutByToken(token);
             // 记录用户退出日志
             sysLoginService.logout(username);
         }

@@ -244,6 +244,7 @@ public class FileUtils extends org.apache.commons.io.FileUtils
                 .append(percentEncodedFileName);
 
         response.setHeader("Content-disposition", contentDispositionValue.toString());
+        response.setHeader("download-filename", percentEncodedFileName);
     }
 
     /**

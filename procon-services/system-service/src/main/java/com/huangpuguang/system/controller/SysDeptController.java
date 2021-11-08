@@ -3,6 +3,7 @@ package com.huangpuguang.system.controller;
 import java.util.Iterator;
 import java.util.List;
 
+import com.huangpuguang.common.security.annotation.RequiresPermissions;
 import com.huangpuguang.system.service.SysDeptService;
 import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,13 +17,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.huangpuguang.common.core.constant.UserConstants;
-import com.huangpuguang.common.core.utils.SecurityUtils;
+import com.huangpuguang.common.security.utils.SecurityUtils;
 import com.huangpuguang.common.core.utils.StringUtils;
 import com.huangpuguang.common.core.web.controller.BaseController;
 import com.huangpuguang.common.core.web.domain.AjaxResult;
 import com.huangpuguang.common.log.annotation.Log;
 import com.huangpuguang.common.log.enums.BusinessType;
-import com.huangpuguang.common.security.annotation.PreAuthorize;
+
 import com.huangpuguang.system.api.domain.SysDept;
 
 /**
@@ -40,7 +41,7 @@ public class SysDeptController extends BaseController
     /**
      * 获取部门列表
      */
-    @PreAuthorize(hasPermi = "system:dept:list")
+    @RequiresPermissions("system:dept:list")
     @GetMapping("/list")
     public AjaxResult list(SysDept dept)
     {
@@ -51,7 +52,7 @@ public class SysDeptController extends BaseController
     /**
      * 查询部门列表（排除节点）
      */
-    @PreAuthorize(hasPermi = "system:dept:list")
+    @RequiresPermissions("system:dept:list")
     @GetMapping("/list/exclude/{deptId}")
     public AjaxResult excludeChild(@PathVariable(value = "deptId", required = false) Long deptId)
     {
@@ -72,7 +73,7 @@ public class SysDeptController extends BaseController
     /**
      * 根据部门编号获取详细信息
      */
-    @PreAuthorize(hasPermi = "system:dept:query")
+    @RequiresPermissions("system:dept:query")
     @GetMapping(value = "/{deptId}")
     public AjaxResult getInfo(@PathVariable Long deptId)
     {
@@ -106,7 +107,7 @@ public class SysDeptController extends BaseController
     /**
      * 新增部门
      */
-    @PreAuthorize(hasPermi = "system:dept:add")
+    @RequiresPermissions("system:dept:add")
     @Log(title = "部门管理", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@Validated @RequestBody SysDept dept)
@@ -122,7 +123,7 @@ public class SysDeptController extends BaseController
     /**
      * 修改部门
      */
-    @PreAuthorize(hasPermi = "system:dept:edit")
+    @RequiresPermissions("system:dept:edit")
     @Log(title = "部门管理", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@Validated @RequestBody SysDept dept)
@@ -147,7 +148,7 @@ public class SysDeptController extends BaseController
     /**
      * 删除部门
      */
-    @PreAuthorize(hasPermi = "system:dept:remove")
+    @RequiresPermissions("system:dept:remove")
     @Log(title = "部门管理", businessType = BusinessType.DELETE)
     @DeleteMapping("/{deptId}")
     public AjaxResult remove(@PathVariable Long deptId)

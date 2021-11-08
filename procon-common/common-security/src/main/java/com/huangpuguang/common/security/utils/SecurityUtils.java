@@ -1,33 +1,51 @@
-package com.huangpuguang.common.core.utils;
-
-import com.huangpuguang.common.core.constant.SecurityConstants;
-import com.huangpuguang.common.core.text.Convert;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+package com.huangpuguang.common.security.utils;
 
 import javax.servlet.http.HttpServletRequest;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import com.huangpuguang.common.core.constant.SecurityConstants;
+import com.huangpuguang.common.core.constant.TokenConstants;
+import com.huangpuguang.common.core.context.SecurityContextHolder;
+import com.huangpuguang.common.core.utils.ServletUtils;
+import com.huangpuguang.common.core.utils.StringUtils;
+import com.huangpuguang.system.api.model.LoginUser;
 
 /**
  * 权限获取工具类
- *
- * @author procon
+ * 
+ * @author huangpuguang
  */
 public class SecurityUtils
 {
-    /**
-     * 获取用户
-     */
-    public static String getUsername()
-    {
-        String username = ServletUtils.getRequest().getHeader(SecurityConstants.DETAILS_USERNAME);
-        return ServletUtils.urlDecode(username);
-    }
-
     /**
      * 获取用户ID
      */
     public static Long getUserId()
     {
-        return Convert.toLong(ServletUtils.getRequest().getHeader(SecurityConstants.DETAILS_USER_ID));
+        return SecurityContextHolder.getUserId();
+    }
+
+    /**
+     * 获取用户名称
+     */
+    public static String getUsername()
+    {
+        return SecurityContextHolder.getUserName();
+    }
+
+    /**
+     * 获取用户key
+     */
+    public static String getUserKey()
+    {
+        return SecurityContextHolder.getUserKey();
+    }
+
+    /**
+     * 获取登录用户信息
+     */
+    public static LoginUser getLoginUser()
+    {
+        return SecurityContextHolder.get(SecurityConstants.LOGIN_USER, LoginUser.class);
     }
 
     /**
@@ -43,25 +61,27 @@ public class SecurityUtils
      */
     public static String getToken(HttpServletRequest request)
     {
-        String token = request.getHeader(SecurityConstants.TOKEN_AUTHENTICATION);
+        // 从header获取token标识
+        String token = request.getHeader(TokenConstants.AUTHENTICATION);
         return replaceTokenPrefix(token);
     }
 
     /**
-     * 替换token前缀
+     * 裁剪token前缀
      */
     public static String replaceTokenPrefix(String token)
     {
-        if (StringUtils.isNotEmpty(token) && token.startsWith(SecurityConstants.TOKEN_PREFIX))
+        // 如果前端设置了令牌前缀，则裁剪掉前缀
+        if (StringUtils.isNotEmpty(token) && token.startsWith(TokenConstants.PREFIX))
         {
-            token = token.replace(SecurityConstants.TOKEN_PREFIX, "");
+            token = token.replaceFirst(TokenConstants.PREFIX, "");
         }
         return token;
     }
 
     /**
      * 是否为管理员
-     *
+     * 
      * @param userId 用户ID
      * @return 结果
      */

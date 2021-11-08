@@ -2,7 +2,7 @@ package com.huangpuguang.system.service.impl;
 
 import com.huangpuguang.common.core.constant.Constants;
 import com.huangpuguang.common.core.constant.UserConstants;
-import com.huangpuguang.common.core.utils.SecurityUtils;
+import com.huangpuguang.common.security.utils.SecurityUtils;
 import com.huangpuguang.common.core.utils.StringUtils;
 import com.huangpuguang.system.api.domain.SysRole;
 import com.huangpuguang.system.api.domain.SysUser;
@@ -178,6 +178,7 @@ public class SysMenuServiceImpl implements SysMenuService
                 children.setComponent(UserConstants.INNER_LINK);
                 children.setName(StringUtils.capitalize(routerPath));
                 children.setMeta(new MetaVo(menu.getMenuName(), menu.getIcon(), menu.getPath()));
+                children.setQuery(menu.getQuery());
                 childrenList.add(children);
                 router.setChildren(childrenList);
             }
