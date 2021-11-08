@@ -2,10 +2,12 @@ package com.huangpuguang.system.service.impl;
 
 import com.huangpuguang.common.core.constant.UserConstants;
 import com.huangpuguang.common.core.exception.ServiceException;
+import com.huangpuguang.common.core.utils.SecurityUtils;
 import com.huangpuguang.common.core.utils.SpringUtils;
 import com.huangpuguang.common.core.utils.StringUtils;
 import com.huangpuguang.common.datascope.annotation.DataScope;
 import com.huangpuguang.system.api.domain.SysRole;
+import com.huangpuguang.system.api.domain.SysUser;
 import com.huangpuguang.system.domain.SysRoleDept;
 import com.huangpuguang.system.domain.SysRoleMenu;
 import com.huangpuguang.system.domain.SysUserRole;
@@ -180,6 +182,26 @@ public class SysRoleServiceImpl implements SysRoleService
         if (StringUtils.isNotNull(role.getRoleId()) && role.isAdmin())
         {
             throw new ServiceException("不允许操作超级管理员角色");
+        }
+    }
+
+    /**
+     * 校验角色是否有数据权限
+     *
+     * @param roleId 角色id
+     */
+    @Override
+    public void checkRoleDataScope(Long roleId)
+    {
+        if (!SysUser.isAdmin(SecurityUtils.getUserId()))
+        {
+            SysRole role = new SysRole();
+            role.setRoleId(roleId);
+            List<SysRole> roles = SpringUtils.getAopProxy(this).selectRoleList(role);
+            if (StringUtils.isEmpty(roles))
+            {
+                throw new ServiceException("没有权限访问角色数据！");
+            }
         }
     }
 

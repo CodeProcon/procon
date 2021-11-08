@@ -3,10 +3,13 @@ package com.huangpuguang.system.service.impl;
 import cn.hutool.core.collection.CollUtil;
 import com.huangpuguang.common.core.constant.UserConstants;
 import com.huangpuguang.common.core.exception.ServiceException;
+import com.huangpuguang.common.core.utils.SecurityUtils;
+import com.huangpuguang.common.core.utils.SpringUtils;
 import com.huangpuguang.common.core.utils.StringUtils;
 import com.huangpuguang.common.datascope.annotation.DataScope;
 import com.huangpuguang.system.api.domain.SysDept;
 import com.huangpuguang.system.api.domain.SysRole;
+import com.huangpuguang.system.api.domain.SysUser;
 import com.huangpuguang.system.domain.vo.TreeSelect;
 import com.huangpuguang.system.mapper.SysDeptMapper;
 import com.huangpuguang.system.mapper.SysRoleMapper;
@@ -170,6 +173,26 @@ public class SysDeptServiceImpl implements SysDeptService
             return UserConstants.NOT_UNIQUE;
         }
         return UserConstants.UNIQUE;
+    }
+
+    /**
+     * 校验部门是否有数据权限
+     *
+     * @param deptId 部门id
+     */
+    @Override
+    public void checkDeptDataScope(Long deptId)
+    {
+        if (!SysUser.isAdmin(SecurityUtils.getUserId()))
+        {
+            SysDept dept = new SysDept();
+            dept.setDeptId(deptId);
+            List<SysDept> depts = SpringUtils.getAopProxy(this).selectDeptList(dept);
+            if (StringUtils.isEmpty(depts))
+            {
+                throw new ServiceException("没有权限访问部门数据！");
+            }
+        }
     }
 
     /**

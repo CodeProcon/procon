@@ -1,9 +1,10 @@
 package com.huangpuguang.job.service;
 
-import java.util.List;
-import javax.annotation.PostConstruct;
-
+import com.huangpuguang.common.core.constant.ScheduleConstants;
+import com.huangpuguang.common.core.exception.job.TaskException;
 import com.huangpuguang.job.domain.SysJob;
+import com.huangpuguang.job.mapper.SysJobMapper;
+import com.huangpuguang.job.util.CronUtils;
 import com.huangpuguang.job.util.ScheduleUtils;
 import org.quartz.JobDataMap;
 import org.quartz.JobKey;
@@ -12,10 +13,9 @@ import org.quartz.SchedulerException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import com.huangpuguang.common.core.constant.ScheduleConstants;
-import com.huangpuguang.common.core.exception.job.TaskException;
-import com.huangpuguang.job.mapper.SysJobMapper;
-import com.huangpuguang.job.util.CronUtils;
+
+import javax.annotation.PostConstruct;
+import java.util.List;
 
 /**
  * 定时任务调度信息 服务层
@@ -75,7 +75,7 @@ public class SysJobServiceImpl implements SysJobService
      * @param job 调度信息
      */
     @Override
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public int pauseJob(SysJob job) throws SchedulerException
     {
         Long jobId = job.getJobId();
@@ -95,7 +95,7 @@ public class SysJobServiceImpl implements SysJobService
      * @param job 调度信息
      */
     @Override
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public int resumeJob(SysJob job) throws SchedulerException
     {
         Long jobId = job.getJobId();
@@ -115,7 +115,7 @@ public class SysJobServiceImpl implements SysJobService
      * @param job 调度信息
      */
     @Override
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public int deleteJob(SysJob job) throws SchedulerException
     {
         Long jobId = job.getJobId();
@@ -135,7 +135,7 @@ public class SysJobServiceImpl implements SysJobService
      * @return 结果
      */
     @Override
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public void deleteJobByIds(Long[] jobIds) throws SchedulerException
     {
         for (Long jobId : jobIds)
@@ -151,7 +151,7 @@ public class SysJobServiceImpl implements SysJobService
      * @param job 调度信息
      */
     @Override
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public int changeStatus(SysJob job) throws SchedulerException
     {
         int rows = 0;
@@ -173,7 +173,7 @@ public class SysJobServiceImpl implements SysJobService
      * @param job 调度信息
      */
     @Override
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public void run(SysJob job) throws SchedulerException
     {
         Long jobId = job.getJobId();
@@ -191,7 +191,7 @@ public class SysJobServiceImpl implements SysJobService
      * @param job 调度信息 调度信息
      */
     @Override
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public int insertJob(SysJob job) throws SchedulerException, TaskException
     {
         job.setStatus(ScheduleConstants.Status.PAUSE.getValue());
@@ -209,7 +209,7 @@ public class SysJobServiceImpl implements SysJobService
      * @param job 调度信息
      */
     @Override
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public int updateJob(SysJob job) throws SchedulerException, TaskException
     {
         SysJob properties = selectJobById(job.getJobId());

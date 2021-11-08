@@ -1,7 +1,7 @@
 package com.huangpuguang.common.core.web.controller;
 
+import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.github.pagehelper.page.PageMethod;
 import com.huangpuguang.common.core.constant.HttpStatus;
 import com.huangpuguang.common.core.utils.DateUtils;
 import com.huangpuguang.common.core.utils.StringUtils;
@@ -56,7 +56,8 @@ public class BaseController
         if (StringUtils.isNotNull(pageNum) && StringUtils.isNotNull(pageSize))
         {
             String orderBy = SqlUtil.escapeOrderBySql(pageDomain.getOrderBy());
-            PageMethod.startPage(pageNum, pageSize, orderBy);
+            Boolean reasonable = pageDomain.getReasonable();
+            PageHelper.startPage(pageNum, pageSize, orderBy).setReasonable(reasonable);
         }
     }
 

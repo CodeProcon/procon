@@ -24,6 +24,7 @@ import java.net.URLEncoder;
 import java.util.Enumeration;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * 客户端工具类
@@ -45,7 +46,7 @@ public class ServletUtils
      */
     public static String getParameter(String name, String defaultValue)
     {
-        return Convert.toStr(getRequest().getParameter(name), defaultValue);
+        return Convert.toStr(Objects.requireNonNull(getRequest()).getParameter(name), defaultValue);
     }
 
     /**
@@ -61,8 +62,25 @@ public class ServletUtils
      */
     public static Integer getParameterToInt(String name, Integer defaultValue)
     {
-        return Convert.toInt(getRequest().getParameter(name), defaultValue);
+        return Convert.toInt(Objects.requireNonNull(getRequest()).getParameter(name), defaultValue);
     }
+
+    /**
+     * 获取Boolean参数
+     */
+    public static Boolean getParameterToBool(String name)
+    {
+        return Convert.toBool(Objects.requireNonNull(getRequest()).getParameter(name));
+    }
+
+    /**
+     * 获取Boolean参数
+     */
+    public static Boolean getParameterToBool(String name, Boolean defaultValue)
+    {
+        return Convert.toBool(Objects.requireNonNull(getRequest()).getParameter(name), defaultValue);
+    }
+
 
     /**
      * 获取request
