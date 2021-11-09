@@ -1,5 +1,6 @@
 package com.huangpuguang.system.api.factory;
 
+import com.huangpuguang.common.core.web.domain.AjaxResult;
 import com.huangpuguang.system.api.domain.SysUser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,6 +56,11 @@ public class RemoteUserFallbackFactory implements FallbackFactory<RemoteUserServ
             @Override
             public List<SysUser> getAllUser() {
                 log.error("获取用户失败:{}",throwable.getMessage());
+                return null;
+            }
+
+            @Override
+            public AjaxResult getInfo(Long userId) {
                 return null;
             }
         };

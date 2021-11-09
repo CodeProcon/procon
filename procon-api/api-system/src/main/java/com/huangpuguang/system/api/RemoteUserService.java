@@ -3,6 +3,7 @@ package com.huangpuguang.system.api;
 import com.huangpuguang.common.core.constant.SecurityConstants;
 import com.huangpuguang.common.core.constant.ServiceNameConstants;
 import com.huangpuguang.common.core.domain.ResultModel;
+import com.huangpuguang.common.core.web.domain.AjaxResult;
 import com.huangpuguang.system.api.domain.SysUser;
 import com.huangpuguang.system.api.factory.RemoteUserFallbackFactory;
 import com.huangpuguang.system.api.model.LoginUser;
@@ -65,4 +66,7 @@ public interface RemoteUserService
      */
     @GetMapping("/user/getAllUser")
     public List<SysUser> getAllUser();
+
+    @GetMapping(value =   "/{userId}" )
+    public AjaxResult getInfo(@PathVariable(value = "userId", required = false) Long userId);
 }

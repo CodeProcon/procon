@@ -7,16 +7,18 @@ import com.huangpuguang.common.core.constant.*;
 import com.huangpuguang.common.core.domain.ResultModel;
 import com.huangpuguang.common.core.exception.ServiceException;
 import com.huangpuguang.common.core.utils.JsonUtils;
-import com.huangpuguang.common.security.utils.SecurityUtils;
+import com.huangpuguang.common.core.utils.JwtUtils;
 import com.huangpuguang.common.core.utils.StringUtils;
 import com.huangpuguang.common.core.utils.bean.BeanUtils;
 import com.huangpuguang.common.core.utils.ip.IpUtils;
 import com.huangpuguang.common.redis.service.RedisService;
 import com.huangpuguang.common.security.service.TokenService;
+import com.huangpuguang.common.security.utils.SecurityUtils;
 import com.huangpuguang.system.api.RemoteUserService;
 import com.huangpuguang.system.api.domain.SysUser;
 import com.huangpuguang.system.api.model.LoginUser;
 import com.xkcoding.http.config.HttpConfig;
+import io.jsonwebtoken.Claims;
 import me.zhyd.oauth.config.AuthConfig;
 import me.zhyd.oauth.enums.scope.AuthGiteeScope;
 import me.zhyd.oauth.model.AuthCallback;
@@ -41,10 +43,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Proxy;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * justAuth第三方登录
@@ -85,6 +84,7 @@ public class JustAuthController {
     private RemoteUserService remoteUserService;
     @Autowired
     private TokenService tokenService;
+
 
     /** 获取认证 */
     @RequestMapping("/render/{source}")
@@ -128,8 +128,8 @@ public class JustAuthController {
             accessToken = token.get(BlogConstants.ACCESS_TOKEN).toString();
         }
 
-        setUserInfo(data,accessToken,httpServletRequest);
-        httpServletResponse.sendRedirect(webSiteUrl + "?token=" + accessToken);
+        String jwtToken = setUserInfo(data, accessToken, httpServletRequest);
+        httpServletResponse.sendRedirect(webSiteUrl + "?token=" + jwtToken);
     }
 
 
@@ -186,7 +186,7 @@ public class JustAuthController {
     }
 
     /**  设置用户信息*/
-    private void setUserInfo(Map<String, Object> data,String accessToken,HttpServletRequest httpServletRequest){
+    private String setUserInfo(Map<String, Object> data,String accessToken,HttpServletRequest httpServletRequest){
         //判断用户是否存在
         boolean exist = false;
         SysUser user;
@@ -200,7 +200,7 @@ public class JustAuthController {
                 user = new SysUser();
             }
         } else {
-            return;
+            return StringUtils.EMPTY;
         }
 
         // 判断邮箱是否存在
@@ -247,23 +247,50 @@ public class JustAuthController {
         if(sysUser.getUserId() != null){
             LoginUser loginUser = new LoginUser();
             loginUser.setSysUser(sysUser);
-            tokenService.createToken(loginUser);
+            Map<String, Object> tokenMap = tokenService.createToken(loginUser);
+            return tokenMap.get("access_token").toString();
         }
+        return StringUtils.EMPTY;
     }
 
     /** 获取用户信息*/
     @GetMapping("/verify/{accessToken}")
-    public ResultModel<Map<String, Object>> verifyUser(@PathVariable("accessToken") String accessToken) {
-        String tokenKey = CacheConstants.LOGIN_TOKEN_KEY+accessToken;
-        LoginUser loginUser = redisService.getCacheObject(tokenKey);
-        if (loginUser != null) {
-            SysUser sysUser = loginUser.getSysUser();
-            if (sysUser != null) {
-                Map<String, Object> map = BeanUtils.beanToMap(loginUser);
-                return ResultModel.ok(map, "获取用户成功！");
+    public ResultModel<Map<String, Object>> verifyUser(@PathVariable("accessToken") String token) {
+
+        Claims claims = JwtUtils.parseToken(token);
+        if (claims == null)
+        {
+            return ResultModel.fail("token已过期或验证不正确！");
+        }
+        String userKey = JwtUtils.getUserKey(claims);
+        String tokenKey = CacheConstants.LOGIN_TOKEN_KEY + userKey;
+
+        boolean isLogin = redisService.hasKey(tokenKey);
+        if (!isLogin)
+        {
+            return ResultModel.fail("登录状态已过期");
+        }
+        String userid = JwtUtils.getUserId(claims);
+        String username = JwtUtils.getUserName(claims);
+        if (StringUtils.isEmpty(userid))
+        {
+            return ResultModel.fail("令牌验证失败");
+        }
+
+        List<SysUser> allUser = remoteUserService.getAllUser();
+        SysUser sysUser = new SysUser();
+        for(SysUser user : allUser){
+            if(Long.parseLong(userid) == user.getUserId()){
+                sysUser = user;
             }
         }
-        return ResultModel.fail("登录失效，请重新登录");
+        LoginUser loginUser = new LoginUser();
+        loginUser.setToken(token);
+        loginUser.setSysUser(sysUser);
+        loginUser.setUsername(username);
+        loginUser.setUserid(Long.parseLong(userid));
+        Map<String, Object> map = BeanUtils.beanToMap(loginUser);
+        return ResultModel.ok(map, "获取用户成功！");
     }
 
 }
