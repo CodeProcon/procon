@@ -42,4 +42,3 @@ nbdist/
 !*/build/*.html
 !*/build/*.xml
 
-bootstrap-dev.yml

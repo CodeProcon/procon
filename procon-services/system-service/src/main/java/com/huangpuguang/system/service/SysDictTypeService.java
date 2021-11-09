@@ -4,6 +4,7 @@ import com.huangpuguang.system.api.domain.SysDictData;
 import com.huangpuguang.system.api.domain.SysDictType;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 字典 业务层
@@ -34,6 +35,13 @@ public interface SysDictTypeService
      * @return 字典数据集合信息
      */
     public List<SysDictData> selectDictDataByType(String dictType);
+
+    /**
+     * 根据字典类型列表查询字典数据
+     * @param dictTypeList 字典列表
+     * @return 字典数据集合信息
+     */
+    Map<String,List<SysDictData>> selectDictDataByTypeList(List<String> dictTypeList);
 
     /**
      * 根据字典类型ID查询信息

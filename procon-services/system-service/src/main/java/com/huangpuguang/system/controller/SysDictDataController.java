@@ -81,6 +81,15 @@ public class SysDictDataController extends BaseController
     }
 
     /**
+     * 根据字典类型查询字典数据信息
+     */
+    @PostMapping(value = "/dictTypeList")
+    public AjaxResult dictTypeList(@RequestBody List<String> dictTypeList)
+    {
+        return AjaxResult.success(dictTypeService.selectDictDataByTypeList(dictTypeList));
+    }
+
+    /**
      * 新增字典类型
      */
     @RequiresPermissions("system:dict:add")

@@ -14,7 +14,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 字典 业务层处理
@@ -82,7 +85,16 @@ public class SysDictTypeServiceImpl implements SysDictTypeService
             DictUtils.setDictCache(dictType, dictDatas);
             return dictDatas;
         }
-        return null;
+        return Collections.emptyList();
+    }
+
+    @Override
+    public Map<String,List<SysDictData>> selectDictDataByTypeList(List<String> dictTypeList) {
+        Map<String,List<SysDictData>> dictDataMap = new HashMap<>(dictTypeList.size());
+        for(String type: dictTypeList){
+            dictDataMap.put(type,selectDictDataByType(type));
+        }
+        return dictDataMap;
     }
 
     /**
