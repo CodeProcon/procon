@@ -7,7 +7,7 @@ import com.huangpuguang.common.core.constant.GenConstants;
 import com.huangpuguang.common.core.exception.ServiceException;
 import com.huangpuguang.common.core.text.CharsetKit;
 import com.huangpuguang.common.security.utils.SecurityUtils;
-import com.huangpuguang.common.core.utils.StringUtils;
+import com.huangpuguang.common.core.utils.ProconStringUtils;
 import com.huangpuguang.common.core.utils.file.FileUtils;
 import com.huangpuguang.gen.domain.GenTable;
 import com.huangpuguang.gen.domain.GenTableColumn;
@@ -257,7 +257,7 @@ public class GenTableServiceImpl implements GenTableService
         List<String> templates = VelocityUtils.getTemplateList(table.getTplCategory());
         for (String template : templates)
         {
-            if (!StringUtils.containsAny(template, "sql.vm", "api.js.vm", "index.vue.vm", "index-tree.vue.vm"))
+            if (!ProconStringUtils.containsAny(template, "sql.vm", "api.js.vm", "index.vue.vm", "index-tree.vue.vm"))
             {
                 // 渲染模板
                 StringWriter sw = new StringWriter();
@@ -290,7 +290,7 @@ public class GenTableServiceImpl implements GenTableService
         List<String> tableColumnNames = tableColumns.stream().map(GenTableColumn::getColumnName).collect(Collectors.toList());
 
         List<GenTableColumn> dbTableColumns = genTableColumnMapper.selectDbTableColumnsByName(tableName);
-        if (StringUtils.isEmpty(dbTableColumns))
+        if (ProconStringUtils.isEmpty(dbTableColumns))
         {
             throw new ServiceException("同步数据失败，原表结构不存在");
         }
@@ -305,7 +305,7 @@ public class GenTableServiceImpl implements GenTableService
         });
 
         List<GenTableColumn> delColumns = tableColumns.stream().filter(column -> !dbTableColumnNames.contains(column.getColumnName())).collect(Collectors.toList());
-        if (StringUtils.isNotEmpty(delColumns))
+        if (ProconStringUtils.isNotEmpty(delColumns))
         {
             genTableColumnMapper.deleteGenTableColumns(delColumns);
         }
@@ -382,25 +382,25 @@ public class GenTableServiceImpl implements GenTableService
         {
             String options = JSON.toJSONString(genTable.getParams());
             JSONObject paramsObj = JSONObject.parseObject(options);
-            if (StringUtils.isEmpty(paramsObj.getString(GenConstants.TREE_CODE)))
+            if (ProconStringUtils.isEmpty(paramsObj.getString(GenConstants.TREE_CODE)))
             {
                 throw new ServiceException("树编码字段不能为空");
             }
-            else if (StringUtils.isEmpty(paramsObj.getString(GenConstants.TREE_PARENT_CODE)))
+            else if (ProconStringUtils.isEmpty(paramsObj.getString(GenConstants.TREE_PARENT_CODE)))
             {
                 throw new ServiceException("树父编码字段不能为空");
             }
-            else if (StringUtils.isEmpty(paramsObj.getString(GenConstants.TREE_NAME)))
+            else if (ProconStringUtils.isEmpty(paramsObj.getString(GenConstants.TREE_NAME)))
             {
                 throw new ServiceException("树名称字段不能为空");
             }
             else if (GenConstants.TPL_SUB.equals(genTable.getTplCategory()))
             {
-                if (StringUtils.isEmpty(genTable.getSubTableName()))
+                if (ProconStringUtils.isEmpty(genTable.getSubTableName()))
                 {
                     throw new ServiceException("关联子表的表名不能为空");
                 }
-                else if (StringUtils.isEmpty(genTable.getSubTableFkName()))
+                else if (ProconStringUtils.isEmpty(genTable.getSubTableFkName()))
                 {
                     throw new ServiceException("子表关联的外键名不能为空");
                 }
@@ -423,7 +423,7 @@ public class GenTableServiceImpl implements GenTableService
                 break;
             }
         }
-        if (StringUtils.isNull(table.getPkColumn()))
+        if (ProconStringUtils.isNull(table.getPkColumn()))
         {
             table.setPkColumn(table.getColumns().get(0));
         }
@@ -437,7 +437,7 @@ public class GenTableServiceImpl implements GenTableService
                     break;
                 }
             }
-            if (StringUtils.isNull(table.getSubTable().getPkColumn()))
+            if (ProconStringUtils.isNull(table.getSubTable().getPkColumn()))
             {
                 table.getSubTable().setPkColumn(table.getSubTable().getColumns().get(0));
             }
@@ -451,7 +451,7 @@ public class GenTableServiceImpl implements GenTableService
     public void setSubTable(GenTable table)
     {
         String subTableName = table.getSubTableName();
-        if (StringUtils.isNotEmpty(subTableName))
+        if (ProconStringUtils.isNotEmpty(subTableName))
         {
             table.setSubTable(genTableMapper.selectGenTableByName(subTableName));
         }
@@ -465,7 +465,7 @@ public class GenTableServiceImpl implements GenTableService
     public void setTableFromOptions(GenTable genTable)
     {
         JSONObject paramsObj = JSONObject.parseObject(genTable.getOptions());
-        if (StringUtils.isNotNull(paramsObj))
+        if (ProconStringUtils.isNotNull(paramsObj))
         {
             String treeCode = paramsObj.getString(GenConstants.TREE_CODE);
             String treeParentCode = paramsObj.getString(GenConstants.TREE_PARENT_CODE);
@@ -491,7 +491,7 @@ public class GenTableServiceImpl implements GenTableService
     public static String getGenPath(GenTable table, String template)
     {
         String genPath = table.getGenPath();
-        if (StringUtils.equals(genPath, "/"))
+        if (ProconStringUtils.equals(genPath, "/"))
         {
             return System.getProperty("user.dir") + File.separator + "src" + File.separator + VelocityUtils.getFileName(template, table);
         }

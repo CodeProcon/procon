@@ -4,7 +4,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.huangpuguang.common.core.constant.HttpStatus;
 import com.huangpuguang.common.core.utils.DateUtils;
-import com.huangpuguang.common.core.utils.StringUtils;
+import com.huangpuguang.common.core.utils.ProconStringUtils;
 import com.huangpuguang.common.core.utils.sql.SqlUtil;
 import com.huangpuguang.common.core.web.domain.AjaxResult;
 import com.huangpuguang.common.core.web.page.PageDomain;
@@ -53,7 +53,7 @@ public class BaseController
         PageDomain pageDomain = TableSupport.buildPageRequest();
         Integer pageNum = pageDomain.getPageNum();
         Integer pageSize = pageDomain.getPageSize();
-        if (StringUtils.isNotNull(pageNum) && StringUtils.isNotNull(pageSize))
+        if (ProconStringUtils.isNotNull(pageNum) && ProconStringUtils.isNotNull(pageSize))
         {
             String orderBy = SqlUtil.escapeOrderBySql(pageDomain.getOrderBy());
             Boolean reasonable = pageDomain.getReasonable();

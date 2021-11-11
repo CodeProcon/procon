@@ -1,6 +1,6 @@
 package com.huangpuguang.common.core.utils.html;
 
-import com.huangpuguang.common.core.utils.StringUtils;
+import com.huangpuguang.common.core.utils.ProconStringUtils;
 
 /**
  * 转义和反转义工具类
@@ -72,7 +72,7 @@ public class EscapeUtil
         int len;
         if ((text == null) || ((len = text.length()) == 0))
         {
-            return StringUtils.EMPTY;
+            return ProconStringUtils.EMPTY;
         }
         StringBuilder buffer = new StringBuilder(len + (len >> 2));
         char c;
@@ -99,7 +99,7 @@ public class EscapeUtil
      */
     public static String decode(String content)
     {
-        if (StringUtils.isEmpty(content))
+        if (ProconStringUtils.isEmpty(content))
         {
             return content;
         }

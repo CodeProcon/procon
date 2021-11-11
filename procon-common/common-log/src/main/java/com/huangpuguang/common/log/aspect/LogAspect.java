@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.huangpuguang.common.security.utils.SecurityUtils;
 import com.huangpuguang.common.core.utils.ServletUtils;
-import com.huangpuguang.common.core.utils.StringUtils;
+import com.huangpuguang.common.core.utils.ProconStringUtils;
 import com.huangpuguang.common.core.utils.ip.IpUtils;
 import com.huangpuguang.common.log.annotation.Log;
 import com.huangpuguang.common.log.enums.BusinessStatus;
@@ -79,7 +79,7 @@ public class LogAspect
             operLog.setOperIp(ip);
             operLog.setOperUrl(ServletUtils.getRequest().getRequestURI());
             String username = SecurityUtils.getUsername();
-            if (StringUtils.isNotBlank(username))
+            if (ProconStringUtils.isNotBlank(username))
             {
                 operLog.setOperName(username);
             }
@@ -87,7 +87,7 @@ public class LogAspect
             if (e != null)
             {
                 operLog.setStatus(BusinessStatus.FAIL.ordinal());
-                operLog.setErrorMsg(StringUtils.substring(e.getMessage(), 0, 2000));
+                operLog.setErrorMsg(ProconStringUtils.substring(e.getMessage(), 0, 2000));
             }
             // 设置方法名称
             String className = joinPoint.getTarget().getClass().getName();
@@ -131,9 +131,9 @@ public class LogAspect
             setRequestValue(joinPoint, operLog);
         }
         // 是否需要保存response，参数和值
-        if (log.isSaveResponseData() && StringUtils.isNotNull(jsonResult))
+        if (log.isSaveResponseData() && ProconStringUtils.isNotNull(jsonResult))
         {
-            operLog.setJsonResult(StringUtils.substring(JSON.toJSONString(jsonResult), 0, 2000));
+            operLog.setJsonResult(ProconStringUtils.substring(JSON.toJSONString(jsonResult), 0, 2000));
         }
     }
 
@@ -149,7 +149,7 @@ public class LogAspect
         if (HttpMethod.PUT.name().equals(requestMethod) || HttpMethod.POST.name().equals(requestMethod))
         {
             String params = argsArrayToString(joinPoint.getArgs());
-            operLog.setOperParam(StringUtils.substring(params, 0, 2000));
+            operLog.setOperParam(ProconStringUtils.substring(params, 0, 2000));
         }
     }
 
@@ -163,7 +163,7 @@ public class LogAspect
         {
             for (Object o : paramsArray)
             {
-                if (StringUtils.isNotNull(o) && !isFilterObject(o))
+                if (ProconStringUtils.isNotNull(o) && !isFilterObject(o))
                 {
                     try
                     {

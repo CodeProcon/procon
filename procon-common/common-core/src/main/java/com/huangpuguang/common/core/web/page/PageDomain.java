@@ -1,7 +1,7 @@
 package com.huangpuguang.common.core.web.page;
 
 
-import com.huangpuguang.common.core.utils.StringUtils;
+import com.huangpuguang.common.core.utils.ProconStringUtils;
 
 /**
  * 分页数据
@@ -27,11 +27,11 @@ public class PageDomain
 
     public String getOrderBy()
     {
-        if (StringUtils.isEmpty(orderByColumn))
+        if (ProconStringUtils.isEmpty(orderByColumn))
         {
             return "";
         }
-        return StringUtils.toUnderScoreCase(orderByColumn) + " " + isAsc;
+        return ProconStringUtils.toUnderScoreCase(orderByColumn) + " " + isAsc;
     }
 
     public Integer getPageNum()
@@ -71,7 +71,7 @@ public class PageDomain
 
     public void setIsAsc(String isAsc)
     {
-        if (StringUtils.isNotEmpty(isAsc))
+        if (ProconStringUtils.isNotEmpty(isAsc))
         {
             // 兼容前端排序类型
             if ("ascending".equals(isAsc))
@@ -88,7 +88,7 @@ public class PageDomain
 
     public Boolean getReasonable()
     {
-        if (StringUtils.isNull(reasonable))
+        if (ProconStringUtils.isNull(reasonable))
         {
             return Boolean.TRUE;
         }

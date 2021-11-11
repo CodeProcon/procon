@@ -4,7 +4,7 @@ import com.huangpuguang.common.core.constant.UserConstants;
 import com.huangpuguang.common.core.exception.ServiceException;
 import com.huangpuguang.common.security.utils.SecurityUtils;
 import com.huangpuguang.common.core.utils.SpringUtils;
-import com.huangpuguang.common.core.utils.StringUtils;
+import com.huangpuguang.common.core.utils.ProconStringUtils;
 import com.huangpuguang.common.datascope.annotation.DataScope;
 import com.huangpuguang.system.api.domain.SysRole;
 import com.huangpuguang.system.api.domain.SysUser;
@@ -92,7 +92,7 @@ public class SysRoleServiceImpl implements SysRoleService
         Set<String> permsSet = new HashSet<>();
         for (SysRole perm : perms)
         {
-            if (StringUtils.isNotNull(perm))
+            if (ProconStringUtils.isNotNull(perm))
             {
                 permsSet.addAll(Arrays.asList(perm.getRoleKey().trim().split(",")));
             }
@@ -144,9 +144,9 @@ public class SysRoleServiceImpl implements SysRoleService
     @Override
     public String checkRoleNameUnique(SysRole role)
     {
-        Long roleId = StringUtils.isNull(role.getRoleId()) ? -1L : role.getRoleId();
+        Long roleId = ProconStringUtils.isNull(role.getRoleId()) ? -1L : role.getRoleId();
         SysRole info = roleMapper.checkRoleNameUnique(role.getRoleName());
-        if (StringUtils.isNotNull(info) && info.getRoleId().longValue() != roleId.longValue())
+        if (ProconStringUtils.isNotNull(info) && info.getRoleId().longValue() != roleId.longValue())
         {
             return UserConstants.NOT_UNIQUE;
         }
@@ -162,9 +162,9 @@ public class SysRoleServiceImpl implements SysRoleService
     @Override
     public String checkRoleKeyUnique(SysRole role)
     {
-        Long roleId = StringUtils.isNull(role.getRoleId()) ? -1L : role.getRoleId();
+        Long roleId = ProconStringUtils.isNull(role.getRoleId()) ? -1L : role.getRoleId();
         SysRole info = roleMapper.checkRoleKeyUnique(role.getRoleKey());
-        if (StringUtils.isNotNull(info) && info.getRoleId().longValue() != roleId.longValue())
+        if (ProconStringUtils.isNotNull(info) && info.getRoleId().longValue() != roleId.longValue())
         {
             return UserConstants.NOT_UNIQUE;
         }
@@ -179,7 +179,7 @@ public class SysRoleServiceImpl implements SysRoleService
     @Override
     public void checkRoleAllowed(SysRole role)
     {
-        if (StringUtils.isNotNull(role.getRoleId()) && role.isAdmin())
+        if (ProconStringUtils.isNotNull(role.getRoleId()) && role.isAdmin())
         {
             throw new ServiceException("不允许操作超级管理员角色");
         }
@@ -198,7 +198,7 @@ public class SysRoleServiceImpl implements SysRoleService
             SysRole role = new SysRole();
             role.setRoleId(roleId);
             List<SysRole> roles = SpringUtils.getAopProxy(this).selectRoleList(role);
-            if (StringUtils.isEmpty(roles))
+            if (ProconStringUtils.isEmpty(roles))
             {
                 throw new ServiceException("没有权限访问角色数据！");
             }

@@ -5,7 +5,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import org.apache.commons.lang3.ArrayUtils;
 import com.huangpuguang.common.core.constant.GenConstants;
-import com.huangpuguang.common.core.utils.StringUtils;
+import com.huangpuguang.common.core.utils.ProconStringUtils;
 import com.huangpuguang.common.core.web.domain.BaseEntity;
 
 /**
@@ -331,7 +331,7 @@ public class GenTable extends BaseEntity
 
     public static boolean isSub(String tplCategory)
     {
-        return tplCategory != null && StringUtils.equals(GenConstants.TPL_SUB, tplCategory);
+        return tplCategory != null && ProconStringUtils.equals(GenConstants.TPL_SUB, tplCategory);
     }
     public boolean isTree()
     {
@@ -340,7 +340,7 @@ public class GenTable extends BaseEntity
 
     public static boolean isTree(String tplCategory)
     {
-        return tplCategory != null && StringUtils.equals(GenConstants.TPL_TREE, tplCategory);
+        return tplCategory != null && ProconStringUtils.equals(GenConstants.TPL_TREE, tplCategory);
     }
 
     public boolean isCrud()
@@ -350,7 +350,7 @@ public class GenTable extends BaseEntity
 
     public static boolean isCrud(String tplCategory)
     {
-        return tplCategory != null && StringUtils.equals(GenConstants.TPL_CRUD, tplCategory);
+        return tplCategory != null && ProconStringUtils.equals(GenConstants.TPL_CRUD, tplCategory);
     }
 
     public boolean isSuperColumn(String javaField)
@@ -362,9 +362,9 @@ public class GenTable extends BaseEntity
     {
         if (isTree(tplCategory))
         {
-            return StringUtils.equalsAnyIgnoreCase(javaField,
+            return ProconStringUtils.equalsAnyIgnoreCase(javaField,
                     ArrayUtils.addAll(GenConstants.TREE_ENTITY, GenConstants.BASE_ENTITY));
         }
-        return StringUtils.equalsAnyIgnoreCase(javaField, GenConstants.BASE_ENTITY);
+        return ProconStringUtils.equalsAnyIgnoreCase(javaField, GenConstants.BASE_ENTITY);
     }
 }

@@ -3,7 +3,7 @@ package com.huangpuguang.common.security.aspect;
 import com.huangpuguang.common.core.constant.SecurityConstants;
 import com.huangpuguang.common.core.exception.InnerAuthException;
 import com.huangpuguang.common.core.utils.ServletUtils;
-import com.huangpuguang.common.core.utils.StringUtils;
+import com.huangpuguang.common.core.utils.ProconStringUtils;
 import com.huangpuguang.common.security.annotation.InnerAuth;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -25,7 +25,7 @@ public class InnerAuthAspect implements Ordered
     {
         String source = ServletUtils.getRequest().getHeader(SecurityConstants.FROM_SOURCE);
         // 内部请求验证
-        if (!StringUtils.equals(SecurityConstants.INNER, source))
+        if (!ProconStringUtils.equals(SecurityConstants.INNER, source))
         {
             throw new InnerAuthException("没有内部访问权限，不允许访问");
         }
@@ -33,7 +33,7 @@ public class InnerAuthAspect implements Ordered
         String userid = ServletUtils.getRequest().getHeader(SecurityConstants.DETAILS_USER_ID);
         String username = ServletUtils.getRequest().getHeader(SecurityConstants.DETAILS_USERNAME);
         // 用户信息验证
-        if (innerAuth.isUser() && (StringUtils.isEmpty(userid) || StringUtils.isEmpty(username)))
+        if (innerAuth.isUser() && (ProconStringUtils.isEmpty(userid) || ProconStringUtils.isEmpty(username)))
         {
             throw new InnerAuthException("没有设置用户信息，不允许访问 ");
         }

@@ -7,7 +7,7 @@ import com.huangpuguang.auth.service.SysLoginService;
 import com.huangpuguang.common.core.domain.ResultModel;
 import com.huangpuguang.common.core.utils.JwtUtils;
 import com.huangpuguang.common.security.utils.SecurityUtils;
-import com.huangpuguang.common.core.utils.StringUtils;
+import com.huangpuguang.common.core.utils.ProconStringUtils;
 import com.huangpuguang.common.security.auth.AuthUtil;
 import com.huangpuguang.common.security.service.TokenService;
 import com.huangpuguang.system.api.model.LoginUser;
@@ -46,7 +46,7 @@ public class TokenController
     public ResultModel<?> logout(HttpServletRequest request)
     {
         String token = SecurityUtils.getToken(request);
-        if (StringUtils.isNotEmpty(token))
+        if (ProconStringUtils.isNotEmpty(token))
         {
             String username = JwtUtils.getUserName(token);
             // 删除用户缓存记录
@@ -61,7 +61,7 @@ public class TokenController
     public ResultModel<?> refresh(HttpServletRequest request)
     {
         LoginUser loginUser = tokenService.getLoginUser(request);
-        if (StringUtils.isNotNull(loginUser))
+        if (ProconStringUtils.isNotNull(loginUser))
         {
             // 刷新令牌有效期
             tokenService.refreshToken(loginUser);

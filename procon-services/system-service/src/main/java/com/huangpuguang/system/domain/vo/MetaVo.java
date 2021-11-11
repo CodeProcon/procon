@@ -1,6 +1,6 @@
 package com.huangpuguang.system.domain.vo;
 
-import com.huangpuguang.common.core.utils.StringUtils;
+import com.huangpuguang.common.core.utils.ProconStringUtils;
 
 /**
  * 路由显示信息
@@ -58,7 +58,7 @@ public class MetaVo
         this.title = title;
         this.icon = icon;
         this.noCache = noCache;
-        if (StringUtils.isHttp(link))
+        if (ProconStringUtils.isHttp(link))
         {
             this.link = link;
         }

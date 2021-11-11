@@ -8,7 +8,7 @@ import com.huangpuguang.common.core.domain.ResultModel;
 import com.huangpuguang.common.core.exception.ServiceException;
 import com.huangpuguang.common.core.utils.JsonUtils;
 import com.huangpuguang.common.core.utils.JwtUtils;
-import com.huangpuguang.common.core.utils.StringUtils;
+import com.huangpuguang.common.core.utils.ProconStringUtils;
 import com.huangpuguang.common.core.utils.bean.BeanUtils;
 import com.huangpuguang.common.core.utils.ip.IpUtils;
 import com.huangpuguang.common.redis.service.RedisService;
@@ -200,7 +200,7 @@ public class JustAuthController {
                 user = new SysUser();
             }
         } else {
-            return StringUtils.EMPTY;
+            return ProconStringUtils.EMPTY;
         }
 
         // 判断邮箱是否存在
@@ -237,7 +237,7 @@ public class JustAuthController {
             user.setSource(source);
             user.setUserName(source+uuid);
             // 如果昵称为空，那么直接设置用户名
-            if (StringUtils.isEmpty(user.getNickName())) {
+            if (ProconStringUtils.isEmpty(user.getNickName())) {
                 user.setNickName(source+uuid);
             }
             // 默认密码
@@ -250,7 +250,7 @@ public class JustAuthController {
             Map<String, Object> tokenMap = tokenService.createToken(loginUser);
             return tokenMap.get("access_token").toString();
         }
-        return StringUtils.EMPTY;
+        return ProconStringUtils.EMPTY;
     }
 
     /** 获取用户信息*/
@@ -272,7 +272,7 @@ public class JustAuthController {
         }
         String userid = JwtUtils.getUserId(claims);
         String username = JwtUtils.getUserName(claims);
-        if (StringUtils.isEmpty(userid))
+        if (ProconStringUtils.isEmpty(userid))
         {
             return ResultModel.fail("令牌验证失败");
         }

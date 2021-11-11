@@ -16,7 +16,7 @@ import com.huangpuguang.common.core.constant.SecurityConstants;
 import com.huangpuguang.common.core.constant.TokenConstants;
 import com.huangpuguang.common.core.utils.JwtUtils;
 import com.huangpuguang.common.core.utils.ServletUtils;
-import com.huangpuguang.common.core.utils.StringUtils;
+import com.huangpuguang.common.core.utils.ProconStringUtils;
 import com.huangpuguang.common.redis.service.RedisService;
 import com.huangpuguang.gateway.config.properties.IgnoreWhiteProperties;
 import io.jsonwebtoken.Claims;
@@ -48,12 +48,12 @@ public class AuthFilter implements GlobalFilter, Ordered
 
         String url = request.getURI().getPath();
         // 跳过不需要验证的路径
-        if (StringUtils.matches(url, ignoreWhite.getWhites()))
+        if (ProconStringUtils.matches(url, ignoreWhite.getWhites()))
         {
             return chain.filter(exchange);
         }
         String token = getToken(request);
-        if (StringUtils.isEmpty(token))
+        if (ProconStringUtils.isEmpty(token))
         {
             return unauthorizedResponse(exchange, "令牌不能为空");
         }
@@ -70,7 +70,7 @@ public class AuthFilter implements GlobalFilter, Ordered
         }
         String userid = JwtUtils.getUserId(claims);
         String username = JwtUtils.getUserName(claims);
-        if (StringUtils.isEmpty(userid) || StringUtils.isEmpty(username))
+        if (ProconStringUtils.isEmpty(userid) || ProconStringUtils.isEmpty(username))
         {
             return unauthorizedResponse(exchange, "令牌验证失败");
         }
@@ -121,9 +121,9 @@ public class AuthFilter implements GlobalFilter, Ordered
     {
         String token = request.getHeaders().getFirst(TokenConstants.AUTHENTICATION);
         // 如果前端设置了令牌前缀，则裁剪掉前缀
-        if (StringUtils.isNotEmpty(token) && token.startsWith(TokenConstants.PREFIX))
+        if (ProconStringUtils.isNotEmpty(token) && token.startsWith(TokenConstants.PREFIX))
         {
-            token = token.replaceFirst(TokenConstants.PREFIX, StringUtils.EMPTY);
+            token = token.replaceFirst(TokenConstants.PREFIX, ProconStringUtils.EMPTY);
         }
         return token;
     }

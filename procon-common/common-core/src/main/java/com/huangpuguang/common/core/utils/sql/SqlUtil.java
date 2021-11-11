@@ -1,7 +1,7 @@
 package com.huangpuguang.common.core.utils.sql;
 
 import com.huangpuguang.common.core.exception.UtilException;
-import com.huangpuguang.common.core.utils.StringUtils;
+import com.huangpuguang.common.core.utils.ProconStringUtils;
 
 /**
  * sql操作工具类
@@ -20,7 +20,7 @@ public class SqlUtil
      */
     public static String escapeOrderBySql(String value)
     {
-        if (StringUtils.isNotEmpty(value) && !isValidOrderBySql(value))
+        if (ProconStringUtils.isNotEmpty(value) && !isValidOrderBySql(value))
         {
             throw new UtilException("参数不符合规范，不能进行查询");
         }

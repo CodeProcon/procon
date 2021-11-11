@@ -2,7 +2,7 @@ package com.huangpuguang.job.task;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-import com.huangpuguang.common.core.utils.StringUtils;
+import com.huangpuguang.common.core.utils.ProconStringUtils;
 
 /**
  * 定时任务调度测试
@@ -15,7 +15,7 @@ public class ProconTask
 {
     public void proconMultipleParams(String s, Boolean b, Long l, Double d, Integer i)
     {
-        log.info(StringUtils.format("执行多参方法： 字符串类型{}，布尔类型{}，长整型{}，浮点型{}，整形{}", s, b, l, d, i));
+        log.info(ProconStringUtils.format("执行多参方法： 字符串类型{}，布尔类型{}，长整型{}，浮点型{}，整形{}", s, b, l, d, i));
     }
 
     public void proconParams(String params)

@@ -4,7 +4,7 @@ import com.google.code.kaptcha.Producer;
 import com.huangpuguang.common.core.constant.Constants;
 import com.huangpuguang.common.core.exception.CaptchaException;
 import com.huangpuguang.common.core.utils.IdUtils;
-import com.huangpuguang.common.core.utils.StringUtils;
+import com.huangpuguang.common.core.utils.ProconStringUtils;
 import com.huangpuguang.common.core.utils.sign.Base64;
 import com.huangpuguang.common.core.web.domain.AjaxResult;
 import com.huangpuguang.common.redis.service.RedisService;
@@ -100,11 +100,11 @@ public class ValidateCodeServiceImpl implements ValidateCodeService
     @Override
     public void checkCapcha(String code, String uuid) throws CaptchaException
     {
-        if (StringUtils.isEmpty(code))
+        if (ProconStringUtils.isEmpty(code))
         {
             throw new CaptchaException("验证码不能为空");
         }
-        if (StringUtils.isEmpty(uuid))
+        if (ProconStringUtils.isEmpty(uuid))
         {
             throw new CaptchaException("验证码已失效");
         }

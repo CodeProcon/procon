@@ -2,7 +2,7 @@ package com.huangpuguang.common.core.web.page;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.page.PageMethod;
-import com.huangpuguang.common.core.utils.StringUtils;
+import com.huangpuguang.common.core.utils.ProconStringUtils;
 import com.huangpuguang.common.core.utils.sql.SqlUtil;
 
 /**
@@ -22,7 +22,7 @@ public class PageOper<T> {
         Integer pageNum = pageDomain.getPageNum();
         Integer pageSize = pageDomain.getPageSize();
         Page<T> page = null;
-        if (StringUtils.isNotNull(pageNum) && StringUtils.isNotNull(pageSize))
+        if (ProconStringUtils.isNotNull(pageNum) && ProconStringUtils.isNotNull(pageSize))
         {
             String orderBy = SqlUtil.escapeOrderBySql(pageDomain.getOrderBy());
             page = PageMethod.startPage(pageNum, pageSize, orderBy);

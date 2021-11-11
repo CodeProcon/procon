@@ -54,7 +54,7 @@ import com.huangpuguang.common.core.annotation.Excel.Type;
 import com.huangpuguang.common.core.annotation.Excels;
 import com.huangpuguang.common.core.text.Convert;
 import com.huangpuguang.common.core.utils.DateUtils;
-import com.huangpuguang.common.core.utils.StringUtils;
+import com.huangpuguang.common.core.utils.ProconStringUtils;
 import com.huangpuguang.common.core.utils.file.FileTypeUtils;
 import com.huangpuguang.common.core.utils.file.ImageUtils;
 import com.huangpuguang.common.core.utils.reflect.ReflectUtils;
@@ -163,7 +163,7 @@ public class ExcelUtil<T>
      */
     public void createTitle()
     {
-        if (StringUtils.isNotEmpty(title))
+        if (ProconStringUtils.isNotEmpty(title))
         {
             Row titleRow = sheet.createRow(rownum == 0 ? rownum++ : 0);
             titleRow.setHeightInPoints(30);
@@ -195,7 +195,7 @@ public class ExcelUtil<T>
      */
     public List<T> importExcel(InputStream is, int titleNum) throws Exception
     {
-        return importExcel(StringUtils.EMPTY, is, titleNum);
+        return importExcel(ProconStringUtils.EMPTY, is, titleNum);
     }
 
     /**
@@ -212,7 +212,7 @@ public class ExcelUtil<T>
         this.wb = WorkbookFactory.create(is);
         List<T> list = new ArrayList<T>();
         // 如果指定sheet名,则取指定sheet中的内容 否则默认指向第1个sheet
-        Sheet sheet = StringUtils.isNotEmpty(sheetName) ? wb.getSheet(sheetName) : wb.getSheetAt(0);
+        Sheet sheet = ProconStringUtils.isNotEmpty(sheetName) ? wb.getSheet(sheetName) : wb.getSheetAt(0);
         if (sheet == null)
         {
             throw new IOException("文件sheet不存在");
@@ -230,7 +230,7 @@ public class ExcelUtil<T>
             for (int i = 0; i < heard.getPhysicalNumberOfCells(); i++)
             {
                 Cell cell = heard.getCell(i);
-                if (StringUtils.isNotNull(cell))
+                if (ProconStringUtils.isNotNull(cell))
                 {
                     String value = this.getCellValue(heard, i).toString();
                     cellMap.put(value, i);
@@ -276,14 +276,14 @@ public class ExcelUtil<T>
                     if (String.class == fieldType)
                     {
                         String s = Convert.toStr(val);
-                        if (StringUtils.endsWith(s, ".0"))
+                        if (ProconStringUtils.endsWith(s, ".0"))
                         {
-                            val = StringUtils.substringBefore(s, ".0");
+                            val = ProconStringUtils.substringBefore(s, ".0");
                         }
                         else
                         {
                             String dateFormat = field.getAnnotation(Excel.class).dateFormat();
-                            if (StringUtils.isNotEmpty(dateFormat))
+                            if (ProconStringUtils.isNotEmpty(dateFormat))
                             {
                                 val = DateUtils.parseDateToStr(dateFormat, (Date) val);
                             }
@@ -293,7 +293,7 @@ public class ExcelUtil<T>
                             }
                         }
                     }
-                    else if ((Integer.TYPE == fieldType || Integer.class == fieldType) && StringUtils.isNumeric(Convert.toStr(val)))
+                    else if ((Integer.TYPE == fieldType || Integer.class == fieldType) && ProconStringUtils.isNumeric(Convert.toStr(val)))
                     {
                         val = Convert.toInt(val);
                     }
@@ -328,14 +328,14 @@ public class ExcelUtil<T>
                     {
                         val = Convert.toBool(val, false);
                     }
-                    if (StringUtils.isNotNull(fieldType))
+                    if (ProconStringUtils.isNotNull(fieldType))
                     {
                         String propertyName = field.getName();
-                        if (StringUtils.isNotEmpty(attr.targetAttr()))
+                        if (ProconStringUtils.isNotEmpty(attr.targetAttr()))
                         {
                             propertyName = field.getName() + "." + attr.targetAttr();
                         }
-                        else if (StringUtils.isNotEmpty(attr.readConverterExp()))
+                        else if (ProconStringUtils.isNotEmpty(attr.readConverterExp()))
                         {
                             val = reverseByExp(Convert.toStr(val), attr.readConverterExp(), attr.separator());
                         }
@@ -363,7 +363,7 @@ public class ExcelUtil<T>
      */
     public void exportExcel(HttpServletResponse response, List<T> list, String sheetName)throws IOException
     {
-        exportExcel(response, list, sheetName, StringUtils.EMPTY);
+        exportExcel(response, list, sheetName, ProconStringUtils.EMPTY);
     }
 
     /**
@@ -398,7 +398,7 @@ public class ExcelUtil<T>
      */
     public void importTemplateExcel(HttpServletResponse response, String sheetName) throws IOException
     {
-        importTemplateExcel(response, sheetName, StringUtils.EMPTY);
+        importTemplateExcel(response, sheetName, ProconStringUtils.EMPTY);
     }
 
     /**
@@ -595,20 +595,20 @@ public class ExcelUtil<T>
     {
         if (ColumnType.STRING == attr.cellType())
         {
-            cell.setCellValue(StringUtils.isNull(value) ? attr.defaultValue() : value + attr.suffix());
+            cell.setCellValue(ProconStringUtils.isNull(value) ? attr.defaultValue() : value + attr.suffix());
         }
         else if (ColumnType.NUMERIC == attr.cellType())
         {
-            if (StringUtils.isNotNull(value))
+            if (ProconStringUtils.isNotNull(value))
             {
-                cell.setCellValue(StringUtils.contains(Convert.toStr(value), ".") ? Convert.toDouble(value) : Convert.toInt(value));
+                cell.setCellValue(ProconStringUtils.contains(Convert.toStr(value), ".") ? Convert.toDouble(value) : Convert.toInt(value));
             }
         }
         else if (ColumnType.IMAGE == attr.cellType())
         {
             ClientAnchor anchor = new XSSFClientAnchor(0, 0, 0, 0, (short) cell.getColumnIndex(), cell.getRow().getRowNum(), (short) (cell.getColumnIndex() + 1), cell.getRow().getRowNum() + 1);
             String imagePath = Convert.toStr(value);
-            if (StringUtils.isNotEmpty(imagePath))
+            if (ProconStringUtils.isNotEmpty(imagePath))
             {
                 byte[] data = ImageUtils.getImage(imagePath);
                 getDrawingPatriarch(cell.getSheet()).createPicture(anchor,
@@ -661,7 +661,7 @@ public class ExcelUtil<T>
             sheet.setColumnWidth(column, (int) ((attr.width() + 0.72) * 256));
         }
         // 如果设置了提示信息则鼠标放上去提示.
-        if (StringUtils.isNotEmpty(attr.prompt()))
+        if (ProconStringUtils.isNotEmpty(attr.prompt()))
         {
             // 这里默认设了2-101列提示.
             setXSSFPrompt(sheet, "", attr.prompt(), 1, 100, column, column);
@@ -697,11 +697,11 @@ public class ExcelUtil<T>
                 String dateFormat = attr.dateFormat();
                 String readConverterExp = attr.readConverterExp();
                 String separator = attr.separator();
-                if (StringUtils.isNotEmpty(dateFormat) && StringUtils.isNotNull(value))
+                if (ProconStringUtils.isNotEmpty(dateFormat) && ProconStringUtils.isNotNull(value))
                 {
                     cell.setCellValue(DateUtils.parseDateToStr(dateFormat, (Date) value));
                 }
-                else if (StringUtils.isNotEmpty(readConverterExp) && StringUtils.isNotNull(value))
+                else if (ProconStringUtils.isNotEmpty(readConverterExp) && ProconStringUtils.isNotNull(value))
                 {
                     cell.setCellValue(convertByExp(Convert.toStr(value), readConverterExp, separator));
                 }
@@ -800,7 +800,7 @@ public class ExcelUtil<T>
         for (String item : convertSource)
         {
             String[] itemArray = item.split("=");
-            if (StringUtils.containsAny(separator, propertyValue))
+            if (ProconStringUtils.containsAny(separator, propertyValue))
             {
                 for (String value : propertyValue.split(separator))
                 {
@@ -819,7 +819,7 @@ public class ExcelUtil<T>
                 }
             }
         }
-        return StringUtils.stripEnd(propertyString.toString(), separator);
+        return ProconStringUtils.stripEnd(propertyString.toString(), separator);
     }
 
     /**
@@ -837,7 +837,7 @@ public class ExcelUtil<T>
         for (String item : convertSource)
         {
             String[] itemArray = item.split("=");
-            if (StringUtils.containsAny(separator, propertyValue))
+            if (ProconStringUtils.containsAny(separator, propertyValue))
             {
                 for (String value : propertyValue.split(separator))
                 {
@@ -856,7 +856,7 @@ public class ExcelUtil<T>
                 }
             }
         }
-        return StringUtils.stripEnd(propertyString.toString(), separator);
+        return ProconStringUtils.stripEnd(propertyString.toString(), separator);
     }
 
     /**
@@ -939,7 +939,7 @@ public class ExcelUtil<T>
     private Object getTargetValue(T vo, Field field, Excel excel) throws Exception
     {
         Object o = field.get(vo);
-        if (StringUtils.isNotEmpty(excel.targetAttr()))
+        if (ProconStringUtils.isNotEmpty(excel.targetAttr()))
         {
             String target = excel.targetAttr();
             if (target.indexOf(".") > -1)
@@ -968,7 +968,7 @@ public class ExcelUtil<T>
      */
     private Object getValue(Object o, String name) throws Exception
     {
-        if (StringUtils.isNotNull(o) && StringUtils.isNotEmpty(name))
+        if (ProconStringUtils.isNotNull(o) && ProconStringUtils.isNotEmpty(name))
         {
             Class<?> clazz = o.getClass();
             Field field = clazz.getDeclaredField(name);
@@ -1087,7 +1087,7 @@ public class ExcelUtil<T>
         try
         {
             Cell cell = row.getCell(column);
-            if (StringUtils.isNotNull(cell))
+            if (ProconStringUtils.isNotNull(cell))
             {
                 if (cell.getCellType() == CellType.NUMERIC || cell.getCellType() == CellType.FORMULA)
                 {

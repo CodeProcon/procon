@@ -4,7 +4,7 @@ import com.huangpuguang.common.core.constant.UserConstants;
 import com.huangpuguang.common.core.exception.ServiceException;
 import com.huangpuguang.common.security.utils.SecurityUtils;
 import com.huangpuguang.common.core.utils.SpringUtils;
-import com.huangpuguang.common.core.utils.StringUtils;
+import com.huangpuguang.common.core.utils.ProconStringUtils;
 import com.huangpuguang.common.datascope.annotation.DataScope;
 import com.huangpuguang.system.api.domain.SysRole;
 import com.huangpuguang.system.api.domain.SysUser;
@@ -129,7 +129,7 @@ public class SysUserServiceImpl implements SysUserService
         {
             idsStr.append(role.getRoleName()).append(",");
         }
-        if (StringUtils.isNotEmpty(idsStr.toString()))
+        if (ProconStringUtils.isNotEmpty(idsStr.toString()))
         {
             return idsStr.substring(0, idsStr.length() - 1);
         }
@@ -151,7 +151,7 @@ public class SysUserServiceImpl implements SysUserService
         {
             idsStr.append(post.getPostName()).append(",");
         }
-        if (StringUtils.isNotEmpty(idsStr.toString()))
+        if (ProconStringUtils.isNotEmpty(idsStr.toString()))
         {
             return idsStr.substring(0, idsStr.length() - 1);
         }
@@ -184,9 +184,9 @@ public class SysUserServiceImpl implements SysUserService
     @Override
     public String checkPhoneUnique(SysUser user)
     {
-        Long userId = StringUtils.isNull(user.getUserId()) ? -1L : user.getUserId();
+        Long userId = ProconStringUtils.isNull(user.getUserId()) ? -1L : user.getUserId();
         SysUser info = userMapper.checkPhoneUnique(user.getPhonenumber());
-        if (StringUtils.isNotNull(info) && info.getUserId().longValue() != userId.longValue())
+        if (ProconStringUtils.isNotNull(info) && info.getUserId().longValue() != userId.longValue())
         {
             return UserConstants.NOT_UNIQUE;
         }
@@ -202,9 +202,9 @@ public class SysUserServiceImpl implements SysUserService
     @Override
     public String checkEmailUnique(SysUser user)
     {
-        Long userId = StringUtils.isNull(user.getUserId()) ? -1L : user.getUserId();
+        Long userId = ProconStringUtils.isNull(user.getUserId()) ? -1L : user.getUserId();
         SysUser info = userMapper.checkEmailUnique(user.getEmail());
-        if (StringUtils.isNotNull(info) && info.getUserId().longValue() != userId.longValue())
+        if (ProconStringUtils.isNotNull(info) && info.getUserId().longValue() != userId.longValue())
         {
             return UserConstants.NOT_UNIQUE;
         }
@@ -219,7 +219,7 @@ public class SysUserServiceImpl implements SysUserService
     @Override
     public void checkUserAllowed(SysUser user)
     {
-        if (StringUtils.isNotNull(user.getUserId()) && user.isAdmin())
+        if (ProconStringUtils.isNotNull(user.getUserId()) && user.isAdmin())
         {
             throw new ServiceException("不允许操作超级管理员用户");
         }
@@ -238,7 +238,7 @@ public class SysUserServiceImpl implements SysUserService
             SysUser user = new SysUser();
             user.setUserId(userId);
             List<SysUser> users = SpringUtils.getAopProxy(this).selectUserList(user);
-            if (StringUtils.isEmpty(users))
+            if (ProconStringUtils.isEmpty(users))
             {
                 throw new ServiceException("没有权限访问用户数据！");
             }
@@ -382,7 +382,7 @@ public class SysUserServiceImpl implements SysUserService
     public void insertUserRole(SysUser user)
     {
         Long[] roles = user.getRoleIds();
-        if (StringUtils.isNotNull(roles))
+        if (ProconStringUtils.isNotNull(roles))
         {
             // 新增用户与角色管理
             List<SysUserRole> list = new ArrayList<SysUserRole>();
@@ -408,7 +408,7 @@ public class SysUserServiceImpl implements SysUserService
     public void insertUserPost(SysUser user)
     {
         Long[] posts = user.getPostIds();
-        if (StringUtils.isNotNull(posts))
+        if (ProconStringUtils.isNotNull(posts))
         {
             // 新增用户与岗位管理
             List<SysUserPost> list = new ArrayList<SysUserPost>();
@@ -434,7 +434,7 @@ public class SysUserServiceImpl implements SysUserService
      */
     public void insertUserRole(Long userId, Long[] roleIds)
     {
-        if (StringUtils.isNotNull(roleIds))
+        if (ProconStringUtils.isNotNull(roleIds))
         {
             // 新增用户与角色管理
             List<SysUserRole> list = new ArrayList<SysUserRole>();
@@ -501,7 +501,7 @@ public class SysUserServiceImpl implements SysUserService
     @Override
     public String importUser(List<SysUser> userList, Boolean isUpdateSupport, String operName)
     {
-        if (StringUtils.isNull(userList) || userList.size() == 0)
+        if (ProconStringUtils.isNull(userList) || userList.size() == 0)
         {
             throw new ServiceException("导入用户数据不能为空！");
         }
@@ -516,7 +516,7 @@ public class SysUserServiceImpl implements SysUserService
             {
                 // 验证是否存在这个用户
                 SysUser u = userMapper.selectUserByUserName(user.getUserName());
-                if (StringUtils.isNull(u))
+                if (ProconStringUtils.isNull(u))
                 {
                     user.setPassword(SecurityUtils.encryptPassword(password));
                     user.setCreateBy(operName);

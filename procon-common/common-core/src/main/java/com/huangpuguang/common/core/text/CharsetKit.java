@@ -3,7 +3,7 @@ package com.huangpuguang.common.core.text;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 
-import com.huangpuguang.common.core.utils.StringUtils;
+import com.huangpuguang.common.core.utils.ProconStringUtils;
 
 /**
  * 字符集工具类
@@ -34,7 +34,7 @@ public class CharsetKit
      */
     public static Charset charset(String charset)
     {
-        return StringUtils.isEmpty(charset) ? Charset.defaultCharset() : Charset.forName(charset);
+        return ProconStringUtils.isEmpty(charset) ? Charset.defaultCharset() : Charset.forName(charset);
     }
 
     /**
@@ -70,7 +70,7 @@ public class CharsetKit
             destCharset = StandardCharsets.UTF_8;
         }
 
-        if (StringUtils.isEmpty(source) || srcCharset.equals(destCharset))
+        if (ProconStringUtils.isEmpty(source) || srcCharset.equals(destCharset))
         {
             return source;
         }

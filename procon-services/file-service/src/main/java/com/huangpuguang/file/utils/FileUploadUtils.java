@@ -9,7 +9,7 @@ import com.huangpuguang.common.core.exception.file.FileSizeLimitExceededExceptio
 import com.huangpuguang.common.core.exception.file.InvalidExtensionException;
 import com.huangpuguang.common.core.utils.DateUtils;
 import com.huangpuguang.common.core.utils.IdUtils;
-import com.huangpuguang.common.core.utils.StringUtils;
+import com.huangpuguang.common.core.utils.ProconStringUtils;
 import com.huangpuguang.common.core.utils.file.MimeTypeUtils;
 
 /**
@@ -186,7 +186,7 @@ public class FileUploadUtils
     public static String getExtension(MultipartFile file)
     {
         String extension = FilenameUtils.getExtension(file.getOriginalFilename());
-        if (StringUtils.isEmpty(extension))
+        if (ProconStringUtils.isEmpty(extension))
         {
             extension = MimeTypeUtils.getExtension(file.getContentType());
         }

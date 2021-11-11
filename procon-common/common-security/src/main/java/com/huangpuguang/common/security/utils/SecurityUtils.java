@@ -6,7 +6,7 @@ import com.huangpuguang.common.core.constant.SecurityConstants;
 import com.huangpuguang.common.core.constant.TokenConstants;
 import com.huangpuguang.common.core.context.SecurityContextHolder;
 import com.huangpuguang.common.core.utils.ServletUtils;
-import com.huangpuguang.common.core.utils.StringUtils;
+import com.huangpuguang.common.core.utils.ProconStringUtils;
 import com.huangpuguang.system.api.model.LoginUser;
 
 /**
@@ -72,7 +72,7 @@ public class SecurityUtils
     public static String replaceTokenPrefix(String token)
     {
         // 如果前端设置了令牌前缀，则裁剪掉前缀
-        if (StringUtils.isNotEmpty(token) && token.startsWith(TokenConstants.PREFIX))
+        if (ProconStringUtils.isNotEmpty(token) && token.startsWith(TokenConstants.PREFIX))
         {
             token = token.replaceFirst(TokenConstants.PREFIX, "");
         }

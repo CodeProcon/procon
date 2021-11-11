@@ -8,7 +8,7 @@ import com.huangpuguang.common.core.enums.UserStatus;
 import com.huangpuguang.common.core.exception.ServiceException;
 import com.huangpuguang.common.security.utils.SecurityUtils;
 import com.huangpuguang.common.core.utils.ServletUtils;
-import com.huangpuguang.common.core.utils.StringUtils;
+import com.huangpuguang.common.core.utils.ProconStringUtils;
 import com.huangpuguang.common.core.utils.ip.IpUtils;
 import com.huangpuguang.system.api.RemoteLogService;
 import com.huangpuguang.system.api.RemoteUserService;
@@ -38,7 +38,7 @@ public class SysLoginService
     public LoginUser login(String username, String password)
     {
         // 用户名或密码为空 错误
-        if (StringUtils.isAnyBlank(username, password))
+        if (ProconStringUtils.isAnyBlank(username, password))
         {
             recordLogininfor(username, Constants.LOGIN_FAIL, "用户/密码必须填写");
             throw new ServiceException("用户/密码必须填写");
@@ -65,7 +65,7 @@ public class SysLoginService
             throw new ServiceException(userResult.getMsg());
         }
 
-        if (StringUtils.isNull(userResult.getData()))
+        if (ProconStringUtils.isNull(userResult.getData()))
         {
             recordLogininfor(username, Constants.LOGIN_FAIL, "登录用户不存在");
             throw new ServiceException("登录用户：" + username + " 不存在");
@@ -102,7 +102,7 @@ public class SysLoginService
     public void register(String username, String password)
     {
         // 用户名或密码为空 错误
-        if (StringUtils.isAnyBlank(username, password))
+        if (ProconStringUtils.isAnyBlank(username, password))
         {
             throw new ServiceException("用户/密码必须填写");
         }
@@ -146,7 +146,7 @@ public class SysLoginService
         logininfor.setIpaddr(IpUtils.getIpAddr(ServletUtils.getRequest()));
         logininfor.setMsg(message);
         // 日志状态
-        if (StringUtils.equalsAny(status, Constants.LOGIN_SUCCESS, Constants.LOGOUT, Constants.REGISTER))
+        if (ProconStringUtils.equalsAny(status, Constants.LOGIN_SUCCESS, Constants.LOGOUT, Constants.REGISTER))
         {
             logininfor.setStatus("0");
         }

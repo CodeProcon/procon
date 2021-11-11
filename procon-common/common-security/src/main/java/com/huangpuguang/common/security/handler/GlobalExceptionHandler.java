@@ -15,7 +15,7 @@ import com.huangpuguang.common.core.exception.InnerAuthException;
 import com.huangpuguang.common.core.exception.ServiceException;
 import com.huangpuguang.common.core.exception.auth.NotPermissionException;
 import com.huangpuguang.common.core.exception.auth.NotRoleException;
-import com.huangpuguang.common.core.utils.StringUtils;
+import com.huangpuguang.common.core.utils.ProconStringUtils;
 import com.huangpuguang.common.core.web.domain.AjaxResult;
 
 /**
@@ -70,7 +70,7 @@ public class GlobalExceptionHandler
     {
         log.error(e.getMessage(), e);
         Integer code = e.getCode();
-        return StringUtils.isNotNull(code) ? AjaxResult.error(code, e.getMessage()) : AjaxResult.error(e.getMessage());
+        return ProconStringUtils.isNotNull(code) ? AjaxResult.error(code, e.getMessage()) : AjaxResult.error(e.getMessage());
     }
 
     /**

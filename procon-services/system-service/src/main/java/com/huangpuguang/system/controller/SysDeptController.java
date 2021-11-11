@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.huangpuguang.common.core.constant.UserConstants;
 import com.huangpuguang.common.security.utils.SecurityUtils;
-import com.huangpuguang.common.core.utils.StringUtils;
+import com.huangpuguang.common.core.utils.ProconStringUtils;
 import com.huangpuguang.common.core.web.controller.BaseController;
 import com.huangpuguang.common.core.web.domain.AjaxResult;
 import com.huangpuguang.common.log.annotation.Log;
@@ -62,7 +62,7 @@ public class SysDeptController extends BaseController
         {
             SysDept d = (SysDept) it.next();
             if (d.getDeptId().intValue() == deptId
-                    || ArrayUtils.contains(StringUtils.split(d.getAncestors(), ","), deptId + ""))
+                    || ArrayUtils.contains(ProconStringUtils.split(d.getAncestors(), ","), deptId + ""))
             {
                 it.remove();
             }
@@ -136,7 +136,7 @@ public class SysDeptController extends BaseController
         {
             return AjaxResult.error("修改部门'" + dept.getDeptName() + "'失败，上级部门不能是自己");
         }
-        else if (StringUtils.equals(UserConstants.DEPT_DISABLE, dept.getStatus())
+        else if (ProconStringUtils.equals(UserConstants.DEPT_DISABLE, dept.getStatus())
                 && deptService.selectNormalChildrenDeptById(dept.getDeptId()) > 0)
         {
             return AjaxResult.error("该部门包含未停用的子部门！");

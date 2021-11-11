@@ -5,7 +5,7 @@ import com.huangpuguang.common.core.constant.UserConstants;
 import com.huangpuguang.common.core.exception.ServiceException;
 import com.huangpuguang.common.security.utils.SecurityUtils;
 import com.huangpuguang.common.core.utils.SpringUtils;
-import com.huangpuguang.common.core.utils.StringUtils;
+import com.huangpuguang.common.core.utils.ProconStringUtils;
 import com.huangpuguang.common.datascope.annotation.DataScope;
 import com.huangpuguang.system.api.domain.SysDept;
 import com.huangpuguang.system.api.domain.SysRole;
@@ -166,9 +166,9 @@ public class SysDeptServiceImpl implements SysDeptService
     @Override
     public String checkDeptNameUnique(SysDept dept)
     {
-        Long deptId = StringUtils.isNull(dept.getDeptId()) ? -1L : dept.getDeptId();
+        Long deptId = ProconStringUtils.isNull(dept.getDeptId()) ? -1L : dept.getDeptId();
         SysDept info = deptMapper.checkDeptNameUnique(dept.getDeptName(), dept.getParentId());
-        if (StringUtils.isNotNull(info) && info.getDeptId().longValue() != deptId.longValue())
+        if (ProconStringUtils.isNotNull(info) && info.getDeptId().longValue() != deptId.longValue())
         {
             return UserConstants.NOT_UNIQUE;
         }
@@ -188,7 +188,7 @@ public class SysDeptServiceImpl implements SysDeptService
             SysDept dept = new SysDept();
             dept.setDeptId(deptId);
             List<SysDept> depts = SpringUtils.getAopProxy(this).selectDeptList(dept);
-            if (StringUtils.isEmpty(depts))
+            if (ProconStringUtils.isEmpty(depts))
             {
                 throw new ServiceException("没有权限访问部门数据！");
             }
@@ -225,7 +225,7 @@ public class SysDeptServiceImpl implements SysDeptService
     {
         SysDept newParentDept = deptMapper.selectDeptById(dept.getParentId());
         SysDept oldDept = deptMapper.selectDeptById(dept.getDeptId());
-        if (StringUtils.isNotNull(newParentDept) && StringUtils.isNotNull(oldDept))
+        if (ProconStringUtils.isNotNull(newParentDept) && ProconStringUtils.isNotNull(oldDept))
         {
             String newAncestors = newParentDept.getAncestors() + "," + newParentDept.getDeptId();
             String oldAncestors = oldDept.getAncestors();
@@ -233,8 +233,8 @@ public class SysDeptServiceImpl implements SysDeptService
             updateDeptChildren(dept.getDeptId(), newAncestors, oldAncestors);
         }
         int result = deptMapper.updateDept(dept);
-        if (UserConstants.DEPT_NORMAL.equals(dept.getStatus()) && StringUtils.isNotEmpty(dept.getAncestors())
-                && !StringUtils.equals("0", dept.getAncestors()))
+        if (UserConstants.DEPT_NORMAL.equals(dept.getStatus()) && ProconStringUtils.isNotEmpty(dept.getAncestors())
+                && !ProconStringUtils.equals("0", dept.getAncestors()))
         {
             // 如果该部门是启用状态，则启用该部门的所有上级部门
             updateParentDeptStatus(dept);
@@ -314,7 +314,7 @@ public class SysDeptServiceImpl implements SysDeptService
         while (it.hasNext())
         {
             SysDept n = (SysDept) it.next();
-            if (StringUtils.isNotNull(n.getParentId()) && n.getParentId().longValue() == t.getDeptId().longValue())
+            if (ProconStringUtils.isNotNull(n.getParentId()) && n.getParentId().longValue() == t.getDeptId().longValue())
             {
                 tlist.add(n);
             }

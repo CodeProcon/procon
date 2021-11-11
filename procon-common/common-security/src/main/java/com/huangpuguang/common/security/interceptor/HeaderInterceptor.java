@@ -8,7 +8,7 @@ import org.springframework.web.servlet.AsyncHandlerInterceptor;
 import com.huangpuguang.common.core.constant.SecurityConstants;
 import com.huangpuguang.common.core.context.SecurityContextHolder;
 import com.huangpuguang.common.core.utils.ServletUtils;
-import com.huangpuguang.common.core.utils.StringUtils;
+import com.huangpuguang.common.core.utils.ProconStringUtils;
 import com.huangpuguang.common.security.auth.AuthUtil;
 import com.huangpuguang.common.security.utils.SecurityUtils;
 import com.huangpuguang.system.api.model.LoginUser;
@@ -34,10 +34,10 @@ public class HeaderInterceptor implements AsyncHandlerInterceptor
         SecurityContextHolder.setUserKey(ServletUtils.getHeader(request, SecurityConstants.USER_KEY));
 
         String token = SecurityUtils.getToken();
-        if (StringUtils.isNotEmpty(token))
+        if (ProconStringUtils.isNotEmpty(token))
         {
             LoginUser loginUser = AuthUtil.getLoginUser(token);
-            if (StringUtils.isNotNull(loginUser))
+            if (ProconStringUtils.isNotNull(loginUser))
             {
                 AuthUtil.verifyLoginUserExpire(loginUser);
                 SecurityContextHolder.set(SecurityConstants.LOGIN_USER, loginUser);

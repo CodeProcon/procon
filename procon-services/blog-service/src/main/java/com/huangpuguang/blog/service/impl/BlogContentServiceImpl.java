@@ -20,7 +20,7 @@ import com.huangpuguang.common.core.constant.HttpStatus;
 import com.huangpuguang.common.core.utils.DateUtils;
 import com.huangpuguang.common.core.utils.JsonUtils;
 import com.huangpuguang.common.security.utils.SecurityUtils;
-import com.huangpuguang.common.core.utils.StringUtils;
+import com.huangpuguang.common.core.utils.ProconStringUtils;
 import com.huangpuguang.common.core.web.page.PageOper;
 import com.huangpuguang.common.core.web.page.TableDataInfo;
 import com.huangpuguang.common.redis.service.RedisService;
@@ -311,7 +311,7 @@ public class BlogContentServiceImpl extends PageOper<BlogContent> implements Blo
         }
         //从Redis取出用户点赞数据
         String praiseJsonResult = redisService.getCacheObject(BlogConstants.BLOG_PRAISE + BlogConstants.SEGMENTATION + id);
-        if (!StringUtils.isEmpty(praiseJsonResult)) {
+        if (!ProconStringUtils.isEmpty(praiseJsonResult)) {
             praiseCount = Integer.parseInt(praiseJsonResult);
         }
         return praiseCount;
@@ -336,7 +336,7 @@ public class BlogContentServiceImpl extends PageOper<BlogContent> implements Blo
         }
         BlogContent blog = blogContentMapper.selectBlogContentById(id);
         String praiseJsonResult = redisService.getCacheObject(BlogConstants.BLOG_PRAISE + BlogConstants.SEGMENTATION + id);
-        if (StringUtils.isEmpty(praiseJsonResult)) {
+        if (ProconStringUtils.isEmpty(praiseJsonResult)) {
             //给该博客点赞数
             redisService.setCacheObject(BlogConstants.BLOG_PRAISE + BlogConstants.SEGMENTATION + id, "1");
             blog.setCollectCount(1L);
@@ -392,7 +392,7 @@ public class BlogContentServiceImpl extends PageOper<BlogContent> implements Blo
         //从Redis中获取内容
         String monthResult = redisService.getCacheObject(BlogConstants.MONTH_SET);
         //判断redis中时候包含归档的内容
-        if (StringUtils.isNotEmpty(monthResult)) {
+        if (ProconStringUtils.isNotEmpty(monthResult)) {
             List list = JsonUtils.jsonArrayToArrayList(monthResult);
             return new HashSet<String>(list);
         }
@@ -413,7 +413,7 @@ public class BlogContentServiceImpl extends PageOper<BlogContent> implements Blo
         String contentResult = redisService.getCacheObject(BlogConstants.BLOG_SORT_BY_MONTH + BlogConstants.REDIS_SEGMENTATION + monthDate);
 
         //判断redis中时候包含该日期下的文章
-        if (StringUtils.isNotEmpty(contentResult)) {
+        if (ProconStringUtils.isNotEmpty(contentResult)) {
             ArrayList list = JsonUtils.jsonArrayToArrayList(contentResult);
             return list;
         }

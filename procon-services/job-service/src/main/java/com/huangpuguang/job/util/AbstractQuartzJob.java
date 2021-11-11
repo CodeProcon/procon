@@ -13,7 +13,7 @@ import org.slf4j.LoggerFactory;
 import com.huangpuguang.common.core.constant.ScheduleConstants;
 import com.huangpuguang.common.core.utils.ExceptionUtil;
 import com.huangpuguang.common.core.utils.SpringUtils;
-import com.huangpuguang.common.core.utils.StringUtils;
+import com.huangpuguang.common.core.utils.ProconStringUtils;
 import com.huangpuguang.common.core.utils.bean.BeanUtils;
 
 /**
@@ -84,7 +84,7 @@ public abstract class AbstractQuartzJob implements Job
         if (e != null)
         {
             sysJobLog.setStatus("1");
-            String errorMsg = StringUtils.substring(ExceptionUtil.getExceptionMessage(e), 0, 2000);
+            String errorMsg = ProconStringUtils.substring(ExceptionUtil.getExceptionMessage(e), 0, 2000);
             sysJobLog.setExceptionInfo(errorMsg);
         }
         else

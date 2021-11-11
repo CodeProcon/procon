@@ -136,9 +136,9 @@ public class ServletUtils
     public static String getHeader(HttpServletRequest request, String name)
     {
         String value = request.getHeader(name);
-        if (StringUtils.isEmpty(value))
+        if (ProconStringUtils.isEmpty(value))
         {
-            return StringUtils.EMPTY;
+            return ProconStringUtils.EMPTY;
         }
         return urlDecode(value);
     }
@@ -203,13 +203,13 @@ public class ServletUtils
         }
 
         String uri = request.getRequestURI();
-        if (StringUtils.inStringIgnoreCase(uri, ".json", ".xml"))
+        if (ProconStringUtils.inStringIgnoreCase(uri, ".json", ".xml"))
         {
             return true;
         }
 
         String ajax = request.getParameter("__ajax");
-        if (StringUtils.inStringIgnoreCase(ajax, "json", "xml"))
+        if (ProconStringUtils.inStringIgnoreCase(ajax, "json", "xml"))
         {
             return true;
         }
@@ -230,7 +230,7 @@ public class ServletUtils
         }
         catch (UnsupportedEncodingException e)
         {
-            return StringUtils.EMPTY;
+            return ProconStringUtils.EMPTY;
         }
     }
 
@@ -248,7 +248,7 @@ public class ServletUtils
         }
         catch (UnsupportedEncodingException e)
         {
-            return StringUtils.EMPTY;
+            return ProconStringUtils.EMPTY;
         }
     }
 

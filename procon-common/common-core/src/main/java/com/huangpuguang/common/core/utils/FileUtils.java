@@ -8,6 +8,7 @@ import com.vladsch.flexmark.parser.Parser;
 import com.vladsch.flexmark.util.ast.Node;
 import com.vladsch.flexmark.util.data.MutableDataSet;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
@@ -15,10 +16,7 @@ import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 
 /**
@@ -29,25 +27,11 @@ import java.util.UUID;
  */
 @Slf4j
 public class FileUtils {
-
-    /**
-     *图片类型
-     */
-    private static List<String> pictureTypes = new ArrayList<>();
-
-    static {
-        pictureTypes.add("jpg");
-        pictureTypes.add("jpeg");
-        pictureTypes.add("bmp");
-        pictureTypes.add("gif");
-        pictureTypes.add("png");
-    }
-
-    public static final String[] IMG_FILE = {"bmp", "jpg", "png", "tif", "gif", "jpeg", "webp"};
-    public static final String[] DOC_FILE = {"doc", "docx", "txt", "hlp", "wps", "rtf", "html", "pdf", "md", "sql", "css", "js", "vue", "java"};
-    public static final String[] VIDEO_FILE = {"avi", "mp4", "mpg", "mov", "swf"};
-    public static final String[] MUSIC_FILE = {"wav", "aif", "au", "mp3", "ram", "wma", "mmf", "amr", "aac", "flac"};
-    public static final String[] ALL_FILE = {"bmp", "jpg", "png", "tif", "gif", "jpeg", "webp",
+    protected static final String[] IMG_FILE = {"bmp", "jpg", "png", "tif", "gif", "jpeg", "webp"};
+    protected static final String[] DOC_FILE = {"doc", "docx", "txt", "hlp", "wps", "rtf", "html", "pdf", "md", "sql", "css", "js", "vue", "java"};
+    protected static final String[] VIDEO_FILE = {"avi", "mp4", "mpg", "mov", "swf"};
+    protected static final String[] MUSIC_FILE = {"wav", "aif", "au", "mp3", "ram", "wma", "mmf", "amr", "aac", "flac"};
+    protected static final String[] ALL_FILE = {"bmp", "jpg", "png", "tif", "gif", "jpeg", "webp",
             "doc", "docx", "txt", "hlp", "wps", "rtf", "html", "pdf", "md", "sql", "css", "js", "vue", "java",
             "avi", "mp4", "mpg", "mov", "swf",
             "wav", "aif", "au", "mp3", "ram", "wma", "mmf", "amr", "aac", "flac"
@@ -63,7 +47,7 @@ public class FileUtils {
             return false;
         }
         String expandName = getPicExpandedName(fileName);
-        return pictureTypes.contains(expandName);
+        return Arrays.asList(IMG_FILE).contains(expandName);
     }
 
     /**
@@ -72,7 +56,12 @@ public class FileUtils {
      * @return 结果
      */
     public static Boolean isMarkdown(String fileName) {
-        return fileName.indexOf(".md") > -1;
+        if(StringUtils.isEmpty(fileName)) {
+            return false;
+        }
+        String expandName = getPicExpandedName(fileName);
+
+        return "md".equalsIgnoreCase(expandName);
     }
 
     /**
@@ -103,8 +92,8 @@ public class FileUtils {
      *
      * @param pathRoot 物理路径webapp所在路径
      * @return 返回图片上传的地址
-     * @throws IOException
-     * @throws IllegalStateException
+     * @throws IOException IO异常
+     * @throws IllegalStateException 非法参数异常
      */
     public static String uploadFile(String pathRoot, String baseUrl, MultipartFile avatar) throws IllegalStateException, IOException {
         String path = "";
@@ -112,9 +101,12 @@ public class FileUtils {
             //获得文件类型（可以判断如果不是图片，禁止上传）
             String contentType = avatar.getContentType();
             //获得文件后缀名称
-            String imageName = contentType.substring(contentType.indexOf("/") + 1);
-            path = baseUrl + UUID.randomUUID().toString() + "." + imageName;
-            avatar.transferTo(new File(pathRoot + path));
+            if(StringUtils.isNotEmpty(contentType)){
+                String imageName = contentType.substring(contentType.indexOf("/") + 1);
+                path = baseUrl + UUID.randomUUID().toString() + "." + imageName;
+                avatar.transferTo(new File(pathRoot + path));
+            }
+
 
         }
         return path;
@@ -131,10 +123,10 @@ public class FileUtils {
         String ext = "";
         if (StringUtils.isNotBlank(fileName) &&
                 StringUtils.contains(fileName, ".")) {
-            ext = StringUtils.substring(fileName, fileName.lastIndexOf(".") + 1);
+            ext = ProconStringUtils.substring(fileName, fileName.lastIndexOf(".") + 1);
         }
         ext = ext.toLowerCase();
-        if (ext == null || ext.length() < 1) {
+        if (ext.length() < 1) {
             ext = "jpg";
         }
 
@@ -182,13 +174,14 @@ public class FileUtils {
      * @param path
      * @return
      */
-    public void creatFile(String path) {
+    public boolean creatFile(String path) {
         File file = new File(path);
         if (file.isDirectory()) {
             log.error("该目录不存在");
         } else {
-            file.mkdir();
+          return  file.mkdir();
         }
+        return false;
     }
 
     /**
@@ -447,7 +440,7 @@ public class FileUtils {
                         String originalFilename = file.getOriginalFilename();
                         // 获得图片后缀名称,如果后缀不为图片格式，则不上传
                         String suffix = originalFilename.substring(originalFilename.lastIndexOf(".")).toLowerCase();
-                        if (!pictureTypes.contains(suffix)) {
+                        if (!Arrays.asList(IMG_FILE).contains(suffix)) {
                             continue;
                         }
                         // 获得上传路径的绝对路径地址(/upload)-->

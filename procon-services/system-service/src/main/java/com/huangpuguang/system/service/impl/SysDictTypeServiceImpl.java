@@ -2,7 +2,7 @@ package com.huangpuguang.system.service.impl;
 
 import com.huangpuguang.common.core.constant.UserConstants;
 import com.huangpuguang.common.core.exception.ServiceException;
-import com.huangpuguang.common.core.utils.StringUtils;
+import com.huangpuguang.common.core.utils.ProconStringUtils;
 import com.huangpuguang.common.security.utils.DictUtils;
 import com.huangpuguang.system.api.domain.SysDictData;
 import com.huangpuguang.system.api.domain.SysDictType;
@@ -75,12 +75,12 @@ public class SysDictTypeServiceImpl implements SysDictTypeService
     public List<SysDictData> selectDictDataByType(String dictType)
     {
         List<SysDictData> dictDatas = DictUtils.getDictCache(dictType);
-        if (StringUtils.isNotEmpty(dictDatas))
+        if (ProconStringUtils.isNotEmpty(dictDatas))
         {
             return dictDatas;
         }
         dictDatas = dictDataMapper.selectDictDataByType(dictType);
-        if (StringUtils.isNotEmpty(dictDatas))
+        if (ProconStringUtils.isNotEmpty(dictDatas))
         {
             DictUtils.setDictCache(dictType, dictDatas);
             return dictDatas;
@@ -222,9 +222,9 @@ public class SysDictTypeServiceImpl implements SysDictTypeService
     @Override
     public String checkDictTypeUnique(SysDictType dict)
     {
-        Long dictId = StringUtils.isNull(dict.getDictId()) ? -1L : dict.getDictId();
+        Long dictId = ProconStringUtils.isNull(dict.getDictId()) ? -1L : dict.getDictId();
         SysDictType dictType = dictTypeMapper.checkDictTypeUnique(dict.getDictType());
-        if (StringUtils.isNotNull(dictType) && dictType.getDictId().longValue() != dictId.longValue())
+        if (ProconStringUtils.isNotNull(dictType) && dictType.getDictId().longValue() != dictId.longValue())
         {
             return UserConstants.NOT_UNIQUE;
         }

@@ -5,7 +5,7 @@ import java.lang.reflect.Method;
 import java.util.LinkedList;
 import java.util.List;
 import com.huangpuguang.common.core.utils.SpringUtils;
-import com.huangpuguang.common.core.utils.StringUtils;
+import com.huangpuguang.common.core.utils.ProconStringUtils;
 import com.huangpuguang.job.domain.SysJob;
 
 /**
@@ -50,7 +50,7 @@ public class JobInvokeUtil
             throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException,
             InvocationTargetException
     {
-        if (StringUtils.isNotNull(methodParams) && methodParams.size() > 0)
+        if (ProconStringUtils.isNotNull(methodParams) && methodParams.size() > 0)
         {
             Method method = bean.getClass().getDeclaredMethod(methodName, getMethodParamsType(methodParams));
             method.invoke(bean, getMethodParamsValue(methodParams));
@@ -70,7 +70,7 @@ public class JobInvokeUtil
      */
     public static boolean isValidClassName(String invokeTarget)
     {
-        return StringUtils.countMatches(invokeTarget, ".") > 1;
+        return ProconStringUtils.countMatches(invokeTarget, ".") > 1;
     }
 
     /**
@@ -81,8 +81,8 @@ public class JobInvokeUtil
      */
     public static String getBeanName(String invokeTarget)
     {
-        String beanName = StringUtils.substringBefore(invokeTarget, "(");
-        return StringUtils.substringBeforeLast(beanName, ".");
+        String beanName = ProconStringUtils.substringBefore(invokeTarget, "(");
+        return ProconStringUtils.substringBeforeLast(beanName, ".");
     }
 
     /**
@@ -93,8 +93,8 @@ public class JobInvokeUtil
      */
     public static String getMethodName(String invokeTarget)
     {
-        String methodName = StringUtils.substringBefore(invokeTarget, "(");
-        return StringUtils.substringAfterLast(methodName, ".");
+        String methodName = ProconStringUtils.substringBefore(invokeTarget, "(");
+        return ProconStringUtils.substringAfterLast(methodName, ".");
     }
 
     /**
@@ -105,8 +105,8 @@ public class JobInvokeUtil
      */
     public static List<Object[]> getMethodParams(String invokeTarget)
     {
-        String methodStr = StringUtils.substringBetween(invokeTarget, "(", ")");
-        if (StringUtils.isEmpty(methodStr))
+        String methodStr = ProconStringUtils.substringBetween(invokeTarget, "(", ")");
+        if (ProconStringUtils.isEmpty(methodStr))
         {
             return null;
         }
@@ -114,26 +114,26 @@ public class JobInvokeUtil
         List<Object[]> classs = new LinkedList<>();
         for (int i = 0; i < methodParams.length; i++)
         {
-            String str = StringUtils.trimToEmpty(methodParams[i]);
+            String str = ProconStringUtils.trimToEmpty(methodParams[i]);
             // String字符串类型，包含'
-            if (StringUtils.contains(str, "'"))
+            if (ProconStringUtils.contains(str, "'"))
             {
-                classs.add(new Object[] { StringUtils.replace(str, "'", ""), String.class });
+                classs.add(new Object[] { ProconStringUtils.replace(str, "'", ""), String.class });
             }
             // boolean布尔类型，等于true或者false
-            else if (StringUtils.equals(str, "true") || StringUtils.equalsIgnoreCase(str, "false"))
+            else if (ProconStringUtils.equals(str, "true") || ProconStringUtils.equalsIgnoreCase(str, "false"))
             {
                 classs.add(new Object[] { Boolean.valueOf(str), Boolean.class });
             }
             // long长整形，包含L
-            else if (StringUtils.containsIgnoreCase(str, "L"))
+            else if (ProconStringUtils.containsIgnoreCase(str, "L"))
             {
-                classs.add(new Object[] { Long.valueOf(StringUtils.replaceIgnoreCase(str, "L", "")), Long.class });
+                classs.add(new Object[] { Long.valueOf(ProconStringUtils.replaceIgnoreCase(str, "L", "")), Long.class });
             }
             // double浮点类型，包含D
-            else if (StringUtils.containsIgnoreCase(str, "D"))
+            else if (ProconStringUtils.containsIgnoreCase(str, "D"))
             {
-                classs.add(new Object[] { Double.valueOf(StringUtils.replaceIgnoreCase(str, "D", "")), Double.class });
+                classs.add(new Object[] { Double.valueOf(ProconStringUtils.replaceIgnoreCase(str, "D", "")), Double.class });
             }
             // 其他类型归类为整形
             else

@@ -3,8 +3,7 @@ package com.huangpuguang.system.controller;
 import com.huangpuguang.common.core.constant.UserConstants;
 import com.huangpuguang.common.core.domain.ResultModel;
 import com.huangpuguang.common.security.utils.SecurityUtils;
-import com.huangpuguang.common.core.utils.ServletUtils;
-import com.huangpuguang.common.core.utils.StringUtils;
+import com.huangpuguang.common.core.utils.ProconStringUtils;
 import com.huangpuguang.common.core.web.controller.BaseController;
 import com.huangpuguang.common.core.web.domain.AjaxResult;
 import com.huangpuguang.common.log.annotation.Log;
@@ -61,12 +60,12 @@ public class SysProfileController extends BaseController
     @PutMapping
     public AjaxResult updateProfile(@RequestBody SysUser user)
     {
-        if (StringUtils.isNotEmpty(user.getPhonenumber())
+        if (ProconStringUtils.isNotEmpty(user.getPhonenumber())
                 && UserConstants.NOT_UNIQUE.equals(userService.checkPhoneUnique(user)))
         {
             return AjaxResult.error("修改用户'" + user.getUserName() + "'失败，手机号码已存在");
         }
-        else if (StringUtils.isNotEmpty(user.getEmail())
+        else if (ProconStringUtils.isNotEmpty(user.getEmail())
                 && UserConstants.NOT_UNIQUE.equals(userService.checkEmailUnique(user)))
         {
             return AjaxResult.error("修改用户'" + user.getUserName() + "'失败，邮箱账号已存在");
@@ -128,7 +127,7 @@ public class SysProfileController extends BaseController
         {
             LoginUser loginUser = SecurityUtils.getLoginUser();
             ResultModel<SysFile> fileResult = remoteFileService.upload(file);
-            if (StringUtils.isNull(fileResult) || StringUtils.isNull(fileResult.getData()))
+            if (ProconStringUtils.isNull(fileResult) || ProconStringUtils.isNull(fileResult.getData()))
             {
                 return AjaxResult.error("文件服务异常，请联系管理员");
             }

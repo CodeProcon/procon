@@ -3,7 +3,7 @@ package com.huangpuguang.system.service.impl;
 import com.huangpuguang.common.core.constant.Constants;
 import com.huangpuguang.common.core.constant.UserConstants;
 import com.huangpuguang.common.security.utils.SecurityUtils;
-import com.huangpuguang.common.core.utils.StringUtils;
+import com.huangpuguang.common.core.utils.ProconStringUtils;
 import com.huangpuguang.system.api.domain.SysRole;
 import com.huangpuguang.system.api.domain.SysUser;
 import com.huangpuguang.system.domain.SysMenu;
@@ -87,7 +87,7 @@ public class SysMenuServiceImpl implements SysMenuService
         Set<String> permsSet = new HashSet<>();
         for (String perm : perms)
         {
-            if (StringUtils.isNotEmpty(perm))
+            if (ProconStringUtils.isNotEmpty(perm))
             {
                 permsSet.addAll(Arrays.asList(perm.trim().split(",")));
             }
@@ -147,7 +147,7 @@ public class SysMenuServiceImpl implements SysMenuService
             router.setPath(getRouterPath(menu));
             router.setComponent(getComponent(menu));
             router.setQuery(menu.getQuery());
-            router.setMeta(new MetaVo(menu.getMenuName(), menu.getIcon(), StringUtils.equals("1", menu.getIsCache()), menu.getPath()));
+            router.setMeta(new MetaVo(menu.getMenuName(), menu.getIcon(), ProconStringUtils.equals("1", menu.getIsCache()), menu.getPath()));
             List<SysMenu> cMenus = menu.getChildren();
             if (!cMenus.isEmpty() && cMenus.size() > 0 && UserConstants.TYPE_DIR.equals(menu.getMenuType()))
             {
@@ -162,8 +162,8 @@ public class SysMenuServiceImpl implements SysMenuService
                 RouterVo children = new RouterVo();
                 children.setPath(menu.getPath());
                 children.setComponent(menu.getComponent());
-                children.setName(StringUtils.capitalize(menu.getPath()));
-                children.setMeta(new MetaVo(menu.getMenuName(), menu.getIcon(), StringUtils.equals("1", menu.getIsCache()), menu.getPath()));
+                children.setName(ProconStringUtils.capitalize(menu.getPath()));
+                children.setMeta(new MetaVo(menu.getMenuName(), menu.getIcon(), ProconStringUtils.equals("1", menu.getIsCache()), menu.getPath()));
                 childrenList.add(children);
                 router.setChildren(childrenList);
             }
@@ -173,10 +173,10 @@ public class SysMenuServiceImpl implements SysMenuService
                 router.setPath("/inner");
                 List<RouterVo> childrenList = new ArrayList<>();
                 RouterVo children = new RouterVo();
-                String routerPath = StringUtils.replaceEach(menu.getPath(), new String[] { Constants.HTTP, Constants.HTTPS }, new String[] { "", "" });
+                String routerPath = ProconStringUtils.replaceEach(menu.getPath(), new String[] { Constants.HTTP, Constants.HTTPS }, new String[] { "", "" });
                 children.setPath(routerPath);
                 children.setComponent(UserConstants.INNER_LINK);
-                children.setName(StringUtils.capitalize(routerPath));
+                children.setName(ProconStringUtils.capitalize(routerPath));
                 children.setMeta(new MetaVo(menu.getMenuName(), menu.getIcon(), menu.getPath()));
                 children.setQuery(menu.getQuery());
                 childrenList.add(children);
@@ -315,9 +315,9 @@ public class SysMenuServiceImpl implements SysMenuService
     @Override
     public String checkMenuNameUnique(SysMenu menu)
     {
-        Long menuId = StringUtils.isNull(menu.getMenuId()) ? -1L : menu.getMenuId();
+        Long menuId = ProconStringUtils.isNull(menu.getMenuId()) ? -1L : menu.getMenuId();
         SysMenu info = menuMapper.checkMenuNameUnique(menu.getMenuName(), menu.getParentId());
-        if (StringUtils.isNotNull(info) && info.getMenuId().longValue() != menuId.longValue())
+        if (ProconStringUtils.isNotNull(info) && info.getMenuId().longValue() != menuId.longValue())
         {
             return UserConstants.NOT_UNIQUE;
         }
@@ -332,11 +332,11 @@ public class SysMenuServiceImpl implements SysMenuService
      */
     public String getRouteName(SysMenu menu)
     {
-        String routerName = StringUtils.capitalize(menu.getPath());
+        String routerName = ProconStringUtils.capitalize(menu.getPath());
         // 非外链并且是一级目录（类型为目录）
         if (isMenuFrame(menu))
         {
-            routerName = StringUtils.EMPTY;
+            routerName = ProconStringUtils.EMPTY;
         }
         return routerName;
     }
@@ -353,7 +353,7 @@ public class SysMenuServiceImpl implements SysMenuService
         // 内链打开外网方式
         if (menu.getParentId().intValue() != 0 && isInnerLink(menu))
         {
-            routerPath = StringUtils.replaceEach(routerPath, new String[] { Constants.HTTP, Constants.HTTPS }, new String[] { "", "" });
+            routerPath = ProconStringUtils.replaceEach(routerPath, new String[] { Constants.HTTP, Constants.HTTPS }, new String[] { "", "" });
         }
         // 非外链并且是一级目录（类型为目录）
         if (0 == menu.getParentId().intValue() && UserConstants.TYPE_DIR.equals(menu.getMenuType())
@@ -378,15 +378,15 @@ public class SysMenuServiceImpl implements SysMenuService
     public String getComponent(SysMenu menu)
     {
         String component = UserConstants.LAYOUT;
-        if (StringUtils.isNotEmpty(menu.getComponent()) && !isMenuFrame(menu))
+        if (ProconStringUtils.isNotEmpty(menu.getComponent()) && !isMenuFrame(menu))
         {
             component = menu.getComponent();
         }
-        else if (StringUtils.isEmpty(menu.getComponent()) && menu.getParentId().intValue() != 0 && isInnerLink(menu))
+        else if (ProconStringUtils.isEmpty(menu.getComponent()) && menu.getParentId().intValue() != 0 && isInnerLink(menu))
         {
             component = UserConstants.INNER_LINK;
         }
-        else if (StringUtils.isEmpty(menu.getComponent()) && isParentView(menu))
+        else if (ProconStringUtils.isEmpty(menu.getComponent()) && isParentView(menu))
         {
             component = UserConstants.PARENT_VIEW;
         }
@@ -413,7 +413,7 @@ public class SysMenuServiceImpl implements SysMenuService
      */
     public boolean isInnerLink(SysMenu menu)
     {
-        return menu.getIsFrame().equals(UserConstants.NO_FRAME) && StringUtils.isHttp(menu.getPath());
+        return menu.getIsFrame().equals(UserConstants.NO_FRAME) && ProconStringUtils.isHttp(menu.getPath());
     }
 
     /**

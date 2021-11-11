@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.huangpuguang.gateway.config.properties.CaptchaProperties;
 import com.huangpuguang.gateway.service.ValidateCodeService;
 import com.huangpuguang.common.core.utils.ServletUtils;
-import com.huangpuguang.common.core.utils.StringUtils;
+import com.huangpuguang.common.core.utils.ProconStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
@@ -45,7 +45,7 @@ public class ValidateCodeFilter extends AbstractGatewayFilterFactory<Object>
             ServerHttpRequest request = exchange.getRequest();
 
             // 非登录/注册请求或验证码关闭，不处理
-            if (!StringUtils.containsAnyIgnoreCase(request.getURI().getPath(), VALIDATE_URL) || !captchaProperties.getEnabled())
+            if (!ProconStringUtils.containsAnyIgnoreCase(request.getURI().getPath(), VALIDATE_URL) || !captchaProperties.getEnabled())
             {
                 return chain.filter(exchange);
             }

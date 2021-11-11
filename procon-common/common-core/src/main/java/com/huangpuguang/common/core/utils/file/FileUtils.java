@@ -11,7 +11,7 @@ import java.nio.charset.StandardCharsets;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang3.ArrayUtils;
-import com.huangpuguang.common.core.utils.StringUtils;
+import com.huangpuguang.common.core.utils.ProconStringUtils;
 
 /**
  * 文件处理工具类
@@ -123,7 +123,7 @@ public class FileUtils extends org.apache.commons.io.FileUtils
     public static boolean checkAllowDownload(String resource)
     {
         // 禁止目录上跳级别
-        if (StringUtils.contains(resource, ".."))
+        if (ProconStringUtils.contains(resource, ".."))
         {
             return false;
         }

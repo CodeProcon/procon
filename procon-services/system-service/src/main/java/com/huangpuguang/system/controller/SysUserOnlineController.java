@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.huangpuguang.common.core.constant.CacheConstants;
-import com.huangpuguang.common.core.utils.StringUtils;
+import com.huangpuguang.common.core.utils.ProconStringUtils;
 import com.huangpuguang.common.core.web.controller.BaseController;
 import com.huangpuguang.common.core.web.domain.AjaxResult;
 import com.huangpuguang.common.core.web.page.TableDataInfo;
@@ -49,23 +49,23 @@ public class SysUserOnlineController extends BaseController
         for (String key : keys)
         {
             LoginUser user = redisService.getCacheObject(key);
-            if (StringUtils.isNotEmpty(ipaddr) && StringUtils.isNotEmpty(userName))
+            if (ProconStringUtils.isNotEmpty(ipaddr) && ProconStringUtils.isNotEmpty(userName))
             {
-                if (StringUtils.equals(ipaddr, user.getIpaddr()) && StringUtils.equals(userName, user.getUsername()))
+                if (ProconStringUtils.equals(ipaddr, user.getIpaddr()) && ProconStringUtils.equals(userName, user.getUsername()))
                 {
                     userOnlineList.add(userOnlineService.selectOnlineByInfo(ipaddr, userName, user));
                 }
             }
-            else if (StringUtils.isNotEmpty(ipaddr))
+            else if (ProconStringUtils.isNotEmpty(ipaddr))
             {
-                if (StringUtils.equals(ipaddr, user.getIpaddr()))
+                if (ProconStringUtils.equals(ipaddr, user.getIpaddr()))
                 {
                     userOnlineList.add(userOnlineService.selectOnlineByIpaddr(ipaddr, user));
                 }
             }
-            else if (StringUtils.isNotEmpty(userName))
+            else if (ProconStringUtils.isNotEmpty(userName))
             {
-                if (StringUtils.equals(userName, user.getUsername()))
+                if (ProconStringUtils.equals(userName, user.getUsername()))
                 {
                     userOnlineList.add(userOnlineService.selectOnlineByUserName(userName, user));
                 }

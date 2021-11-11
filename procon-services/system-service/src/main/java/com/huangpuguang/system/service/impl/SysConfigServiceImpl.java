@@ -4,7 +4,7 @@ import com.huangpuguang.common.core.constant.Constants;
 import com.huangpuguang.common.core.constant.UserConstants;
 import com.huangpuguang.common.core.exception.ServiceException;
 import com.huangpuguang.common.core.text.Convert;
-import com.huangpuguang.common.core.utils.StringUtils;
+import com.huangpuguang.common.core.utils.ProconStringUtils;
 import com.huangpuguang.common.redis.service.RedisService;
 import com.huangpuguang.system.domain.SysConfig;
 import com.huangpuguang.system.mapper.SysConfigMapper;
@@ -63,19 +63,19 @@ public class SysConfigServiceImpl implements SysConfigService
     public String selectConfigByKey(String configKey)
     {
         String configValue = Convert.toStr(redisService.getCacheObject(getCacheKey(configKey)));
-        if (StringUtils.isNotEmpty(configValue))
+        if (ProconStringUtils.isNotEmpty(configValue))
         {
             return configValue;
         }
         SysConfig config = new SysConfig();
         config.setConfigKey(configKey);
         SysConfig retConfig = configMapper.selectConfig(config);
-        if (StringUtils.isNotNull(retConfig))
+        if (ProconStringUtils.isNotNull(retConfig))
         {
             redisService.setCacheObject(getCacheKey(configKey), retConfig.getConfigValue());
             return retConfig.getConfigValue();
         }
-        return StringUtils.EMPTY;
+        return ProconStringUtils.EMPTY;
     }
 
     /**
@@ -136,7 +136,7 @@ public class SysConfigServiceImpl implements SysConfigService
         for (Long configId : configIds)
         {
             SysConfig config = selectConfigById(configId);
-            if (StringUtils.equals(UserConstants.YES, config.getConfigType()))
+            if (ProconStringUtils.equals(UserConstants.YES, config.getConfigType()))
             {
                 throw new ServiceException(String.format("内置参数【%1$s】不能删除 ", config.getConfigKey()));
             }
@@ -187,9 +187,9 @@ public class SysConfigServiceImpl implements SysConfigService
     @Override
     public String checkConfigKeyUnique(SysConfig config)
     {
-        Long configId = StringUtils.isNull(config.getConfigId()) ? -1L : config.getConfigId();
+        Long configId = ProconStringUtils.isNull(config.getConfigId()) ? -1L : config.getConfigId();
         SysConfig info = configMapper.checkConfigKeyUnique(config.getConfigKey());
-        if (StringUtils.isNotNull(info) && info.getConfigId().longValue() != configId.longValue())
+        if (ProconStringUtils.isNotNull(info) && info.getConfigId().longValue() != configId.longValue())
         {
             return UserConstants.NOT_UNIQUE;
         }

@@ -55,9 +55,9 @@ public class ReUtil
      */
     public static String replaceAll(CharSequence content, Pattern pattern, String replacementTemplate)
     {
-        if (StringUtils.isEmpty(content))
+        if (ProconStringUtils.isEmpty(content))
         {
-            return StringUtils.EMPTY;
+            return ProconStringUtils.EMPTY;
         }
 
         final Matcher matcher = pattern.matcher(content);
@@ -140,9 +140,9 @@ public class ReUtil
      */
     public static String escape(CharSequence content)
     {
-        if (StringUtils.isBlank(content))
+        if (ProconStringUtils.isBlank(content))
         {
-            return StringUtils.EMPTY;
+            return ProconStringUtils.EMPTY;
         }
 
         final StringBuilder builder = new StringBuilder();
