@@ -1,20 +1,5 @@
 package com.huangpuguang.system.controller;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-
-import com.huangpuguang.common.security.annotation.RequiresPermissions;
-import com.huangpuguang.system.api.model.LoginUser;
-import com.huangpuguang.system.domain.SysUserOnline;
-import com.huangpuguang.system.service.SysUserOnlineService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 import com.huangpuguang.common.core.constant.CacheConstants;
 import com.huangpuguang.common.core.utils.ProconStringUtils;
 import com.huangpuguang.common.core.web.controller.BaseController;
@@ -23,6 +8,17 @@ import com.huangpuguang.common.core.web.page.TableDataInfo;
 import com.huangpuguang.common.log.annotation.Log;
 import com.huangpuguang.common.log.enums.BusinessType;
 import com.huangpuguang.common.redis.service.RedisService;
+import com.huangpuguang.common.security.annotation.RequiresPermissions;
+import com.huangpuguang.system.api.model.LoginUser;
+import com.huangpuguang.system.domain.SysUserOnline;
+import com.huangpuguang.system.service.SysUserOnlineService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 
 /**
@@ -45,7 +41,7 @@ public class SysUserOnlineController extends BaseController
     public TableDataInfo list(String ipaddr, String userName)
     {
         Collection<String> keys = redisService.keys(CacheConstants.LOGIN_TOKEN_KEY + "*");
-        List<SysUserOnline> userOnlineList = new ArrayList<SysUserOnline>();
+        List<SysUserOnline> userOnlineList = new ArrayList<>();
         for (String key : keys)
         {
             LoginUser user = redisService.getCacheObject(key);

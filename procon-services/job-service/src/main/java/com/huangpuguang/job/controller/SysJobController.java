@@ -2,8 +2,6 @@ package com.huangpuguang.job.controller;
 
 import com.huangpuguang.common.core.constant.Constants;
 import com.huangpuguang.common.core.exception.job.TaskException;
-import com.huangpuguang.common.security.annotation.RequiresPermissions;
-import com.huangpuguang.common.security.utils.SecurityUtils;
 import com.huangpuguang.common.core.utils.ProconStringUtils;
 import com.huangpuguang.common.core.utils.poi.ExcelUtil;
 import com.huangpuguang.common.core.web.controller.BaseController;
@@ -11,7 +9,8 @@ import com.huangpuguang.common.core.web.domain.AjaxResult;
 import com.huangpuguang.common.core.web.page.TableDataInfo;
 import com.huangpuguang.common.log.annotation.Log;
 import com.huangpuguang.common.log.enums.BusinessType;
-
+import com.huangpuguang.common.security.annotation.RequiresPermissions;
+import com.huangpuguang.common.security.utils.SecurityUtils;
 import com.huangpuguang.job.domain.SysJob;
 import com.huangpuguang.job.service.SysJobService;
 import com.huangpuguang.job.util.CronUtils;
@@ -20,7 +19,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.List;
 
 
@@ -54,7 +52,7 @@ public class SysJobController extends BaseController
     @RequiresPermissions("monitor:job:export")
     @Log(title = "定时任务", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
-    public void export(HttpServletResponse response, SysJob sysJob) throws IOException
+    public void export(HttpServletResponse response, SysJob sysJob)
     {
         List<SysJob> list = jobService.selectJobList(sysJob);
         ExcelUtil<SysJob> util = new ExcelUtil<>(SysJob.class);

@@ -1,10 +1,5 @@
 package com.huangpuguang.system.controller;
 
-import com.huangpuguang.common.security.annotation.RequiresPermissions;
-import com.huangpuguang.system.api.domain.SysDictData;
-import com.huangpuguang.system.service.SysDictDataService;
-import com.huangpuguang.system.service.SysDictTypeService;
-import com.huangpuguang.common.security.utils.SecurityUtils;
 import com.huangpuguang.common.core.utils.ProconStringUtils;
 import com.huangpuguang.common.core.utils.poi.ExcelUtil;
 import com.huangpuguang.common.core.web.controller.BaseController;
@@ -12,13 +7,16 @@ import com.huangpuguang.common.core.web.domain.AjaxResult;
 import com.huangpuguang.common.core.web.page.TableDataInfo;
 import com.huangpuguang.common.log.annotation.Log;
 import com.huangpuguang.common.log.enums.BusinessType;
-
+import com.huangpuguang.common.security.annotation.RequiresPermissions;
+import com.huangpuguang.common.security.utils.SecurityUtils;
+import com.huangpuguang.system.api.domain.SysDictData;
+import com.huangpuguang.system.service.SysDictDataService;
+import com.huangpuguang.system.service.SysDictTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,7 +47,7 @@ public class SysDictDataController extends BaseController
     @Log(title = "字典数据", businessType = BusinessType.EXPORT)
     @RequiresPermissions("system:dict:export")
     @PostMapping("/export")
-    public void export(HttpServletResponse response, SysDictData dictData) throws IOException
+    public void export(HttpServletResponse response, SysDictData dictData)
     {
         List<SysDictData> list = dictDataService.selectDictDataList(dictData);
         ExcelUtil<SysDictData> util = new ExcelUtil<SysDictData>(SysDictData.class);

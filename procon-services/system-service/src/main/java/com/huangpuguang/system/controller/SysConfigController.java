@@ -1,23 +1,21 @@
 package com.huangpuguang.system.controller;
 
-import com.huangpuguang.common.security.annotation.RequiresPermissions;
-import com.huangpuguang.system.domain.SysConfig;
-import com.huangpuguang.system.service.SysConfigService;
 import com.huangpuguang.common.core.constant.UserConstants;
-import com.huangpuguang.common.security.utils.SecurityUtils;
 import com.huangpuguang.common.core.utils.poi.ExcelUtil;
 import com.huangpuguang.common.core.web.controller.BaseController;
 import com.huangpuguang.common.core.web.domain.AjaxResult;
 import com.huangpuguang.common.core.web.page.TableDataInfo;
 import com.huangpuguang.common.log.annotation.Log;
 import com.huangpuguang.common.log.enums.BusinessType;
-
+import com.huangpuguang.common.security.annotation.RequiresPermissions;
+import com.huangpuguang.common.security.utils.SecurityUtils;
+import com.huangpuguang.system.domain.SysConfig;
+import com.huangpuguang.system.service.SysConfigService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.List;
 
 /**
@@ -47,8 +45,7 @@ public class SysConfigController extends BaseController
     @Log(title = "参数管理", businessType = BusinessType.EXPORT)
     @RequiresPermissions("system:config:export")
     @PostMapping("/export")
-    public void export(HttpServletResponse response, SysConfig config) throws IOException
-    {
+    public void export(HttpServletResponse response, SysConfig config){
         List<SysConfig> list = configService.selectConfigList(config);
         ExcelUtil<SysConfig> util = new ExcelUtil<>(SysConfig.class);
         util.exportExcel(response, list, "参数数据");

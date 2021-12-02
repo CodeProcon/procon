@@ -1,30 +1,22 @@
 package com.huangpuguang.system.controller;
 
-import java.io.IOException;
-import java.util.List;
-import javax.servlet.http.HttpServletResponse;
-
-import com.huangpuguang.common.security.annotation.RequiresPermissions;
-import com.huangpuguang.system.domain.SysPost;
-import com.huangpuguang.system.service.SysPostService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 import com.huangpuguang.common.core.constant.UserConstants;
-import com.huangpuguang.common.security.utils.SecurityUtils;
 import com.huangpuguang.common.core.utils.poi.ExcelUtil;
 import com.huangpuguang.common.core.web.controller.BaseController;
 import com.huangpuguang.common.core.web.domain.AjaxResult;
 import com.huangpuguang.common.core.web.page.TableDataInfo;
 import com.huangpuguang.common.log.annotation.Log;
 import com.huangpuguang.common.log.enums.BusinessType;
+import com.huangpuguang.common.security.annotation.RequiresPermissions;
+import com.huangpuguang.common.security.utils.SecurityUtils;
+import com.huangpuguang.system.domain.SysPost;
+import com.huangpuguang.system.service.SysPostService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 
 /**
@@ -54,10 +46,9 @@ public class SysPostController extends BaseController
     @Log(title = "岗位管理", businessType = BusinessType.EXPORT)
     @RequiresPermissions("system:post:export")
     @PostMapping("/export")
-    public void export(HttpServletResponse response, SysPost post) throws IOException
-    {
+    public void export(HttpServletResponse response, SysPost post) {
         List<SysPost> list = postService.selectPostList(post);
-        ExcelUtil<SysPost> util = new ExcelUtil<SysPost>(SysPost.class);
+        ExcelUtil<SysPost> util = new ExcelUtil<>(SysPost.class);
         util.exportExcel(response, list, "岗位数据");
     }
 

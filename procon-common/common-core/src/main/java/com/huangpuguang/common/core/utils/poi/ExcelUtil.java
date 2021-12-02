@@ -1,53 +1,6 @@
 package com.huangpuguang.common.core.utils.poi;
 
 
-
-
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.math.BigDecimal;
-import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
-import javax.servlet.http.HttpServletResponse;
-import org.apache.poi.ss.usermodel.BorderStyle;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.CellStyle;
-import org.apache.poi.ss.usermodel.CellType;
-import org.apache.poi.ss.usermodel.ClientAnchor;
-import org.apache.poi.ss.usermodel.DataValidation;
-import org.apache.poi.ss.usermodel.DataValidationConstraint;
-import org.apache.poi.ss.usermodel.DataValidationHelper;
-import org.apache.poi.ss.usermodel.DateUtil;
-import org.apache.poi.ss.usermodel.Drawing;
-import org.apache.poi.ss.usermodel.FillPatternType;
-import org.apache.poi.ss.usermodel.Font;
-import org.apache.poi.ss.usermodel.HorizontalAlignment;
-import org.apache.poi.ss.usermodel.IndexedColors;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.VerticalAlignment;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.ss.usermodel.WorkbookFactory;
-import org.apache.poi.ss.util.CellRangeAddress;
-import org.apache.poi.ss.util.CellRangeAddressList;
-import org.apache.poi.util.IOUtils;
-import org.apache.poi.xssf.streaming.SXSSFWorkbook;
-import org.apache.poi.xssf.usermodel.XSSFClientAnchor;
-import org.apache.poi.xssf.usermodel.XSSFDataValidation;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import com.huangpuguang.common.core.annotation.Excel;
 import com.huangpuguang.common.core.annotation.Excel.ColumnType;
 import com.huangpuguang.common.core.annotation.Excel.Type;
@@ -58,6 +11,25 @@ import com.huangpuguang.common.core.utils.ProconStringUtils;
 import com.huangpuguang.common.core.utils.file.FileTypeUtils;
 import com.huangpuguang.common.core.utils.file.ImageUtils;
 import com.huangpuguang.common.core.utils.reflect.ReflectUtils;
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.ss.util.CellRangeAddress;
+import org.apache.poi.ss.util.CellRangeAddressList;
+import org.apache.poi.util.IOUtils;
+import org.apache.poi.xssf.streaming.SXSSFWorkbook;
+import org.apache.poi.xssf.usermodel.XSSFClientAnchor;
+import org.apache.poi.xssf.usermodel.XSSFDataValidation;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.InputStream;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Excel相关处理
@@ -71,7 +43,7 @@ public class ExcelUtil<T>
     /**
      * Excel sheet最大行数，默认65536
      */
-    public static final int sheetSize = 65536;
+    public static final int SHEET_SIZE = 65536;
 
     /**
      * 工作表名称
@@ -111,7 +83,7 @@ public class ExcelUtil<T>
     /**
      * 当前行号
      */
-    private int rownum;
+    private int rowNum;
 
     /**
      * 标题
@@ -126,7 +98,7 @@ public class ExcelUtil<T>
     /**
      * 统计列表
      */
-    private Map<Integer, Double> statistics = new HashMap<Integer, Double>();
+    private Map<Integer, Double> statistics = new HashMap<>();
 
     /**
      * 数字格式
@@ -147,7 +119,7 @@ public class ExcelUtil<T>
     {
         if (list == null)
         {
-            list = new ArrayList<T>();
+            list = new ArrayList<>();
         }
         this.list = list;
         this.sheetName = sheetName;
@@ -165,7 +137,7 @@ public class ExcelUtil<T>
     {
         if (ProconStringUtils.isNotEmpty(title))
         {
-            Row titleRow = sheet.createRow(rownum == 0 ? rownum++ : 0);
+            Row titleRow = sheet.createRow(rowNum == 0 ? rowNum++ : 0);
             titleRow.setHeightInPoints(30);
             Cell titleCell = titleRow.createCell(0);
             titleCell.setCellStyle(styles.get("title"));
@@ -361,7 +333,7 @@ public class ExcelUtil<T>
      * @return 结果
      * @throws IOException
      */
-    public void exportExcel(HttpServletResponse response, List<T> list, String sheetName)throws IOException
+    public void exportExcel(HttpServletResponse response, List<T> list, String sheetName)
     {
         exportExcel(response, list, sheetName, ProconStringUtils.EMPTY);
     }
@@ -376,12 +348,11 @@ public class ExcelUtil<T>
      * @return 结果
      * @throws IOException
      */
-    public void exportExcel(HttpServletResponse response, List<T> list, String sheetName, String title) throws IOException
-    {
+    public void exportExcel(HttpServletResponse response, List<T> list, String sheetName, String title){
         response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
         response.setCharacterEncoding("utf-8");
         this.init(list, sheetName, title, Type.EXPORT);
-        exportExcel(response.getOutputStream());
+        exportExcel(response);
     }
 
     /**
@@ -396,7 +367,7 @@ public class ExcelUtil<T>
      * @param sheetName 工作表的名称
      * @return 结果
      */
-    public void importTemplateExcel(HttpServletResponse response, String sheetName) throws IOException
+    public void importTemplateExcel(HttpServletResponse response, String sheetName)
     {
         importTemplateExcel(response, sheetName, ProconStringUtils.EMPTY);
     }
@@ -408,25 +379,24 @@ public class ExcelUtil<T>
      * @param title 标题
      * @return 结果
      */
-    public void importTemplateExcel(HttpServletResponse response, String sheetName, String title) throws IOException
+    public void importTemplateExcel(HttpServletResponse response, String sheetName, String title)
     {
         response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
         response.setCharacterEncoding("utf-8");
         this.init(null, sheetName, title, Type.IMPORT);
-        exportExcel(response.getOutputStream());
+        exportExcel(response);
     }
 
     /**
      * 对list数据源将其里面的数据导入到excel表单
      *
-     * @return 结果
      */
-    public void exportExcel(OutputStream out)
+    public void exportExcel(HttpServletResponse response)
     {
         try
         {
             writeSheet();
-            wb.write(out);
+            wb.write(response.getOutputStream());
         }
         catch (Exception e)
         {
@@ -435,7 +405,6 @@ public class ExcelUtil<T>
         finally
         {
             IOUtils.closeQuietly(wb);
-            IOUtils.closeQuietly(out);
         }
     }
 
@@ -445,13 +414,13 @@ public class ExcelUtil<T>
     public void writeSheet()
     {
         // 取出一共有多少个sheet.
-        int sheetNo = Math.max(1, (int) Math.ceil(list.size() * 1.0 / sheetSize));
+        int sheetNo = Math.max(1, (int) Math.ceil(list.size() * 1.0 / SHEET_SIZE));
         for (int index = 0; index < sheetNo; index++)
         {
             createSheet(sheetNo, index);
 
             // 产生一行
-            Row row = sheet.createRow(rownum);
+            Row row = sheet.createRow(rowNum);
             int column = 0;
             // 写入各个字段的列头名称
             for (Object[] os : fields)
@@ -475,11 +444,11 @@ public class ExcelUtil<T>
      */
     public void fillExcelData(int index, Row row)
     {
-        int startNo = index * sheetSize;
-        int endNo = Math.min(startNo + sheetSize, list.size());
+        int startNo = index * SHEET_SIZE;
+        int endNo = Math.min(startNo + SHEET_SIZE, list.size());
         for (int i = startNo; i < endNo; i++)
         {
-            row = sheet.createRow(i + 1 + rownum - startNo);
+            row = sheet.createRow(i + 1 + rowNum - startNo);
             // 得到导出对象.
             T vo = (T) list.get(i);
             int column = 0;

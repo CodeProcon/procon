@@ -1,12 +1,16 @@
 package com.huangpuguang.job.util;
 
+import cn.hutool.core.collection.CollUtil;
+import com.huangpuguang.common.core.utils.ProconStringUtils;
+import com.huangpuguang.common.core.utils.SpringUtils;
+import com.huangpuguang.job.domain.SysJob;
+import org.apache.commons.lang3.StringUtils;
+
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
-import com.huangpuguang.common.core.utils.SpringUtils;
-import com.huangpuguang.common.core.utils.ProconStringUtils;
-import com.huangpuguang.job.domain.SysJob;
 
 /**
  * 任务执行工具
@@ -20,8 +24,7 @@ public class JobInvokeUtil
      *
      * @param sysJob 系统任务
      */
-    public static void invokeMethod(SysJob sysJob) throws Exception
-    {
+    public static void invokeMethod(SysJob sysJob) throws ClassNotFoundException, InvocationTargetException, NoSuchMethodException, IllegalAccessException, InstantiationException {
         String invokeTarget = sysJob.getInvokeTarget();
         String beanName = getBeanName(invokeTarget);
         String methodName = getMethodName(invokeTarget);
@@ -50,7 +53,7 @@ public class JobInvokeUtil
             throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException,
             InvocationTargetException
     {
-        if (ProconStringUtils.isNotNull(methodParams) && methodParams.size() > 0)
+        if (CollUtil.isNotEmpty(methodParams))
         {
             Method method = bean.getClass().getDeclaredMethod(methodName, getMethodParamsType(methodParams));
             method.invoke(bean, getMethodParamsValue(methodParams));
@@ -70,7 +73,7 @@ public class JobInvokeUtil
      */
     public static boolean isValidClassName(String invokeTarget)
     {
-        return ProconStringUtils.countMatches(invokeTarget, ".") > 1;
+        return StringUtils.countMatches(invokeTarget, ".") > 1;
     }
 
     /**
@@ -81,8 +84,8 @@ public class JobInvokeUtil
      */
     public static String getBeanName(String invokeTarget)
     {
-        String beanName = ProconStringUtils.substringBefore(invokeTarget, "(");
-        return ProconStringUtils.substringBeforeLast(beanName, ".");
+        String beanName = StringUtils.substringBefore(invokeTarget, "(");
+        return StringUtils.substringBeforeLast(beanName, ".");
     }
 
     /**
@@ -93,8 +96,8 @@ public class JobInvokeUtil
      */
     public static String getMethodName(String invokeTarget)
     {
-        String methodName = ProconStringUtils.substringBefore(invokeTarget, "(");
-        return ProconStringUtils.substringAfterLast(methodName, ".");
+        String methodName = StringUtils.substringBefore(invokeTarget, "(");
+        return StringUtils.substringAfterLast(methodName, ".");
     }
 
     /**
@@ -105,43 +108,37 @@ public class JobInvokeUtil
      */
     public static List<Object[]> getMethodParams(String invokeTarget)
     {
-        String methodStr = ProconStringUtils.substringBetween(invokeTarget, "(", ")");
+        String methodStr = StringUtils.substringBetween(invokeTarget, "(", ")");
         if (ProconStringUtils.isEmpty(methodStr))
         {
-            return null;
+            return Collections.emptyList();
         }
-        String[] methodParams = methodStr.split(",");
-        List<Object[]> classs = new LinkedList<>();
-        for (int i = 0; i < methodParams.length; i++)
-        {
-            String str = ProconStringUtils.trimToEmpty(methodParams[i]);
+        String[] methodParams = methodStr.split(",(?=(?:[^']*\"[^']*')*[^']*$)");
+        List<Object[]> classList = new LinkedList<>();
+        for (String methodParam : methodParams) {
+            String str = StringUtils.trimToEmpty(methodParam);
             // String字符串类型，包含'
-            if (ProconStringUtils.contains(str, "'"))
-            {
-                classs.add(new Object[] { ProconStringUtils.replace(str, "'", ""), String.class });
+            if (StringUtils.contains(str, "'")) {
+                classList.add(new Object[]{StringUtils.replace(str, "'", ""), String.class});
             }
             // boolean布尔类型，等于true或者false
-            else if (ProconStringUtils.equals(str, "true") || ProconStringUtils.equalsIgnoreCase(str, "false"))
-            {
-                classs.add(new Object[] { Boolean.valueOf(str), Boolean.class });
+            else if (StringUtils.equals(str, "true") || StringUtils.equalsIgnoreCase(str, "false")) {
+                classList.add(new Object[]{Boolean.valueOf(str), Boolean.class});
             }
             // long长整形，包含L
-            else if (ProconStringUtils.containsIgnoreCase(str, "L"))
-            {
-                classs.add(new Object[] { Long.valueOf(ProconStringUtils.replaceIgnoreCase(str, "L", "")), Long.class });
+            else if (StringUtils.containsIgnoreCase(str, "L")) {
+                classList.add(new Object[]{Long.valueOf(StringUtils.replaceIgnoreCase(str, "L", "")), Long.class});
             }
             // double浮点类型，包含D
-            else if (ProconStringUtils.containsIgnoreCase(str, "D"))
-            {
-                classs.add(new Object[] { Double.valueOf(ProconStringUtils.replaceIgnoreCase(str, "D", "")), Double.class });
+            else if (StringUtils.containsIgnoreCase(str, "D")) {
+                classList.add(new Object[]{Double.valueOf(StringUtils.replaceIgnoreCase(str, "D", "")), Double.class});
             }
             // 其他类型归类为整形
-            else
-            {
-                classs.add(new Object[] { Integer.valueOf(str), Integer.class });
+            else {
+                classList.add(new Object[]{Integer.valueOf(str), Integer.class});
             }
         }
-        return classs;
+        return classList;
     }
 
     /**
@@ -152,14 +149,14 @@ public class JobInvokeUtil
      */
     public static Class<?>[] getMethodParamsType(List<Object[]> methodParams)
     {
-        Class<?>[] classs = new Class<?>[methodParams.size()];
+        Class<?>[] clazz = new Class<?>[methodParams.size()];
         int index = 0;
         for (Object[] os : methodParams)
         {
-            classs[index] = (Class<?>) os[1];
+            clazz[index] = (Class<?>) os[1];
             index++;
         }
-        return classs;
+        return clazz;
     }
 
     /**
@@ -170,13 +167,13 @@ public class JobInvokeUtil
      */
     public static Object[] getMethodParamsValue(List<Object[]> methodParams)
     {
-        Object[] classs = new Object[methodParams.size()];
+        Object[] classes = new Object[methodParams.size()];
         int index = 0;
         for (Object[] os : methodParams)
         {
-            classs[index] = (Object) os[0];
+            classes[index] = os[0];
             index++;
         }
-        return classs;
+        return classes;
     }
 }

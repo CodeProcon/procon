@@ -1,26 +1,24 @@
 package com.huangpuguang.system.controller;
 
-import com.huangpuguang.common.security.annotation.RequiresPermissions;
-import com.huangpuguang.system.api.domain.SysRole;
-import com.huangpuguang.system.api.domain.SysUser;
-import com.huangpuguang.system.domain.SysUserRole;
-import com.huangpuguang.system.service.SysRoleService;
-import com.huangpuguang.system.service.SysUserService;
 import com.huangpuguang.common.core.constant.UserConstants;
-import com.huangpuguang.common.security.utils.SecurityUtils;
 import com.huangpuguang.common.core.utils.poi.ExcelUtil;
 import com.huangpuguang.common.core.web.controller.BaseController;
 import com.huangpuguang.common.core.web.domain.AjaxResult;
 import com.huangpuguang.common.core.web.page.TableDataInfo;
 import com.huangpuguang.common.log.annotation.Log;
 import com.huangpuguang.common.log.enums.BusinessType;
-
+import com.huangpuguang.common.security.annotation.RequiresPermissions;
+import com.huangpuguang.common.security.utils.SecurityUtils;
+import com.huangpuguang.system.api.domain.SysRole;
+import com.huangpuguang.system.api.domain.SysUser;
+import com.huangpuguang.system.domain.SysUserRole;
+import com.huangpuguang.system.service.SysRoleService;
+import com.huangpuguang.system.service.SysUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.List;
 
 /**
@@ -50,10 +48,10 @@ public class SysRoleController extends BaseController
     @Log(title = "角色管理", businessType = BusinessType.EXPORT)
     @RequiresPermissions("system:role:export")
     @PostMapping("/export")
-    public void export(HttpServletResponse response, SysRole role) throws IOException
+    public void export(HttpServletResponse response, SysRole role)
     {
         List<SysRole> list = roleService.selectRoleList(role);
-        ExcelUtil<SysRole> util = new ExcelUtil<SysRole>(SysRole.class);
+        ExcelUtil<SysRole> util = new ExcelUtil<>(SysRole.class);
         util.exportExcel(response, list, "角色数据");
     }
 

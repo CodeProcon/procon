@@ -1,13 +1,7 @@
 package com.huangpuguang.system.controller;
 
-import com.huangpuguang.common.security.annotation.RequiresPermissions;
-import com.huangpuguang.system.api.domain.SysRole;
-import com.huangpuguang.system.api.domain.SysUser;
-import com.huangpuguang.system.api.model.LoginUser;
-import com.huangpuguang.system.service.*;
 import com.huangpuguang.common.core.constant.UserConstants;
 import com.huangpuguang.common.core.domain.ResultModel;
-import com.huangpuguang.common.security.utils.SecurityUtils;
 import com.huangpuguang.common.core.utils.ProconStringUtils;
 import com.huangpuguang.common.core.utils.poi.ExcelUtil;
 import com.huangpuguang.common.core.web.controller.BaseController;
@@ -16,8 +10,14 @@ import com.huangpuguang.common.core.web.page.TableDataInfo;
 import com.huangpuguang.common.log.annotation.Log;
 import com.huangpuguang.common.log.enums.BusinessType;
 import com.huangpuguang.common.security.annotation.InnerAuth;
-
+import com.huangpuguang.common.security.annotation.RequiresPermissions;
+import com.huangpuguang.common.security.utils.SecurityUtils;
+import com.huangpuguang.system.api.domain.SysRole;
+import com.huangpuguang.system.api.domain.SysUser;
+import com.huangpuguang.system.api.model.LoginUser;
+import com.huangpuguang.system.service.*;
 import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -68,8 +68,7 @@ public class SysUserController extends BaseController
     @Log(title = "用户管理", businessType = BusinessType.EXPORT)
     @RequiresPermissions("system:user:export")
     @PostMapping("/export")
-    public void export(HttpServletResponse response, SysUser user) throws IOException
-    {
+    public void export(HttpServletResponse response, SysUser user) {
         List<SysUser> list = userService.selectUserList(user);
         ExcelUtil<SysUser> util = new ExcelUtil<SysUser>(SysUser.class);
         util.exportExcel(response, list, "用户数据");
@@ -213,7 +212,7 @@ public class SysUserController extends BaseController
     public AjaxResult edit(@Validated @RequestBody SysUser user)
     {
         userService.checkUserAllowed(user);
-        if (ProconStringUtils.isNotEmpty(user.getPhonenumber())
+        if (StringUtils.isNotEmpty(user.getPhonenumber())
                 && UserConstants.NOT_UNIQUE.equals(userService.checkPhoneUnique(user)))
         {
             return AjaxResult.error("修改用户'" + user.getUserName() + "'失败，手机号码已存在");

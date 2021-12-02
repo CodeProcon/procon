@@ -1,8 +1,5 @@
 package com.huangpuguang.system.controller;
 
-import com.huangpuguang.common.security.annotation.RequiresPermissions;
-import com.huangpuguang.system.api.domain.SysOperLog;
-import com.huangpuguang.system.service.SysOperLogService;
 import com.huangpuguang.common.core.utils.poi.ExcelUtil;
 import com.huangpuguang.common.core.web.controller.BaseController;
 import com.huangpuguang.common.core.web.domain.AjaxResult;
@@ -10,12 +7,13 @@ import com.huangpuguang.common.core.web.page.TableDataInfo;
 import com.huangpuguang.common.log.annotation.Log;
 import com.huangpuguang.common.log.enums.BusinessType;
 import com.huangpuguang.common.security.annotation.InnerAuth;
-
+import com.huangpuguang.common.security.annotation.RequiresPermissions;
+import com.huangpuguang.system.api.domain.SysOperLog;
+import com.huangpuguang.system.service.SysOperLogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.List;
 
 /**
@@ -42,10 +40,10 @@ public class SysOperlogController extends BaseController
     @Log(title = "操作日志", businessType = BusinessType.EXPORT)
     @RequiresPermissions("system:operlog:export")
     @PostMapping("/export")
-    public void export(HttpServletResponse response, SysOperLog operLog) throws IOException
+    public void export(HttpServletResponse response, SysOperLog operLog)
     {
         List<SysOperLog> list = operLogService.selectOperLogList(operLog);
-        ExcelUtil<SysOperLog> util = new ExcelUtil<SysOperLog>(SysOperLog.class);
+        ExcelUtil<SysOperLog> util = new ExcelUtil<>(SysOperLog.class);
         util.exportExcel(response, list, "操作日志");
     }
     @Log(title = "操作日志", businessType = BusinessType.DELETE)
