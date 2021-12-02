@@ -6,9 +6,9 @@ import com.huangpuguang.common.core.constant.Constants;
 import com.huangpuguang.common.core.constant.GenConstants;
 import com.huangpuguang.common.core.exception.ServiceException;
 import com.huangpuguang.common.core.text.CharsetKit;
-import com.huangpuguang.common.security.utils.SecurityUtils;
 import com.huangpuguang.common.core.utils.ProconStringUtils;
 import com.huangpuguang.common.core.utils.file.FileUtils;
+import com.huangpuguang.common.security.utils.SecurityUtils;
 import com.huangpuguang.gen.domain.GenTable;
 import com.huangpuguang.gen.domain.GenTableColumn;
 import com.huangpuguang.gen.mapper.GenTableColumnMapper;
@@ -17,6 +17,7 @@ import com.huangpuguang.gen.util.GenUtils;
 import com.huangpuguang.gen.util.VelocityInitializer;
 import com.huangpuguang.gen.util.VelocityUtils;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
@@ -290,7 +291,7 @@ public class GenTableServiceImpl implements GenTableService
         List<String> tableColumnNames = tableColumns.stream().map(GenTableColumn::getColumnName).collect(Collectors.toList());
 
         List<GenTableColumn> dbTableColumns = genTableColumnMapper.selectDbTableColumnsByName(tableName);
-        if (ProconStringUtils.isEmpty(dbTableColumns))
+        if (StringUtils.isEmpty(dbTableColumns))
         {
             throw new ServiceException("同步数据失败，原表结构不存在");
         }
@@ -382,25 +383,25 @@ public class GenTableServiceImpl implements GenTableService
         {
             String options = JSON.toJSONString(genTable.getParams());
             JSONObject paramsObj = JSONObject.parseObject(options);
-            if (ProconStringUtils.isEmpty(paramsObj.getString(GenConstants.TREE_CODE)))
+            if (StringUtils.isEmpty(paramsObj.getString(GenConstants.TREE_CODE)))
             {
                 throw new ServiceException("树编码字段不能为空");
             }
-            else if (ProconStringUtils.isEmpty(paramsObj.getString(GenConstants.TREE_PARENT_CODE)))
+            else if (StringUtils.isEmpty(paramsObj.getString(GenConstants.TREE_PARENT_CODE)))
             {
                 throw new ServiceException("树父编码字段不能为空");
             }
-            else if (ProconStringUtils.isEmpty(paramsObj.getString(GenConstants.TREE_NAME)))
+            else if (StringUtils.isEmpty(paramsObj.getString(GenConstants.TREE_NAME)))
             {
                 throw new ServiceException("树名称字段不能为空");
             }
             else if (GenConstants.TPL_SUB.equals(genTable.getTplCategory()))
             {
-                if (ProconStringUtils.isEmpty(genTable.getSubTableName()))
+                if (StringUtils.isEmpty(genTable.getSubTableName()))
                 {
                     throw new ServiceException("关联子表的表名不能为空");
                 }
-                else if (ProconStringUtils.isEmpty(genTable.getSubTableFkName()))
+                else if (StringUtils.isEmpty(genTable.getSubTableFkName()))
                 {
                     throw new ServiceException("子表关联的外键名不能为空");
                 }

@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.huangpuguang.common.core.constant.Constants;
 import com.huangpuguang.common.core.domain.ResultModel;
 import com.huangpuguang.common.core.text.Convert;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -136,7 +137,7 @@ public class ServletUtils
     public static String getHeader(HttpServletRequest request, String name)
     {
         String value = request.getHeader(name);
-        if (ProconStringUtils.isEmpty(value))
+        if (StringUtils.isEmpty(value))
         {
             return ProconStringUtils.EMPTY;
         }

@@ -1,13 +1,14 @@
 package com.huangpuguang.common.core.utils;
 
+import com.huangpuguang.common.core.text.Convert;
+import org.apache.commons.lang3.StringUtils;
+
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import com.huangpuguang.common.core.text.Convert;
 
 public class ReUtil
 {
@@ -55,7 +56,7 @@ public class ReUtil
      */
     public static String replaceAll(CharSequence content, Pattern pattern, String replacementTemplate)
     {
-        if (ProconStringUtils.isEmpty(content))
+        if (StringUtils.isEmpty(content))
         {
             return ProconStringUtils.EMPTY;
         }

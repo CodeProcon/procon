@@ -109,7 +109,7 @@ public class JobInvokeUtil
     public static List<Object[]> getMethodParams(String invokeTarget)
     {
         String methodStr = StringUtils.substringBetween(invokeTarget, "(", ")");
-        if (ProconStringUtils.isEmpty(methodStr))
+        if (StringUtils.isEmpty(methodStr))
         {
             return Collections.emptyList();
         }

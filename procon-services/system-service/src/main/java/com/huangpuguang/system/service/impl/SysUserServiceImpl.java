@@ -1,11 +1,12 @@
 package com.huangpuguang.system.service.impl;
 
+import cn.hutool.core.collection.CollUtil;
 import com.huangpuguang.common.core.constant.UserConstants;
 import com.huangpuguang.common.core.exception.ServiceException;
-import com.huangpuguang.common.security.utils.SecurityUtils;
-import com.huangpuguang.common.core.utils.SpringUtils;
 import com.huangpuguang.common.core.utils.ProconStringUtils;
+import com.huangpuguang.common.core.utils.SpringUtils;
 import com.huangpuguang.common.datascope.annotation.DataScope;
+import com.huangpuguang.common.security.utils.SecurityUtils;
 import com.huangpuguang.system.api.domain.SysRole;
 import com.huangpuguang.system.api.domain.SysUser;
 import com.huangpuguang.system.domain.SysPost;
@@ -238,7 +239,7 @@ public class SysUserServiceImpl implements SysUserService
             SysUser user = new SysUser();
             user.setUserId(userId);
             List<SysUser> users = SpringUtils.getAopProxy(this).selectUserList(user);
-            if (ProconStringUtils.isEmpty(users))
+            if (CollUtil.isEmpty(users))
             {
                 throw new ServiceException("没有权限访问用户数据！");
             }

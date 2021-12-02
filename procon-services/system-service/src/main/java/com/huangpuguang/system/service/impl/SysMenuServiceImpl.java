@@ -2,8 +2,8 @@ package com.huangpuguang.system.service.impl;
 
 import com.huangpuguang.common.core.constant.Constants;
 import com.huangpuguang.common.core.constant.UserConstants;
-import com.huangpuguang.common.security.utils.SecurityUtils;
 import com.huangpuguang.common.core.utils.ProconStringUtils;
+import com.huangpuguang.common.security.utils.SecurityUtils;
 import com.huangpuguang.system.api.domain.SysRole;
 import com.huangpuguang.system.api.domain.SysUser;
 import com.huangpuguang.system.domain.SysMenu;
@@ -14,6 +14,7 @@ import com.huangpuguang.system.mapper.SysMenuMapper;
 import com.huangpuguang.system.mapper.SysRoleMapper;
 import com.huangpuguang.system.mapper.SysRoleMenuMapper;
 import com.huangpuguang.system.service.SysMenuService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -382,11 +383,11 @@ public class SysMenuServiceImpl implements SysMenuService
         {
             component = menu.getComponent();
         }
-        else if (ProconStringUtils.isEmpty(menu.getComponent()) && menu.getParentId().intValue() != 0 && isInnerLink(menu))
+        else if (StringUtils.isEmpty(menu.getComponent()) && menu.getParentId().intValue() != 0 && isInnerLink(menu))
         {
             component = UserConstants.INNER_LINK;
         }
-        else if (ProconStringUtils.isEmpty(menu.getComponent()) && isParentView(menu))
+        else if (StringUtils.isEmpty(menu.getComponent()) && isParentView(menu))
         {
             component = UserConstants.PARENT_VIEW;
         }

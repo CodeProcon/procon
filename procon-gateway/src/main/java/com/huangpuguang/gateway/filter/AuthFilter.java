@@ -1,6 +1,17 @@
 package com.huangpuguang.gateway.filter;
 
 
+import com.huangpuguang.common.core.constant.CacheConstants;
+import com.huangpuguang.common.core.constant.HttpStatus;
+import com.huangpuguang.common.core.constant.SecurityConstants;
+import com.huangpuguang.common.core.constant.TokenConstants;
+import com.huangpuguang.common.core.utils.JwtUtils;
+import com.huangpuguang.common.core.utils.ProconStringUtils;
+import com.huangpuguang.common.core.utils.ServletUtils;
+import com.huangpuguang.common.redis.service.RedisService;
+import com.huangpuguang.gateway.config.properties.IgnoreWhiteProperties;
+import io.jsonwebtoken.Claims;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,16 +21,6 @@ import org.springframework.core.Ordered;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
-import com.huangpuguang.common.core.constant.CacheConstants;
-import com.huangpuguang.common.core.constant.HttpStatus;
-import com.huangpuguang.common.core.constant.SecurityConstants;
-import com.huangpuguang.common.core.constant.TokenConstants;
-import com.huangpuguang.common.core.utils.JwtUtils;
-import com.huangpuguang.common.core.utils.ServletUtils;
-import com.huangpuguang.common.core.utils.ProconStringUtils;
-import com.huangpuguang.common.redis.service.RedisService;
-import com.huangpuguang.gateway.config.properties.IgnoreWhiteProperties;
-import io.jsonwebtoken.Claims;
 import reactor.core.publisher.Mono;
 
 /**
@@ -53,7 +54,7 @@ public class AuthFilter implements GlobalFilter, Ordered
             return chain.filter(exchange);
         }
         String token = getToken(request);
-        if (ProconStringUtils.isEmpty(token))
+        if (StringUtils.isEmpty(token))
         {
             return unauthorizedResponse(exchange, "令牌不能为空");
         }
@@ -70,7 +71,7 @@ public class AuthFilter implements GlobalFilter, Ordered
         }
         String userid = JwtUtils.getUserId(claims);
         String username = JwtUtils.getUserName(claims);
-        if (ProconStringUtils.isEmpty(userid) || ProconStringUtils.isEmpty(username))
+        if (StringUtils.isEmpty(userid) || StringUtils.isEmpty(username))
         {
             return unauthorizedResponse(exchange, "令牌验证失败");
         }

@@ -1,5 +1,6 @@
 package com.huangpuguang.system.service.impl;
 
+import cn.hutool.core.collection.CollUtil;
 import com.huangpuguang.common.core.constant.UserConstants;
 import com.huangpuguang.common.core.exception.ServiceException;
 import com.huangpuguang.common.security.utils.SecurityUtils;
@@ -198,7 +199,7 @@ public class SysRoleServiceImpl implements SysRoleService
             SysRole role = new SysRole();
             role.setRoleId(roleId);
             List<SysRole> roles = SpringUtils.getAopProxy(this).selectRoleList(role);
-            if (ProconStringUtils.isEmpty(roles))
+            if (CollUtil.isEmpty(roles))
             {
                 throw new ServiceException("没有权限访问角色数据！");
             }

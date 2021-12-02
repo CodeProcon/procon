@@ -4,12 +4,12 @@ import com.google.code.kaptcha.Producer;
 import com.huangpuguang.common.core.constant.Constants;
 import com.huangpuguang.common.core.exception.CaptchaException;
 import com.huangpuguang.common.core.utils.IdUtils;
-import com.huangpuguang.common.core.utils.ProconStringUtils;
 import com.huangpuguang.common.core.utils.sign.Base64;
 import com.huangpuguang.common.core.web.domain.AjaxResult;
 import com.huangpuguang.common.redis.service.RedisService;
 import com.huangpuguang.gateway.config.properties.CaptchaProperties;
 import com.huangpuguang.gateway.service.ValidateCodeService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.FastByteArrayOutputStream;
@@ -100,11 +100,11 @@ public class ValidateCodeServiceImpl implements ValidateCodeService
     @Override
     public void checkCapcha(String code, String uuid) throws CaptchaException
     {
-        if (ProconStringUtils.isEmpty(code))
+        if (StringUtils.isEmpty(code))
         {
             throw new CaptchaException("验证码不能为空");
         }
-        if (ProconStringUtils.isEmpty(uuid))
+        if (StringUtils.isEmpty(uuid))
         {
             throw new CaptchaException("验证码已失效");
         }

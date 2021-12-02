@@ -2,6 +2,7 @@ package com.huangpuguang.common.core.web.page;
 
 
 import com.huangpuguang.common.core.utils.ProconStringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * 分页数据
@@ -27,7 +28,7 @@ public class PageDomain
 
     public String getOrderBy()
     {
-        if (ProconStringUtils.isEmpty(orderByColumn))
+        if (StringUtils.isEmpty(orderByColumn))
         {
             return "";
         }

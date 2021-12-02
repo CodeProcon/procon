@@ -8,6 +8,7 @@ import com.google.zxing.qrcode.QRCodeWriter;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import com.huangpuguang.common.core.exception.UtilException;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.imageio.ImageIO;
 import javax.servlet.ServletOutputStream;
@@ -34,7 +35,7 @@ public class QrCodeUtil {
     public String createQRCode(String content, int width, int height) throws IOException {
         String resultImage = "";
         //除了尺寸，传入内容不能为空
-        if (!ProconStringUtils.isEmpty(content)) {
+        if (!StringUtils.isEmpty(content)) {
             ServletOutputStream stream = null;
             ByteArrayOutputStream os = new ByteArrayOutputStream();
             //二维码参数

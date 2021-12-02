@@ -1,12 +1,14 @@
 package com.huangpuguang.common.core.context;
 
 
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 import com.alibaba.ttl.TransmittableThreadLocal;
 import com.huangpuguang.common.core.constant.SecurityConstants;
 import com.huangpuguang.common.core.text.Convert;
 import com.huangpuguang.common.core.utils.ProconStringUtils;
+import org.apache.commons.lang3.StringUtils;
+
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 获取当前线程变量中的 用户id、用户名称、Token等信息 
@@ -21,13 +23,13 @@ public class SecurityContextHolder
     public static void set(String key, Object value)
     {
         Map<String, Object> map = getLocalMap();
-        map.put(key, value == null ? ProconStringUtils.EMPTY : value);
+        map.put(key, value == null ? StringUtils.EMPTY : value);
     }
 
     public static String get(String key)
     {
         Map<String, Object> map = getLocalMap();
-        return Convert.toStr(map.getOrDefault(key, ProconStringUtils.EMPTY));
+        return Convert.toStr(map.getOrDefault(key, StringUtils.EMPTY));
     }
 
     public static <T> T get(String key, Class<T> clazz)

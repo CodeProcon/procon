@@ -19,14 +19,15 @@ import com.huangpuguang.common.core.constant.Constants;
 import com.huangpuguang.common.core.constant.HttpStatus;
 import com.huangpuguang.common.core.utils.DateUtils;
 import com.huangpuguang.common.core.utils.JsonUtils;
-import com.huangpuguang.common.security.utils.SecurityUtils;
 import com.huangpuguang.common.core.utils.ProconStringUtils;
 import com.huangpuguang.common.core.web.page.PageOper;
 import com.huangpuguang.common.core.web.page.TableDataInfo;
 import com.huangpuguang.common.redis.service.RedisService;
+import com.huangpuguang.common.security.utils.SecurityUtils;
 import com.huangpuguang.system.api.RemoteFileService;
 import com.huangpuguang.system.api.domain.ProconFile;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -311,7 +312,7 @@ public class BlogContentServiceImpl extends PageOper<BlogContent> implements Blo
         }
         //从Redis取出用户点赞数据
         String praiseJsonResult = redisService.getCacheObject(BlogConstants.BLOG_PRAISE + BlogConstants.SEGMENTATION + id);
-        if (!ProconStringUtils.isEmpty(praiseJsonResult)) {
+        if (!StringUtils.isEmpty(praiseJsonResult)) {
             praiseCount = Integer.parseInt(praiseJsonResult);
         }
         return praiseCount;
@@ -336,7 +337,7 @@ public class BlogContentServiceImpl extends PageOper<BlogContent> implements Blo
         }
         BlogContent blog = blogContentMapper.selectBlogContentById(id);
         String praiseJsonResult = redisService.getCacheObject(BlogConstants.BLOG_PRAISE + BlogConstants.SEGMENTATION + id);
-        if (ProconStringUtils.isEmpty(praiseJsonResult)) {
+        if (StringUtils.isEmpty(praiseJsonResult)) {
             //给该博客点赞数
             redisService.setCacheObject(BlogConstants.BLOG_PRAISE + BlogConstants.SEGMENTATION + id, "1");
             blog.setCollectCount(1L);

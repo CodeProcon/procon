@@ -1,16 +1,17 @@
 package com.huangpuguang.file.utils;
 
-import java.io.File;
-import java.io.IOException;
-import org.apache.commons.io.FilenameUtils;
-import org.springframework.web.multipart.MultipartFile;
 import com.huangpuguang.common.core.exception.file.FileNameLengthLimitExceededException;
 import com.huangpuguang.common.core.exception.file.FileSizeLimitExceededException;
 import com.huangpuguang.common.core.exception.file.InvalidExtensionException;
 import com.huangpuguang.common.core.utils.DateUtils;
 import com.huangpuguang.common.core.utils.IdUtils;
-import com.huangpuguang.common.core.utils.ProconStringUtils;
 import com.huangpuguang.common.core.utils.file.MimeTypeUtils;
+import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.File;
+import java.io.IOException;
 
 /**
  * 文件上传工具类
@@ -186,7 +187,7 @@ public class FileUploadUtils
     public static String getExtension(MultipartFile file)
     {
         String extension = FilenameUtils.getExtension(file.getOriginalFilename());
-        if (ProconStringUtils.isEmpty(extension))
+        if (StringUtils.isEmpty(extension))
         {
             extension = MimeTypeUtils.getExtension(file.getContentType());
         }

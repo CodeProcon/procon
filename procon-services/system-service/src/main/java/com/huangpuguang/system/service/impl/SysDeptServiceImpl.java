@@ -3,10 +3,10 @@ package com.huangpuguang.system.service.impl;
 import cn.hutool.core.collection.CollUtil;
 import com.huangpuguang.common.core.constant.UserConstants;
 import com.huangpuguang.common.core.exception.ServiceException;
-import com.huangpuguang.common.security.utils.SecurityUtils;
-import com.huangpuguang.common.core.utils.SpringUtils;
 import com.huangpuguang.common.core.utils.ProconStringUtils;
+import com.huangpuguang.common.core.utils.SpringUtils;
 import com.huangpuguang.common.datascope.annotation.DataScope;
+import com.huangpuguang.common.security.utils.SecurityUtils;
 import com.huangpuguang.system.api.domain.SysDept;
 import com.huangpuguang.system.api.domain.SysRole;
 import com.huangpuguang.system.api.domain.SysUser;
@@ -188,7 +188,7 @@ public class SysDeptServiceImpl implements SysDeptService
             SysDept dept = new SysDept();
             dept.setDeptId(deptId);
             List<SysDept> depts = SpringUtils.getAopProxy(this).selectDeptList(dept);
-            if (ProconStringUtils.isEmpty(depts))
+            if (CollUtil.isEmpty(depts))
             {
                 throw new ServiceException("没有权限访问部门数据！");
             }

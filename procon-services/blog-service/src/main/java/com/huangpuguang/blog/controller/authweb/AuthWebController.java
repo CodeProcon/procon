@@ -10,12 +10,12 @@ import com.huangpuguang.blog.service.BlogCommentService;
 import com.huangpuguang.blog.service.BlogContentService;
 import com.huangpuguang.blog.service.BlogWebConfigService;
 import com.huangpuguang.common.core.constant.BlogConstants;
-import com.huangpuguang.common.security.utils.SecurityUtils;
-import com.huangpuguang.common.core.utils.ProconStringUtils;
 import com.huangpuguang.common.core.web.controller.BaseController;
 import com.huangpuguang.common.core.web.domain.AjaxResult;
+import com.huangpuguang.common.security.utils.SecurityUtils;
 import com.huangpuguang.system.api.RemoteUserService;
 import com.huangpuguang.system.api.domain.SysUser;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -117,7 +117,7 @@ public class AuthWebController extends BaseController {
         if (comment.getContent().length() > BlogConstants.ONE_ZERO_TWO_FOUR) {
             return AjaxResult.error("评论不能超过1024个字符!");
         }
-        if (ProconStringUtils.isEmpty(comment.getContent())) {
+        if (StringUtils.isEmpty(comment.getContent())) {
             return AjaxResult.error("评论不能为空");
         }
         BlogComment blogComment = blogCommentService.add(comment, userId);

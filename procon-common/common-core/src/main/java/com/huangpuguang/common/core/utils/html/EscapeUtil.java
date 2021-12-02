@@ -1,6 +1,7 @@
 package com.huangpuguang.common.core.utils.html;
 
 import com.huangpuguang.common.core.utils.ProconStringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * 转义和反转义工具类
@@ -99,7 +100,7 @@ public class EscapeUtil
      */
     public static String decode(String content)
     {
-        if (ProconStringUtils.isEmpty(content))
+        if (StringUtils.isEmpty(content))
         {
             return content;
         }
