@@ -58,7 +58,7 @@ public class ReUtil
     {
         if (StringUtils.isEmpty(content))
         {
-            return ProconStringUtils.EMPTY;
+            return StringUtils.EMPTY;
         }
 
         final Matcher matcher = pattern.matcher(content);
@@ -143,7 +143,7 @@ public class ReUtil
     {
         if (ProconStringUtils.isBlank(content))
         {
-            return ProconStringUtils.EMPTY;
+            return StringUtils.EMPTY;
         }
 
         final StringBuilder builder = new StringBuilder();

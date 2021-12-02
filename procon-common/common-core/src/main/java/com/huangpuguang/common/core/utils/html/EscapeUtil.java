@@ -1,6 +1,5 @@
 package com.huangpuguang.common.core.utils.html;
 
-import com.huangpuguang.common.core.utils.ProconStringUtils;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -73,7 +72,7 @@ public class EscapeUtil
         int len;
         if ((text == null) || ((len = text.length()) == 0))
         {
-            return ProconStringUtils.EMPTY;
+            return StringUtils.EMPTY;
         }
         StringBuilder buffer = new StringBuilder(len + (len >> 2));
         char c;

@@ -139,7 +139,7 @@ public class ServletUtils
         String value = request.getHeader(name);
         if (StringUtils.isEmpty(value))
         {
-            return ProconStringUtils.EMPTY;
+            return StringUtils.EMPTY;
         }
         return urlDecode(value);
     }
@@ -231,7 +231,7 @@ public class ServletUtils
         }
         catch (UnsupportedEncodingException e)
         {
-            return ProconStringUtils.EMPTY;
+            return StringUtils.EMPTY;
         }
     }
 
@@ -249,7 +249,7 @@ public class ServletUtils
         }
         catch (UnsupportedEncodingException e)
         {
-            return ProconStringUtils.EMPTY;
+            return StringUtils.EMPTY;
         }
     }
 

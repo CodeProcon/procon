@@ -337,7 +337,7 @@ public class SysMenuServiceImpl implements SysMenuService
         // 非外链并且是一级目录（类型为目录）
         if (isMenuFrame(menu))
         {
-            routerName = ProconStringUtils.EMPTY;
+            routerName = StringUtils.EMPTY;
         }
         return routerName;
     }

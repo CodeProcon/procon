@@ -6,6 +6,7 @@ import com.huangpuguang.common.core.utils.DateUtils;
 import com.huangpuguang.common.core.utils.ProconStringUtils;
 import com.huangpuguang.gen.domain.GenTable;
 import com.huangpuguang.gen.domain.GenTableColumn;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.velocity.VelocityContext;
 
 import java.util.ArrayList;
@@ -322,7 +323,7 @@ public class VelocityUtils
         {
             return ProconStringUtils.toCamelCase(paramsObj.getString(GenConstants.TREE_CODE));
         }
-        return ProconStringUtils.EMPTY;
+        return StringUtils.EMPTY;
     }
 
     /**
@@ -337,7 +338,7 @@ public class VelocityUtils
         {
             return ProconStringUtils.toCamelCase(paramsObj.getString(GenConstants.TREE_PARENT_CODE));
         }
-        return ProconStringUtils.EMPTY;
+        return StringUtils.EMPTY;
     }
 
     /**
@@ -352,7 +353,7 @@ public class VelocityUtils
         {
             return ProconStringUtils.toCamelCase(paramsObj.getString(GenConstants.TREE_NAME));
         }
-        return ProconStringUtils.EMPTY;
+        return StringUtils.EMPTY;
     }
 
     /**

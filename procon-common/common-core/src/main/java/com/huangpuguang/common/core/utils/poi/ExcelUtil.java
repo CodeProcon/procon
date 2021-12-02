@@ -11,6 +11,7 @@ import com.huangpuguang.common.core.utils.ProconStringUtils;
 import com.huangpuguang.common.core.utils.file.FileTypeUtils;
 import com.huangpuguang.common.core.utils.file.ImageUtils;
 import com.huangpuguang.common.core.utils.reflect.ReflectUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.ss.util.CellRangeAddressList;
@@ -167,7 +168,7 @@ public class ExcelUtil<T>
      */
     public List<T> importExcel(InputStream is, int titleNum) throws Exception
     {
-        return importExcel(ProconStringUtils.EMPTY, is, titleNum);
+        return importExcel(StringUtils.EMPTY, is, titleNum);
     }
 
     /**
@@ -335,7 +336,7 @@ public class ExcelUtil<T>
      */
     public void exportExcel(HttpServletResponse response, List<T> list, String sheetName)
     {
-        exportExcel(response, list, sheetName, ProconStringUtils.EMPTY);
+        exportExcel(response, list, sheetName, StringUtils.EMPTY);
     }
 
     /**
@@ -369,7 +370,7 @@ public class ExcelUtil<T>
      */
     public void importTemplateExcel(HttpServletResponse response, String sheetName)
     {
-        importTemplateExcel(response, sheetName, ProconStringUtils.EMPTY);
+        importTemplateExcel(response, sheetName, StringUtils.EMPTY);
     }
 
     /**

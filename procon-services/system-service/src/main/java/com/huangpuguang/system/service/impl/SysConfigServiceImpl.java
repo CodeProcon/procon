@@ -9,6 +9,7 @@ import com.huangpuguang.common.redis.service.RedisService;
 import com.huangpuguang.system.domain.SysConfig;
 import com.huangpuguang.system.mapper.SysConfigMapper;
 import com.huangpuguang.system.service.SysConfigService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -75,7 +76,7 @@ public class SysConfigServiceImpl implements SysConfigService
             redisService.setCacheObject(getCacheKey(configKey), retConfig.getConfigValue());
             return retConfig.getConfigValue();
         }
-        return ProconStringUtils.EMPTY;
+        return StringUtils.EMPTY;
     }
 
     /**

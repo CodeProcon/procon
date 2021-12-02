@@ -124,7 +124,7 @@ public class AuthFilter implements GlobalFilter, Ordered
         // 如果前端设置了令牌前缀，则裁剪掉前缀
         if (ProconStringUtils.isNotEmpty(token) && token.startsWith(TokenConstants.PREFIX))
         {
-            token = token.replaceFirst(TokenConstants.PREFIX, ProconStringUtils.EMPTY);
+            token = token.replaceFirst(TokenConstants.PREFIX, StringUtils.EMPTY);
         }
         return token;
     }
