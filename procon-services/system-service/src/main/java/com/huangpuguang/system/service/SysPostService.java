@@ -1,8 +1,8 @@
 package com.huangpuguang.system.service;
 
-import java.util.List;
-
 import com.huangpuguang.system.domain.SysPost;
+
+import java.util.List;
 
 /**
  * 岗位信息 服务层
@@ -40,7 +40,7 @@ public interface SysPostService
      * @param userId 用户ID
      * @return 选中岗位ID列表
      */
-    public List<Integer> selectPostListByUserId(Long userId);
+    public List<Long> selectPostListByUserId(Long userId);
 
     /**
      * 校验岗位名称

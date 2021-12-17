@@ -1,11 +1,11 @@
 package com.huangpuguang.system.service;
 
-import java.util.List;
-import java.util.Set;
-
+import com.huangpuguang.system.domain.SysMenu;
 import com.huangpuguang.system.domain.vo.RouterVo;
 import com.huangpuguang.system.domain.vo.TreeSelect;
-import com.huangpuguang.system.domain.SysMenu;
+
+import java.util.List;
+import java.util.Set;
 
 /**
  * 菜单 业务层
@@ -53,7 +53,7 @@ public interface SysMenuService
      * @param roleId 角色ID
      * @return 选中菜单列表
      */
-    public List<Integer> selectMenuListByRoleId(Long roleId);
+    public List<Long> selectMenuListByRoleId(Long roleId);
 
     /**
      * 构建前端路由所需要的菜单

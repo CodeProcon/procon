@@ -5,6 +5,7 @@ import com.huangpuguang.common.core.constant.UserConstants;
 import com.huangpuguang.common.core.exception.ServiceException;
 import com.huangpuguang.common.core.utils.ProconStringUtils;
 import com.huangpuguang.common.core.utils.SpringUtils;
+import com.huangpuguang.common.core.utils.bean.BeanValidators;
 import com.huangpuguang.common.datascope.annotation.DataScope;
 import com.huangpuguang.common.security.utils.SecurityUtils;
 import com.huangpuguang.system.api.domain.SysRole;
@@ -15,14 +16,18 @@ import com.huangpuguang.system.domain.SysUserRole;
 import com.huangpuguang.system.mapper.*;
 import com.huangpuguang.system.service.SysConfigService;
 import com.huangpuguang.system.service.SysUserService;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
+import javax.validation.Validator;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 用户 业务层处理
@@ -51,6 +56,9 @@ public class SysUserServiceImpl implements SysUserService
 
     @Autowired
     private SysConfigService configService;
+
+    @Autowired
+    protected Validator validator;
 
     /**
      * 根据条件分页查询用户列表
@@ -125,16 +133,10 @@ public class SysUserServiceImpl implements SysUserService
     public String selectUserRoleGroup(String userName)
     {
         List<SysRole> list = roleMapper.selectRolesByUserName(userName);
-        StringBuffer idsStr = new StringBuffer();
-        for (SysRole role : list)
-        {
-            idsStr.append(role.getRoleName()).append(",");
+        if (CollectionUtils.isEmpty(list)){
+            return StringUtils.EMPTY;
         }
-        if (ProconStringUtils.isNotEmpty(idsStr.toString()))
-        {
-            return idsStr.substring(0, idsStr.length() - 1);
-        }
-        return idsStr.toString();
+        return list.stream().map(SysRole::getRoleName).collect(Collectors.joining(","));
     }
 
     /**
@@ -147,16 +149,10 @@ public class SysUserServiceImpl implements SysUserService
     public String selectUserPostGroup(String userName)
     {
         List<SysPost> list = postMapper.selectPostsByUserName(userName);
-        StringBuffer idsStr = new StringBuffer();
-        for (SysPost post : list)
-        {
-            idsStr.append(post.getPostName()).append(",");
+        if (CollectionUtils.isEmpty(list)){
+            return StringUtils.EMPTY;
         }
-        if (ProconStringUtils.isNotEmpty(idsStr.toString()))
-        {
-            return idsStr.substring(0, idsStr.length() - 1);
-        }
-        return idsStr.toString();
+        return list.stream().map(SysPost::getPostName).collect(Collectors.joining(","));
     }
 
     /**
@@ -519,6 +515,7 @@ public class SysUserServiceImpl implements SysUserService
                 SysUser u = userMapper.selectUserByUserName(user.getUserName());
                 if (ProconStringUtils.isNull(u))
                 {
+                    BeanValidators.validateWithException(validator, user);
                     user.setPassword(SecurityUtils.encryptPassword(password));
                     user.setCreateBy(operName);
                     this.insertUser(user);
@@ -527,6 +524,7 @@ public class SysUserServiceImpl implements SysUserService
                 }
                 else if (isUpdateSupport)
                 {
+                    BeanValidators.validateWithException(validator, user);
                     user.setUpdateBy(operName);
                     this.updateUser(user);
                     successNum++;
