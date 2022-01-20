@@ -1,19 +1,12 @@
 package com.huangpuguang.job.util;
 
-import com.huangpuguang.job.domain.SysJob;
-import org.quartz.CronScheduleBuilder;
-import org.quartz.CronTrigger;
-import org.quartz.Job;
-import org.quartz.JobBuilder;
-import org.quartz.JobDetail;
-import org.quartz.JobKey;
-import org.quartz.Scheduler;
-import org.quartz.SchedulerException;
-import org.quartz.TriggerBuilder;
-import org.quartz.TriggerKey;
+import com.huangpuguang.common.core.constant.Constants;
 import com.huangpuguang.common.core.constant.ScheduleConstants;
 import com.huangpuguang.common.core.exception.job.TaskException;
 import com.huangpuguang.common.core.exception.job.TaskException.Code;
+import com.huangpuguang.job.domain.SysJob;
+import org.apache.commons.lang3.StringUtils;
+import org.quartz.*;
 
 /**
  * 定时任务工具类
@@ -109,5 +102,24 @@ public class ScheduleUtils
                 throw new TaskException("The task misfire policy '" + job.getMisfirePolicy()
                         + "' cannot be used in cron schedule tasks", Code.CONFIG_ERROR);
         }
+    }
+    /**
+     * 检查包名是否为白名单配置
+     *
+     * @param invokeTarget 目标字符串
+     * @return 结果
+     */
+    public static boolean whiteList(String invokeTarget)
+    {
+        String packageName = StringUtils.substringBefore(invokeTarget, ")");
+        int count = StringUtils.countMatches(packageName, ".");
+        if (count > 1)
+        {
+            if (!StringUtils.containsAnyIgnoreCase(invokeTarget, Constants.JOB_WHITELIST_STR))
+            {
+                return false;
+            }
+        }
+        return true;
     }
 }
