@@ -1,5 +1,6 @@
 package com.huangpuguang.common.core.text;
 
+import com.huangpuguang.common.core.utils.ProconStringUtils;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -29,7 +30,7 @@ public class StrFormatter
      */
     public static String format(final String strPattern, final Object... argArray)
     {
-        if (StringUtils.isEmpty(strPattern) || StringUtils.isEmpty(argArray))
+        if (StringUtils.isEmpty(strPattern) || ProconStringUtils.isEmpty(argArray))
         {
             return strPattern;
         }

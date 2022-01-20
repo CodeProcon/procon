@@ -6,9 +6,6 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * @author Procon
- */
 @Component
 @ConfigurationProperties("swagger")
 public class SwaggerProperties
