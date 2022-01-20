@@ -7,7 +7,6 @@ import com.huangpuguang.common.core.constant.GenConstants;
 import com.huangpuguang.common.core.exception.ServiceException;
 import com.huangpuguang.common.core.text.CharsetKit;
 import com.huangpuguang.common.core.utils.ProconStringUtils;
-import com.huangpuguang.common.core.utils.file.FileUtils;
 import com.huangpuguang.common.security.utils.SecurityUtils;
 import com.huangpuguang.gen.domain.GenTable;
 import com.huangpuguang.gen.domain.GenTableColumn;
@@ -16,6 +15,7 @@ import com.huangpuguang.gen.mapper.GenTableMapper;
 import com.huangpuguang.gen.util.GenUtils;
 import com.huangpuguang.gen.util.VelocityInitializer;
 import com.huangpuguang.gen.util.VelocityUtils;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.velocity.Template;
@@ -34,6 +34,7 @@ import java.io.StringWriter;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
@@ -41,7 +42,7 @@ import java.util.zip.ZipOutputStream;
 /**
  * 业务 服务层实现
  *
- * @author procon
+ * @author ruoyi
  */
 @Service
 public class GenTableServiceImpl implements GenTableService
@@ -258,7 +259,7 @@ public class GenTableServiceImpl implements GenTableService
         List<String> templates = VelocityUtils.getTemplateList(table.getTplCategory());
         for (String template : templates)
         {
-            if (!ProconStringUtils.containsAny(template, "sql.vm", "api.js.vm", "index.vue.vm", "index-tree.vue.vm"))
+            if (!StringUtils.containsAny(template, "sql.vm", "api.js.vm", "index.vue.vm", "index-tree.vue.vm"))
             {
                 // 渲染模板
                 StringWriter sw = new StringWriter();
@@ -288,19 +289,27 @@ public class GenTableServiceImpl implements GenTableService
     {
         GenTable table = genTableMapper.selectGenTableByName(tableName);
         List<GenTableColumn> tableColumns = table.getColumns();
-        List<String> tableColumnNames = tableColumns.stream().map(GenTableColumn::getColumnName).collect(Collectors.toList());
+        Map<String, GenTableColumn> tableColumnMap = tableColumns.stream().collect(Collectors.toMap(GenTableColumn::getColumnName,  Function.identity()));
 
         List<GenTableColumn> dbTableColumns = genTableColumnMapper.selectDbTableColumnsByName(tableName);
-        if (StringUtils.isEmpty(dbTableColumns))
+        if (ProconStringUtils.isEmpty(dbTableColumns))
         {
             throw new ServiceException("同步数据失败，原表结构不存在");
         }
         List<String> dbTableColumnNames = dbTableColumns.stream().map(GenTableColumn::getColumnName).collect(Collectors.toList());
 
         dbTableColumns.forEach(column -> {
-            if (!tableColumnNames.contains(column.getColumnName()))
+            GenUtils.initColumnField(column, table);
+            if (tableColumnMap.containsKey(column.getColumnName()))
             {
-                GenUtils.initColumnField(column, table);
+                GenTableColumn prevColumn = tableColumnMap.get(column.getColumnName());
+                column.setColumnId(prevColumn.getColumnId());
+                if (column.isList()) {
+                    // 如果是列表，继续保留字典类型
+                    column.setDictType(prevColumn.getDictType());
+                }
+                genTableColumnMapper.updateGenTableColumn(column);
+            } else {
                 genTableColumnMapper.insertGenTableColumn(column);
             }
         });
@@ -361,7 +370,7 @@ public class GenTableServiceImpl implements GenTableService
                 zip.putNextEntry(new ZipEntry(VelocityUtils.getFileName(template, table)));
                 IOUtils.write(sw.toString(), zip, Constants.UTF8);
                 IOUtils.closeQuietly(sw);
-				zip.flush();
+                zip.flush();
                 zip.closeEntry();
             }
             catch (IOException e)
@@ -452,7 +461,7 @@ public class GenTableServiceImpl implements GenTableService
     public void setSubTable(GenTable table)
     {
         String subTableName = table.getSubTableName();
-        if (ProconStringUtils.isNotEmpty(subTableName))
+        if (StringUtils.isNotEmpty(subTableName))
         {
             table.setSubTable(genTableMapper.selectGenTableByName(subTableName));
         }
@@ -492,7 +501,7 @@ public class GenTableServiceImpl implements GenTableService
     public static String getGenPath(GenTable table, String template)
     {
         String genPath = table.getGenPath();
-        if (ProconStringUtils.equals(genPath, "/"))
+        if (StringUtils.equals(genPath, "/"))
         {
             return System.getProperty("user.dir") + File.separator + "src" + File.separator + VelocityUtils.getFileName(template, table);
         }
