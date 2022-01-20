@@ -1,15 +1,11 @@
 package com.huangpuguang.common.core.web.controller;
 
-import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.huangpuguang.common.core.constant.HttpStatus;
 import com.huangpuguang.common.core.utils.DateUtils;
-import com.huangpuguang.common.core.utils.ProconStringUtils;
-import com.huangpuguang.common.core.utils.sql.SqlUtil;
+import com.huangpuguang.common.core.utils.PageUtils;
 import com.huangpuguang.common.core.web.domain.AjaxResult;
-import com.huangpuguang.common.core.web.page.PageDomain;
 import com.huangpuguang.common.core.web.page.TableDataInfo;
-import com.huangpuguang.common.core.web.page.TableSupport;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.WebDataBinder;
@@ -50,15 +46,7 @@ public class BaseController
      */
     protected void startPage()
     {
-        PageDomain pageDomain = TableSupport.buildPageRequest();
-        Integer pageNum = pageDomain.getPageNum();
-        Integer pageSize = pageDomain.getPageSize();
-        if (ProconStringUtils.isNotNull(pageNum) && ProconStringUtils.isNotNull(pageSize))
-        {
-            String orderBy = SqlUtil.escapeOrderBySql(pageDomain.getOrderBy());
-            Boolean reasonable = pageDomain.getReasonable();
-            PageHelper.startPage(pageNum, pageSize, orderBy).setReasonable(reasonable);
-        }
+        PageUtils.startPage();
     }
 
     /**
