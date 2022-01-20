@@ -17,18 +17,18 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
-        <spring-boot.version>2.5.8</spring-boot.version>
-        <spring-cloud.version>2020.0.4</spring-cloud.version>
+        <spring-boot.version>2.6.2</spring-boot.version>
+        <spring-cloud.version>2021.0.0</spring-cloud.version>
         <spring-cloud-alibaba.version>2021.1</spring-cloud-alibaba.version>
         <alibaba.nacos.version>2.0.3</alibaba.nacos.version>
-        <spring-boot-admin.version>2.5.4</spring-boot-admin.version>
+        <spring-boot-admin.version>2.6.0</spring-boot-admin.version>
         <mybatis.plus.version>3.4.3.1</mybatis.plus.version>
         <swagger.fox.version>2.9.2</swagger.fox.version>
         <swagger.core.version>1.5.24</swagger.core.version>
         <knife4j.version>2.0.8</knife4j.version>
         <tobato.version>1.27.2</tobato.version>
         <kaptcha.version>2.3.2</kaptcha.version>
-        <pagehelper.boot.version>1.4.0</pagehelper.boot.version>
+        <pagehelper.boot.version>1.4.1</pagehelper.boot.version>
         <druid.version>1.2.8</druid.version>
         <dynamic-ds.version>3.5.0</dynamic-ds.version>
         <zxing.version>3.4.1</zxing.version>
@@ -45,7 +45,6 @@
         <aliyun.sms.version>2.0.4</aliyun.sms.version>
         <alipay-sdk-java.version>4.14.8.ALL</alipay-sdk-java.version>
         <poi.version>4.1.2</poi.version>
-        <common-pool.version>2.10.0</common-pool.version>
         <lombok.version>1.18.20</lombok.version>
         <hutool.version>5.6.3</hutool.version>
         <just-auth.version>1.15.8</just-auth.version>
@@ -249,12 +248,7 @@
                 <version>${transmittable-thread-local.version}</version>
             </dependency>
 
-            <!-- 公共资源池 -->
-            <dependency>
-                <groupId>org.apache.commons</groupId>
-                <artifactId>commons-pool2</artifactId>
-                <version>${common-pool.version}</version>
-            </dependency>
+
 
             <!-- hutool工具包 -->
             <dependency>
