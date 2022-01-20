@@ -2,8 +2,10 @@ package com.huangpuguang.common.swagger.config;
 
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
+import org.springframework.stereotype.Component;
 import org.springframework.util.ReflectionUtils;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfoHandlerMapping;
+import springfox.documentation.spring.web.plugins.WebFluxRequestHandlerProvider;
 import springfox.documentation.spring.web.plugins.WebMvcRequestHandlerProvider;
 
 import java.lang.reflect.Field;
@@ -11,16 +13,17 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * <p>swagger 在 springboot 2.6.x 不兼容问题的处理</p>
+ * swagger 在 springboot 2.6.x 不兼容问题的处理
  *
- * @author Procon
- * @since 2022/1/20
+ * @author ruoyi
  */
-public class SwaggerBeanPostProcessor implements BeanPostProcessor {
+@Component
+public class SwaggerBeanPostProcessor implements BeanPostProcessor
+{
     @Override
     public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException
     {
-        if (bean instanceof WebMvcRequestHandlerProvider)
+        if (bean instanceof WebMvcRequestHandlerProvider || bean instanceof WebFluxRequestHandlerProvider)
         {
             customizeSpringfoxHandlerMappings(getHandlerMappings(bean));
         }
