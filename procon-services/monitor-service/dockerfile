@@ -2,8 +2,11 @@
 FROM openjdk:8-jdk-alpine
 # author
 MAINTAINER procon
+COPY /opt/skywalking-agent /usr/skywalking/agent
+ENV SW_AGENT_NAME="monitor-service" \
+    SW_AGENT_COLLECTOR_BACKEND_SERVICES="172.17.0.13:11800"
 ARG JAR_FILE
 COPY ${JAR_FILE} /monitor-service.jar
 EXPOSE 9400
 # 启动定时任务服务
-ENTRYPOINT ["java","-jar","/monitor-service.jar"]
+ENTRYPOINT ["sh","-c","java -javaagent:/usr/skywalking/agent/skywalking-agent.jar -jar /monitor-service.jar"]
