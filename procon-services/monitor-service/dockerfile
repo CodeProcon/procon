@@ -2,7 +2,7 @@
 FROM openjdk:8-jdk-alpine
 # author
 MAINTAINER procon
-COPY /opt/skywalking-agent /usr/skywalking/agent
+COPY ../../skywalking-agent /usr/skywalking/agent
 ENV SW_AGENT_NAME="monitor-service" \
     SW_AGENT_COLLECTOR_BACKEND_SERVICES="172.17.0.13:11800"
 ARG JAR_FILE
