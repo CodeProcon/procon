@@ -10,7 +10,7 @@ import com.huangpuguang.common.core.exception.auth.NotLoginException;
 import com.huangpuguang.common.core.exception.auth.NotPermissionException;
 import com.huangpuguang.common.core.exception.auth.NotRoleException;
 import com.huangpuguang.common.core.utils.SpringUtils;
-import com.huangpuguang.common.core.utils.ProconStringUtils;
+import com.huangpuguang.common.core.utils.ProconStrUtils;
 import com.huangpuguang.common.security.annotation.Logical;
 import com.huangpuguang.common.security.annotation.RequiresLogin;
 import com.huangpuguang.common.security.annotation.RequiresPermissions;
@@ -353,7 +353,7 @@ public class AuthLogic
      */
     public boolean hasPermi(Collection<String> authorities, String permission)
     {
-        return authorities.stream().filter(ProconStringUtils::hasText)
+        return authorities.stream().filter(ProconStrUtils::hasText)
                 .anyMatch(x -> ALL_PERMISSION.contains(x) || PatternMatchUtils.simpleMatch(x, permission));
     }
 
@@ -366,7 +366,7 @@ public class AuthLogic
      */
     public boolean hasRole(Collection<String> roles, String role)
     {
-        return roles.stream().filter(ProconStringUtils::hasText)
+        return roles.stream().filter(ProconStrUtils::hasText)
                 .anyMatch(x -> SUPER_ADMIN.contains(x) || PatternMatchUtils.simpleMatch(x, role));
     }
 }

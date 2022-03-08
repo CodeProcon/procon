@@ -6,7 +6,7 @@ import com.huangpuguang.common.core.constant.Constants;
 import com.huangpuguang.common.core.constant.GenConstants;
 import com.huangpuguang.common.core.exception.ServiceException;
 import com.huangpuguang.common.core.text.CharsetKit;
-import com.huangpuguang.common.core.utils.ProconStringUtils;
+import com.huangpuguang.common.core.utils.ProconStrUtils;
 import com.huangpuguang.common.security.utils.SecurityUtils;
 import com.huangpuguang.gen.domain.GenTable;
 import com.huangpuguang.gen.domain.GenTableColumn;
@@ -292,7 +292,7 @@ public class GenTableServiceImpl implements GenTableService
         Map<String, GenTableColumn> tableColumnMap = tableColumns.stream().collect(Collectors.toMap(GenTableColumn::getColumnName,  Function.identity()));
 
         List<GenTableColumn> dbTableColumns = genTableColumnMapper.selectDbTableColumnsByName(tableName);
-        if (ProconStringUtils.isEmpty(dbTableColumns))
+        if (ProconStrUtils.isEmpty(dbTableColumns))
         {
             throw new ServiceException("同步数据失败，原表结构不存在");
         }
@@ -315,7 +315,7 @@ public class GenTableServiceImpl implements GenTableService
         });
 
         List<GenTableColumn> delColumns = tableColumns.stream().filter(column -> !dbTableColumnNames.contains(column.getColumnName())).collect(Collectors.toList());
-        if (ProconStringUtils.isNotEmpty(delColumns))
+        if (ProconStrUtils.isNotEmpty(delColumns))
         {
             genTableColumnMapper.deleteGenTableColumns(delColumns);
         }
@@ -433,7 +433,7 @@ public class GenTableServiceImpl implements GenTableService
                 break;
             }
         }
-        if (ProconStringUtils.isNull(table.getPkColumn()))
+        if (ProconStrUtils.isNull(table.getPkColumn()))
         {
             table.setPkColumn(table.getColumns().get(0));
         }
@@ -447,7 +447,7 @@ public class GenTableServiceImpl implements GenTableService
                     break;
                 }
             }
-            if (ProconStringUtils.isNull(table.getSubTable().getPkColumn()))
+            if (ProconStrUtils.isNull(table.getSubTable().getPkColumn()))
             {
                 table.getSubTable().setPkColumn(table.getSubTable().getColumns().get(0));
             }
@@ -475,7 +475,7 @@ public class GenTableServiceImpl implements GenTableService
     public void setTableFromOptions(GenTable genTable)
     {
         JSONObject paramsObj = JSONObject.parseObject(genTable.getOptions());
-        if (ProconStringUtils.isNotNull(paramsObj))
+        if (ProconStrUtils.isNotNull(paramsObj))
         {
             String treeCode = paramsObj.getString(GenConstants.TREE_CODE);
             String treeParentCode = paramsObj.getString(GenConstants.TREE_PARENT_CODE);

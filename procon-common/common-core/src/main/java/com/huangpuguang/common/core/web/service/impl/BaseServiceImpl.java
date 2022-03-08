@@ -3,7 +3,7 @@ package com.huangpuguang.common.core.web.service.impl;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.pagehelper.page.PageMethod;
-import com.huangpuguang.common.core.utils.ProconStringUtils;
+import com.huangpuguang.common.core.utils.ProconStrUtils;
 import com.huangpuguang.common.core.utils.sql.SqlUtil;
 import com.huangpuguang.common.core.web.service.BaseService;
 import com.huangpuguang.common.core.web.page.PageDomain;
@@ -24,7 +24,7 @@ public class BaseServiceImpl<M extends BaseMapper<T>, T> extends ServiceImpl<M,T
         PageDomain pageDomain = TableSupport.buildPageRequest();
         Integer pageNum = pageDomain.getPageNum();
         Integer pageSize = pageDomain.getPageSize();
-        if (ProconStringUtils.isNotNull(pageNum) && ProconStringUtils.isNotNull(pageSize))
+        if (ProconStrUtils.isNotNull(pageNum) && ProconStrUtils.isNotNull(pageSize))
         {
             String orderBy = SqlUtil.escapeOrderBySql(pageDomain.getOrderBy());
             PageMethod.startPage(pageNum, pageSize, orderBy);

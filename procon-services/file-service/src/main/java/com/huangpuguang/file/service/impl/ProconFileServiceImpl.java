@@ -203,8 +203,8 @@ public class ProconFileServiceImpl implements ProconFileService {
     @Override
     public List<ProconFile> selectFileByIds(String ids, String splitCode) {
 
-        if(ProconStringUtils.isNotNull(ids)){
-            List<String> stringList = ProconStringUtils.changeStringToString(ids, splitCode);
+        if(ProconStrUtils.isNotNull(ids)){
+            List<String> stringList = ProconStrUtils.changeStringToString(ids, splitCode);
             List<Long> fileIds = new ArrayList<>();
             stringList.forEach(item -> fileIds.add(Long.parseLong(item)));
             return fileMapper.selectBlogSortByIds(fileIds);

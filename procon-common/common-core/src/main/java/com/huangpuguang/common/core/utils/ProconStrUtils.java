@@ -2,6 +2,7 @@ package com.huangpuguang.common.core.utils;
 
 import com.huangpuguang.common.core.constant.Constants;
 import com.huangpuguang.common.core.text.StrFormatter;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.AntPathMatcher;
 
 import java.util.*;
@@ -11,7 +12,7 @@ import java.util.*;
  *
  * @author procon
  */
-public class ProconStringUtils extends org.apache.commons.lang3.StringUtils
+public class ProconStrUtils extends org.apache.commons.lang3.StringUtils
 {
     /** 空字符串 */
     private static final String NULL_STR = "";
@@ -138,17 +139,6 @@ public class ProconStringUtils extends org.apache.commons.lang3.StringUtils
     public static boolean isNotNull(Object object)
     {
         return !isNull(object);
-    }
-
-    /**
-     * * 判断一个对象是否是数组类型（Java基本型别的数组）
-     *
-     * @param object 对象
-     * @return true：是数组 false：不是数组
-     */
-    public static boolean isArray(Object object)
-    {
-        return isNotNull(object) && object.getClass().isArray();
     }
 
     /**
@@ -290,7 +280,7 @@ public class ProconStringUtils extends org.apache.commons.lang3.StringUtils
      */
     public static boolean isHttp(String link)
     {
-        return ProconStringUtils.startsWithAny(link, Constants.HTTP, Constants.HTTPS);
+        return StringUtils.startsWithAny(link, Constants.HTTP, Constants.HTTPS);
     }
 
     /**
@@ -304,11 +294,11 @@ public class ProconStringUtils extends org.apache.commons.lang3.StringUtils
         }
         StringBuilder sb = new StringBuilder();
         // 前置字符是否大写
-        boolean preCharIsUpperCase = true;
-        // 当前字符是否大写
-        boolean curreCharIsUpperCase = true;
-        // 下一字符是否大写
-        boolean nexteCharIsUpperCase = true;
+        boolean preCharIsUpperCase;
+        // 当前的字符是否大写
+        boolean currentCharIsUpperCase;
+        // 下一个字符是否大写
+        boolean nextCharIsUpperCase = true;
         for (int i = 0; i < str.length(); i++)
         {
             char c = str.charAt(i);
@@ -321,18 +311,18 @@ public class ProconStringUtils extends org.apache.commons.lang3.StringUtils
                 preCharIsUpperCase = false;
             }
 
-            curreCharIsUpperCase = Character.isUpperCase(c);
+            currentCharIsUpperCase = Character.isUpperCase(c);
 
             if (i < (str.length() - 1))
             {
-                nexteCharIsUpperCase = Character.isUpperCase(str.charAt(i + 1));
+                nextCharIsUpperCase = Character.isUpperCase(str.charAt(i + 1));
             }
 
-            if (preCharIsUpperCase && curreCharIsUpperCase && !nexteCharIsUpperCase)
+            if (preCharIsUpperCase && currentCharIsUpperCase && !nextCharIsUpperCase)
             {
                 sb.append(SEPARATOR);
             }
-            else if ((i != 0 && !preCharIsUpperCase) && curreCharIsUpperCase)
+            else if ((i != 0 && !preCharIsUpperCase) && currentCharIsUpperCase)
             {
                 sb.append(SEPARATOR);
             }
@@ -481,8 +471,8 @@ public class ProconStringUtils extends org.apache.commons.lang3.StringUtils
     /**
      * 把字符串按code 转换为List<String>
      *
-     * @param str
-     * @return
+     * @param str 字符串
+     * @return list
      */
     public static List<String> changeStringToString(String str, String code) {
         String[] split = split(str, code);

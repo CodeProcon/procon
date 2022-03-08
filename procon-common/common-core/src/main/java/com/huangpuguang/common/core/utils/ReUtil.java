@@ -141,7 +141,7 @@ public class ReUtil
      */
     public static String escape(CharSequence content)
     {
-        if (ProconStringUtils.isBlank(content))
+        if (ProconStrUtils.isBlank(content))
         {
             return StringUtils.EMPTY;
         }

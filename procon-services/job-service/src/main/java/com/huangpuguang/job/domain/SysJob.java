@@ -10,7 +10,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.huangpuguang.common.core.annotation.Excel;
 import com.huangpuguang.common.core.annotation.Excel.ColumnType;
 import com.huangpuguang.common.core.constant.ScheduleConstants;
-import com.huangpuguang.common.core.utils.ProconStringUtils;
+import com.huangpuguang.common.core.utils.ProconStrUtils;
 import com.huangpuguang.common.core.web.domain.BaseEntity;
 import com.huangpuguang.job.util.CronUtils;
 
@@ -114,7 +114,7 @@ public class SysJob extends BaseEntity implements Serializable
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     public Date getNextValidTime()
     {
-        if (ProconStringUtils.isNotEmpty(cronExpression))
+        if (ProconStrUtils.isNotEmpty(cronExpression))
         {
             return CronUtils.getNextExecution(cronExpression);
         }

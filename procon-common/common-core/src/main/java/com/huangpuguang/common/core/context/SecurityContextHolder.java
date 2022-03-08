@@ -4,7 +4,7 @@ package com.huangpuguang.common.core.context;
 import com.alibaba.ttl.TransmittableThreadLocal;
 import com.huangpuguang.common.core.constant.SecurityConstants;
 import com.huangpuguang.common.core.text.Convert;
-import com.huangpuguang.common.core.utils.ProconStringUtils;
+import com.huangpuguang.common.core.utils.ProconStrUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Map;
@@ -35,7 +35,7 @@ public class SecurityContextHolder
     public static <T> T get(String key, Class<T> clazz)
     {
         Map<String, Object> map = getLocalMap();
-        return ProconStringUtils.cast(map.getOrDefault(key, null));
+        return ProconStrUtils.cast(map.getOrDefault(key, null));
     }
 
     public static Map<String, Object> getLocalMap()

@@ -1,6 +1,6 @@
 package com.huangpuguang.system.controller;
 
-import com.huangpuguang.common.core.utils.ProconStringUtils;
+import com.huangpuguang.common.core.utils.ProconStrUtils;
 import com.huangpuguang.common.core.utils.poi.ExcelUtil;
 import com.huangpuguang.common.core.web.controller.BaseController;
 import com.huangpuguang.common.core.web.domain.AjaxResult;
@@ -71,7 +71,7 @@ public class SysDictDataController extends BaseController
     public AjaxResult dictType(@PathVariable String dictType)
     {
         List<SysDictData> data = dictTypeService.selectDictDataByType(dictType);
-        if (ProconStringUtils.isNull(data))
+        if (ProconStrUtils.isNull(data))
         {
             data = new ArrayList<SysDictData>();
         }

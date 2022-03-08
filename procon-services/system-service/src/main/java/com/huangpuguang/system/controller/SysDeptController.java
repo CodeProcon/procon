@@ -1,7 +1,7 @@
 package com.huangpuguang.system.controller;
 
 import com.huangpuguang.common.core.constant.UserConstants;
-import com.huangpuguang.common.core.utils.ProconStringUtils;
+import com.huangpuguang.common.core.utils.ProconStrUtils;
 import com.huangpuguang.common.core.web.controller.BaseController;
 import com.huangpuguang.common.core.web.domain.AjaxResult;
 import com.huangpuguang.common.log.annotation.Log;
@@ -49,7 +49,7 @@ public class SysDeptController extends BaseController
     {
         List<SysDept> depts = deptService.selectDeptList(new SysDept());
         depts.removeIf(d -> d.getDeptId().intValue() == deptId
-                || ArrayUtils.contains(ProconStringUtils.split(d.getAncestors(), ","), deptId + ""));
+                || ArrayUtils.contains(ProconStrUtils.split(d.getAncestors(), ","), deptId + ""));
         return AjaxResult.success(depts);
     }
 
@@ -119,7 +119,7 @@ public class SysDeptController extends BaseController
         {
             return AjaxResult.error("修改部门'" + dept.getDeptName() + "'失败，上级部门不能是自己");
         }
-        else if (ProconStringUtils.equals(UserConstants.DEPT_DISABLE, dept.getStatus())
+        else if (ProconStrUtils.equals(UserConstants.DEPT_DISABLE, dept.getStatus())
                 && deptService.selectNormalChildrenDeptById(dept.getDeptId()) > 0)
         {
             return AjaxResult.error("该部门包含未停用的子部门！");

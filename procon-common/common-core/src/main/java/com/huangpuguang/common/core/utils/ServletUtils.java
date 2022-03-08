@@ -204,13 +204,13 @@ public class ServletUtils
         }
 
         String uri = request.getRequestURI();
-        if (ProconStringUtils.inStringIgnoreCase(uri, ".json", ".xml"))
+        if (ProconStrUtils.inStringIgnoreCase(uri, ".json", ".xml"))
         {
             return true;
         }
 
         String ajax = request.getParameter("__ajax");
-        if (ProconStringUtils.inStringIgnoreCase(ajax, "json", "xml"))
+        if (ProconStrUtils.inStringIgnoreCase(ajax, "json", "xml"))
         {
             return true;
         }

@@ -2,7 +2,7 @@ package com.huangpuguang.system.service.impl;
 
 import com.huangpuguang.common.core.constant.UserConstants;
 import com.huangpuguang.common.core.exception.ServiceException;
-import com.huangpuguang.common.core.utils.ProconStringUtils;
+import com.huangpuguang.common.core.utils.ProconStrUtils;
 import com.huangpuguang.system.domain.SysPost;
 import com.huangpuguang.system.mapper.SysPostMapper;
 import com.huangpuguang.system.mapper.SysUserPostMapper;
@@ -82,9 +82,9 @@ public class SysPostServiceImpl implements SysPostService
     @Override
     public String checkPostNameUnique(SysPost post)
     {
-        Long postId = ProconStringUtils.isNull(post.getPostId()) ? -1L : post.getPostId();
+        Long postId = ProconStrUtils.isNull(post.getPostId()) ? -1L : post.getPostId();
         SysPost info = postMapper.checkPostNameUnique(post.getPostName());
-        if (ProconStringUtils.isNotNull(info) && info.getPostId().longValue() != postId.longValue())
+        if (ProconStrUtils.isNotNull(info) && info.getPostId().longValue() != postId.longValue())
         {
             return UserConstants.NOT_UNIQUE;
         }
@@ -100,9 +100,9 @@ public class SysPostServiceImpl implements SysPostService
     @Override
     public String checkPostCodeUnique(SysPost post)
     {
-        Long postId = ProconStringUtils.isNull(post.getPostId()) ? -1L : post.getPostId();
+        Long postId = ProconStrUtils.isNull(post.getPostId()) ? -1L : post.getPostId();
         SysPost info = postMapper.checkPostCodeUnique(post.getPostCode());
-        if (ProconStringUtils.isNotNull(info) && info.getPostId().longValue() != postId.longValue())
+        if (ProconStrUtils.isNotNull(info) && info.getPostId().longValue() != postId.longValue())
         {
             return UserConstants.NOT_UNIQUE;
         }

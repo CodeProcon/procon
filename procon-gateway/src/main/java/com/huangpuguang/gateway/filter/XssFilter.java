@@ -1,6 +1,6 @@
 package com.huangpuguang.gateway.filter;
 
-import com.huangpuguang.common.core.utils.ProconStringUtils;
+import com.huangpuguang.common.core.utils.ProconStrUtils;
 import com.huangpuguang.common.core.utils.html.EscapeUtil;
 import com.huangpuguang.gateway.config.properties.XssProperties;
 import io.netty.buffer.ByteBufAllocator;
@@ -55,7 +55,7 @@ public class XssFilter implements GlobalFilter, Ordered
         }
         // excludeUrls 不过滤
         String url = request.getURI().getPath();
-        if (ProconStringUtils.matches(url, xss.getExcludeUrls()))
+        if (ProconStrUtils.matches(url, xss.getExcludeUrls()))
         {
             return chain.filter(exchange);
         }
@@ -112,7 +112,7 @@ public class XssFilter implements GlobalFilter, Ordered
     public boolean isJsonRequest(ServerWebExchange exchange)
     {
         String header = exchange.getRequest().getHeaders().getFirst(HttpHeaders.CONTENT_TYPE);
-        return ProconStringUtils.startsWithIgnoreCase(header, MediaType.APPLICATION_JSON_VALUE);
+        return ProconStrUtils.startsWithIgnoreCase(header, MediaType.APPLICATION_JSON_VALUE);
     }
 
     @Override

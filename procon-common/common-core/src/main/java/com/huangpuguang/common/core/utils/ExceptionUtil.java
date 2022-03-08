@@ -35,6 +35,6 @@ public class ExceptionUtil
         {
             return "null";
         }
-        return ProconStringUtils.defaultString(msg);
+        return ProconStrUtils.defaultString(msg);
     }
 }

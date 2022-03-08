@@ -1,6 +1,6 @@
 package com.huangpuguang.job.util;
 
-import com.huangpuguang.common.core.utils.ProconStringUtils;
+import com.huangpuguang.common.core.utils.ProconStrUtils;
 import com.huangpuguang.common.core.utils.SpringUtils;
 import com.huangpuguang.job.domain.SysJob;
 import org.apache.commons.lang3.StringUtils;
@@ -52,7 +52,7 @@ public class JobInvokeUtil
             throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException,
             InvocationTargetException
     {
-        if (ProconStringUtils.isNotNull(methodParams) && methodParams.size() > 0)
+        if (ProconStrUtils.isNotNull(methodParams) && methodParams.size() > 0)
         {
             Method method = bean.getClass().getDeclaredMethod(methodName, getMethodParamsType(methodParams));
             method.invoke(bean, getMethodParamsValue(methodParams));

@@ -2,7 +2,7 @@ package com.huangpuguang.gen.domain;
 
 import javax.validation.constraints.NotBlank;
 
-import com.huangpuguang.common.core.utils.ProconStringUtils;
+import com.huangpuguang.common.core.utils.ProconStrUtils;
 import com.huangpuguang.common.core.web.domain.BaseEntity;
 
 /**
@@ -141,7 +141,7 @@ public class GenTableColumn extends BaseEntity
 
     public String getCapJavaField()
     {
-        return ProconStringUtils.capitalize(javaField);
+        return ProconStrUtils.capitalize(javaField);
     }
 
     public void setIsPk(String isPk)
@@ -161,7 +161,7 @@ public class GenTableColumn extends BaseEntity
 
     public boolean isPk(String isPk)
     {
-        return isPk != null && ProconStringUtils.equals("1", isPk);
+        return isPk != null && ProconStrUtils.equals("1", isPk);
     }
 
     public String getIsIncrement()
@@ -181,7 +181,7 @@ public class GenTableColumn extends BaseEntity
 
     public boolean isIncrement(String isIncrement)
     {
-        return isIncrement != null && ProconStringUtils.equals("1", isIncrement);
+        return isIncrement != null && ProconStrUtils.equals("1", isIncrement);
     }
 
     public void setIsRequired(String isRequired)
@@ -201,7 +201,7 @@ public class GenTableColumn extends BaseEntity
 
     public boolean isRequired(String isRequired)
     {
-        return isRequired != null && ProconStringUtils.equals("1", isRequired);
+        return isRequired != null && ProconStrUtils.equals("1", isRequired);
     }
 
     public void setIsInsert(String isInsert)
@@ -221,7 +221,7 @@ public class GenTableColumn extends BaseEntity
 
     public boolean isInsert(String isInsert)
     {
-        return isInsert != null && ProconStringUtils.equals("1", isInsert);
+        return isInsert != null && ProconStrUtils.equals("1", isInsert);
     }
 
     public void setIsEdit(String isEdit)
@@ -241,7 +241,7 @@ public class GenTableColumn extends BaseEntity
 
     public boolean isEdit(String isEdit)
     {
-        return isEdit != null && ProconStringUtils.equals("1", isEdit);
+        return isEdit != null && ProconStrUtils.equals("1", isEdit);
     }
 
     public void setIsList(String isList)
@@ -261,7 +261,7 @@ public class GenTableColumn extends BaseEntity
 
     public boolean isList(String isList)
     {
-        return isList != null && ProconStringUtils.equals("1", isList);
+        return isList != null && ProconStrUtils.equals("1", isList);
     }
 
     public void setIsQuery(String isQuery)
@@ -281,7 +281,7 @@ public class GenTableColumn extends BaseEntity
 
     public boolean isQuery(String isQuery)
     {
-        return isQuery != null && ProconStringUtils.equals("1", isQuery);
+        return isQuery != null && ProconStrUtils.equals("1", isQuery);
     }
 
     public void setQueryType(String queryType)
@@ -331,7 +331,7 @@ public class GenTableColumn extends BaseEntity
 
     public static boolean isSuperColumn(String javaField)
     {
-        return ProconStringUtils.equalsAnyIgnoreCase(javaField,
+        return ProconStrUtils.equalsAnyIgnoreCase(javaField,
                 // BaseEntity
                 "createBy", "createTime", "updateBy", "updateTime", "remark",
                 // TreeEntity
@@ -346,18 +346,18 @@ public class GenTableColumn extends BaseEntity
     public static boolean isUsableColumn(String javaField)
     {
         // isSuperColumn()中的名单用于避免生成多余Domain属性，若某些属性在生成页面时需要用到不能忽略，则放在此处白名单
-        return ProconStringUtils.equalsAnyIgnoreCase(javaField, "parentId", "orderNum", "remark");
+        return ProconStrUtils.equalsAnyIgnoreCase(javaField, "parentId", "orderNum", "remark");
     }
 
     public String readConverterExp()
     {
-        String remarks = ProconStringUtils.substringBetween(this.columnComment, "（", "）");
+        String remarks = ProconStrUtils.substringBetween(this.columnComment, "（", "）");
         StringBuffer sb = new StringBuffer();
-        if (ProconStringUtils.isNotEmpty(remarks))
+        if (ProconStrUtils.isNotEmpty(remarks))
         {
             for (String value : remarks.split(" "))
             {
-                if (ProconStringUtils.isNotEmpty(value))
+                if (ProconStrUtils.isNotEmpty(value))
                 {
                     Object startStr = value.subSequence(0, 1);
                     String endStr = value.substring(1);

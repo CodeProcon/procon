@@ -4,7 +4,7 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import javax.servlet.http.HttpServletRequest;
 
-import com.huangpuguang.common.core.utils.ProconStringUtils;
+import com.huangpuguang.common.core.utils.ProconStrUtils;
 
 /**
  * 获取IP方法
@@ -67,7 +67,7 @@ public class IpUtils
 
     private static boolean internalIp(byte[] addr)
     {
-        if (ProconStringUtils.isNull(addr) || addr.length < 2)
+        if (ProconStrUtils.isNull(addr) || addr.length < 2)
         {
             return true;
         }

@@ -3,7 +3,7 @@ package com.huangpuguang.common.datascope.aspect;
 
 
 import com.huangpuguang.common.security.utils.SecurityUtils;
-import com.huangpuguang.common.core.utils.ProconStringUtils;
+import com.huangpuguang.common.core.utils.ProconStrUtils;
 import com.huangpuguang.common.core.web.domain.BaseEntity;
 import com.huangpuguang.common.datascope.annotation.DataScope;
 import com.huangpuguang.common.security.service.TokenService;
@@ -70,11 +70,11 @@ public class DataScopeAspect
     {
         // 获取当前的用户
         LoginUser loginUser = SecurityUtils.getLoginUser();
-        if (ProconStringUtils.isNotNull(loginUser))
+        if (ProconStrUtils.isNotNull(loginUser))
         {
             SysUser currentUser = loginUser.getSysUser();
             // 如果是超级管理员，则不过滤数据
-            if (ProconStringUtils.isNotNull(currentUser) && !currentUser.isAdmin())
+            if (ProconStrUtils.isNotNull(currentUser) && !currentUser.isAdmin())
             {
                 dataScopeFilter(joinPoint, currentUser, controllerDataScope.deptAlias(),
                         controllerDataScope.userAlias());
@@ -104,25 +104,25 @@ public class DataScopeAspect
             }
             else if (DATA_SCOPE_CUSTOM.equals(dataScope))
             {
-                sqlString.append(ProconStringUtils.format(
+                sqlString.append(ProconStrUtils.format(
                         " OR {}.dept_id IN ( SELECT dept_id FROM sys_role_dept WHERE role_id = {} ) ", deptAlias,
                         role.getRoleId()));
             }
             else if (DATA_SCOPE_DEPT.equals(dataScope))
             {
-                sqlString.append(ProconStringUtils.format(" OR {}.dept_id = {} ", deptAlias, user.getDeptId()));
+                sqlString.append(ProconStrUtils.format(" OR {}.dept_id = {} ", deptAlias, user.getDeptId()));
             }
             else if (DATA_SCOPE_DEPT_AND_CHILD.equals(dataScope))
             {
-                sqlString.append(ProconStringUtils.format(
+                sqlString.append(ProconStrUtils.format(
                         " OR {}.dept_id IN ( SELECT dept_id FROM sys_dept WHERE dept_id = {} or find_in_set( {} , ancestors ) )",
                         deptAlias, user.getDeptId(), user.getDeptId()));
             }
             else if (DATA_SCOPE_SELF.equals(dataScope))
             {
-                if (ProconStringUtils.isNotBlank(userAlias))
+                if (ProconStrUtils.isNotBlank(userAlias))
                 {
-                    sqlString.append(ProconStringUtils.format(" OR {}.user_id = {} ", userAlias, user.getUserId()));
+                    sqlString.append(ProconStrUtils.format(" OR {}.user_id = {} ", userAlias, user.getUserId()));
                 }
                 else
                 {
@@ -132,10 +132,10 @@ public class DataScopeAspect
             }
         }
 
-        if (ProconStringUtils.isNotBlank(sqlString.toString()))
+        if (ProconStrUtils.isNotBlank(sqlString.toString()))
         {
             Object params = joinPoint.getArgs()[0];
-            if (ProconStringUtils.isNotNull(params) && params instanceof BaseEntity)
+            if (ProconStrUtils.isNotNull(params) && params instanceof BaseEntity)
             {
                 BaseEntity baseEntity = (BaseEntity) params;
                 baseEntity.getParams().put(DATA_SCOPE, " AND (" + sqlString.substring(4) + ")");
@@ -149,7 +149,7 @@ public class DataScopeAspect
     private void clearDataScope(final JoinPoint joinPoint)
     {
         Object params = joinPoint.getArgs()[0];
-        if (ProconStringUtils.isNotNull(params) && params instanceof BaseEntity)
+        if (ProconStrUtils.isNotNull(params) && params instanceof BaseEntity)
         {
             BaseEntity baseEntity = (BaseEntity) params;
             baseEntity.getParams().put(DATA_SCOPE, "");

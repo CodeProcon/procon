@@ -3,7 +3,7 @@ package com.huangpuguang.gen.util;
 import com.alibaba.fastjson.JSONObject;
 import com.huangpuguang.common.core.constant.GenConstants;
 import com.huangpuguang.common.core.utils.DateUtils;
-import com.huangpuguang.common.core.utils.ProconStringUtils;
+import com.huangpuguang.common.core.utils.ProconStrUtils;
 import com.huangpuguang.gen.domain.GenTable;
 import com.huangpuguang.gen.domain.GenTableColumn;
 import org.apache.commons.lang3.StringUtils;
@@ -46,11 +46,11 @@ public class VelocityUtils
         VelocityContext velocityContext = new VelocityContext();
         velocityContext.put("tplCategory", genTable.getTplCategory());
         velocityContext.put("tableName", genTable.getTableName());
-        velocityContext.put("functionName", ProconStringUtils.isNotEmpty(functionName) ? functionName : "【请填写功能名称】");
+        velocityContext.put("functionName", ProconStrUtils.isNotEmpty(functionName) ? functionName : "【请填写功能名称】");
         velocityContext.put("ClassName", genTable.getClassName());
-        velocityContext.put("className", ProconStringUtils.uncapitalize(genTable.getClassName()));
+        velocityContext.put("className", ProconStrUtils.uncapitalize(genTable.getClassName()));
         velocityContext.put("moduleName", genTable.getModuleName());
-        velocityContext.put("BusinessName", ProconStringUtils.capitalize(genTable.getBusinessName()));
+        velocityContext.put("BusinessName", ProconStrUtils.capitalize(genTable.getBusinessName()));
         velocityContext.put("businessName", genTable.getBusinessName());
         velocityContext.put("basePackage", getPackagePrefix(packageName));
         velocityContext.put("packageName", packageName);
@@ -110,15 +110,15 @@ public class VelocityUtils
         String subTableName = genTable.getSubTableName();
         String subTableFkName = genTable.getSubTableFkName();
         String subClassName = genTable.getSubTable().getClassName();
-        String subTableFkClassName = ProconStringUtils.convertToCamelCase(subTableFkName);
+        String subTableFkClassName = ProconStrUtils.convertToCamelCase(subTableFkName);
 
         context.put("subTable", subTable);
         context.put("subTableName", subTableName);
         context.put("subTableFkName", subTableFkName);
         context.put("subTableFkClassName", subTableFkClassName);
-        context.put("subTableFkclassName", ProconStringUtils.uncapitalize(subTableFkClassName));
+        context.put("subTableFkclassName", ProconStrUtils.uncapitalize(subTableFkClassName));
         context.put("subClassName", subClassName);
-        context.put("subclassName", ProconStringUtils.uncapitalize(subClassName));
+        context.put("subclassName", ProconStrUtils.uncapitalize(subClassName));
         context.put("subImportList", getImportList(genTable.getSubTable()));
     }
 
@@ -170,37 +170,37 @@ public class VelocityUtils
         // 业务名称
         String businessName = genTable.getBusinessName();
 
-        String javaPath = PROJECT_PATH + "/" + ProconStringUtils.replace(packageName, ".", "/");
+        String javaPath = PROJECT_PATH + "/" + ProconStrUtils.replace(packageName, ".", "/");
         String mybatisPath = MYBATIS_PATH + "/" + moduleName;
         String vuePath = "vue";
 
         if (template.contains("domain.java.vm"))
         {
-            fileName = ProconStringUtils.format("{}/domain/{}.java", javaPath, className);
+            fileName = ProconStrUtils.format("{}/domain/{}.java", javaPath, className);
         }
-        if (template.contains("sub-domain.java.vm") && ProconStringUtils.equals(GenConstants.TPL_SUB, genTable.getTplCategory()))
+        if (template.contains("sub-domain.java.vm") && ProconStrUtils.equals(GenConstants.TPL_SUB, genTable.getTplCategory()))
         {
-            fileName = ProconStringUtils.format("{}/domain/{}.java", javaPath, genTable.getSubTable().getClassName());
+            fileName = ProconStrUtils.format("{}/domain/{}.java", javaPath, genTable.getSubTable().getClassName());
         }
         else if (template.contains("mapper.java.vm"))
         {
-            fileName = ProconStringUtils.format("{}/mapper/{}Mapper.java", javaPath, className);
+            fileName = ProconStrUtils.format("{}/mapper/{}Mapper.java", javaPath, className);
         }
         else if (template.contains("service.java.vm"))
         {
-            fileName = ProconStringUtils.format("{}/service/I{}Service.java", javaPath, className);
+            fileName = ProconStrUtils.format("{}/service/I{}Service.java", javaPath, className);
         }
         else if (template.contains("serviceImpl.java.vm"))
         {
-            fileName = ProconStringUtils.format("{}/service/impl/{}ServiceImpl.java", javaPath, className);
+            fileName = ProconStrUtils.format("{}/service/impl/{}ServiceImpl.java", javaPath, className);
         }
         else if (template.contains("controller.java.vm"))
         {
-            fileName = ProconStringUtils.format("{}/controller/{}Controller.java", javaPath, className);
+            fileName = ProconStrUtils.format("{}/controller/{}Controller.java", javaPath, className);
         }
         else if (template.contains("mapper.xml.vm"))
         {
-            fileName = ProconStringUtils.format("{}/{}Mapper.xml", mybatisPath, className);
+            fileName = ProconStrUtils.format("{}/{}Mapper.xml", mybatisPath, className);
         }
         else if (template.contains("sql.vm"))
         {
@@ -208,15 +208,15 @@ public class VelocityUtils
         }
         else if (template.contains("api.js.vm"))
         {
-            fileName = ProconStringUtils.format("{}/api/{}/{}.js", vuePath, moduleName, businessName);
+            fileName = ProconStrUtils.format("{}/api/{}/{}.js", vuePath, moduleName, businessName);
         }
         else if (template.contains("index.vue.vm"))
         {
-            fileName = ProconStringUtils.format("{}/views/{}/{}/index.vue", vuePath, moduleName, businessName);
+            fileName = ProconStrUtils.format("{}/views/{}/{}/index.vue", vuePath, moduleName, businessName);
         }
         else if (template.contains("index-tree.vue.vm"))
         {
-            fileName = ProconStringUtils.format("{}/views/{}/{}/index.vue", vuePath, moduleName, businessName);
+            fileName = ProconStrUtils.format("{}/views/{}/{}/index.vue", vuePath, moduleName, businessName);
         }
         return fileName;
     }
@@ -230,7 +230,7 @@ public class VelocityUtils
     public static String getPackagePrefix(String packageName)
     {
         int lastIndex = packageName.lastIndexOf(".");
-        String basePackage = ProconStringUtils.substring(packageName, 0, lastIndex);
+        String basePackage = ProconStrUtils.substring(packageName, 0, lastIndex);
         return basePackage;
     }
 
@@ -245,7 +245,7 @@ public class VelocityUtils
         List<GenTableColumn> columns = genTable.getColumns();
         GenTable subGenTable = genTable.getSubTable();
         HashSet<String> importList = new HashSet<String>();
-        if (ProconStringUtils.isNotNull(subGenTable))
+        if (ProconStrUtils.isNotNull(subGenTable))
         {
             importList.add("java.util.List");
         }
@@ -276,13 +276,13 @@ public class VelocityUtils
         Set<String> dicts = new HashSet<>();
         for (GenTableColumn column : columns)
         {
-            if (!column.isSuperColumn() && ProconStringUtils.isNotEmpty(column.getDictType()) && ProconStringUtils.equalsAny(
+            if (!column.isSuperColumn() && ProconStrUtils.isNotEmpty(column.getDictType()) && ProconStrUtils.equalsAny(
                     column.getHtmlType(), new String[] { GenConstants.HTML_SELECT, GenConstants.HTML_RADIO }))
             {
                 dicts.add("'" + column.getDictType() + "'");
             }
         }
-        return ProconStringUtils.join(dicts, ", ");
+        return ProconStrUtils.join(dicts, ", ");
     }
     /**
      * 获取权限前缀
@@ -293,7 +293,7 @@ public class VelocityUtils
      */
     public static String getPermissionPrefix(String moduleName, String businessName)
     {
-        return ProconStringUtils.format("{}:{}", moduleName, businessName);
+        return ProconStrUtils.format("{}:{}", moduleName, businessName);
     }
 
     /**
@@ -304,8 +304,8 @@ public class VelocityUtils
      */
     public static String getParentMenuId(JSONObject paramsObj)
     {
-        if (ProconStringUtils.isNotEmpty(paramsObj) && paramsObj.containsKey(GenConstants.PARENT_MENU_ID)
-                && ProconStringUtils.isNotEmpty(paramsObj.getString(GenConstants.PARENT_MENU_ID)))
+        if (ProconStrUtils.isNotEmpty(paramsObj) && paramsObj.containsKey(GenConstants.PARENT_MENU_ID)
+                && ProconStrUtils.isNotEmpty(paramsObj.getString(GenConstants.PARENT_MENU_ID)))
         {
             return paramsObj.getString(GenConstants.PARENT_MENU_ID);
         }
@@ -322,7 +322,7 @@ public class VelocityUtils
     {
         if (paramsObj.containsKey(GenConstants.TREE_CODE))
         {
-            return ProconStringUtils.toCamelCase(paramsObj.getString(GenConstants.TREE_CODE));
+            return ProconStrUtils.toCamelCase(paramsObj.getString(GenConstants.TREE_CODE));
         }
         return StringUtils.EMPTY;
     }
@@ -337,7 +337,7 @@ public class VelocityUtils
     {
         if (paramsObj.containsKey(GenConstants.TREE_PARENT_CODE))
         {
-            return ProconStringUtils.toCamelCase(paramsObj.getString(GenConstants.TREE_PARENT_CODE));
+            return ProconStrUtils.toCamelCase(paramsObj.getString(GenConstants.TREE_PARENT_CODE));
         }
         return StringUtils.EMPTY;
     }
@@ -352,7 +352,7 @@ public class VelocityUtils
     {
         if (paramsObj.containsKey(GenConstants.TREE_NAME))
         {
-            return ProconStringUtils.toCamelCase(paramsObj.getString(GenConstants.TREE_NAME));
+            return ProconStrUtils.toCamelCase(paramsObj.getString(GenConstants.TREE_NAME));
         }
         return StringUtils.EMPTY;
     }

@@ -123,7 +123,7 @@ public class FileUtils {
         String ext = "";
         if (StringUtils.isNotBlank(fileName) &&
                 StringUtils.contains(fileName, ".")) {
-            ext = ProconStringUtils.substring(fileName, fileName.lastIndexOf(".") + 1);
+            ext = ProconStrUtils.substring(fileName, fileName.lastIndexOf(".") + 1);
         }
         ext = ext.toLowerCase();
         if (ext.length() < 1) {

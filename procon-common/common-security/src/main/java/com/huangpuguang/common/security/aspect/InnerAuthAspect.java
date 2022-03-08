@@ -2,7 +2,7 @@ package com.huangpuguang.common.security.aspect;
 
 import com.huangpuguang.common.core.constant.SecurityConstants;
 import com.huangpuguang.common.core.exception.InnerAuthException;
-import com.huangpuguang.common.core.utils.ProconStringUtils;
+import com.huangpuguang.common.core.utils.ProconStrUtils;
 import com.huangpuguang.common.core.utils.ServletUtils;
 import com.huangpuguang.common.security.annotation.InnerAuth;
 import org.apache.commons.lang3.StringUtils;
@@ -26,7 +26,7 @@ public class InnerAuthAspect implements Ordered
     {
         String source = ServletUtils.getRequest().getHeader(SecurityConstants.FROM_SOURCE);
         // 内部请求验证
-        if (!ProconStringUtils.equals(SecurityConstants.INNER, source))
+        if (!ProconStrUtils.equals(SecurityConstants.INNER, source))
         {
             throw new InnerAuthException("没有内部访问权限，不允许访问");
         }

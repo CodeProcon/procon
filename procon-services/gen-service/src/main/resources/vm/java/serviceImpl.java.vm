@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
     #if($table.sub)
     import java.util.ArrayList;
-    import com.huangpuguang.common.core.utils.ProconStringUtils;
+    import com.huangpuguang.common.core.utils.ProconStrUtils;
     import org.springframework.transaction.annotation.Transactional;
     import ${packageName}.domain.${subClassName};
     #end
@@ -151,7 +151,7 @@ public class ${ClassName}ServiceImpl implements ${ClassName}Service
         {
             List<${subClassName}> ${subclassName}List = ${className}.get${subClassName}List();
             ${pkColumn.javaType} ${pkColumn.javaField} = ${className}.get${pkColumn.capJavaField}();
-            if (ProconStringUtils.isNotNull(${subclassName}List))
+            if (ProconStrUtils.isNotNull(${subclassName}List))
             {
                 List<${subClassName}> list = new ArrayList<${subClassName}>();
                 for (${subClassName} ${subclassName} : ${subclassName}List)

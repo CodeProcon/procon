@@ -11,7 +11,7 @@ import com.huangpuguang.common.core.constant.SecurityConstants;
 import com.huangpuguang.common.core.utils.IdUtils;
 import com.huangpuguang.common.core.utils.JwtUtils;
 import com.huangpuguang.common.core.utils.ServletUtils;
-import com.huangpuguang.common.core.utils.ProconStringUtils;
+import com.huangpuguang.common.core.utils.ProconStrUtils;
 import com.huangpuguang.common.core.utils.ip.IpUtils;
 import com.huangpuguang.common.redis.service.RedisService;
 import com.huangpuguang.common.security.utils.SecurityUtils;
@@ -97,7 +97,7 @@ public class TokenService
         LoginUser user = null;
         try
         {
-            if (ProconStringUtils.isNotEmpty(token))
+            if (ProconStrUtils.isNotEmpty(token))
             {
                 String userkey = JwtUtils.getUserKey(token);
                 user = redisService.getCacheObject(getTokenKey(userkey));
@@ -115,7 +115,7 @@ public class TokenService
      */
     public void setLoginUser(LoginUser loginUser)
     {
-        if (ProconStringUtils.isNotNull(loginUser) && ProconStringUtils.isNotEmpty(loginUser.getToken()))
+        if (ProconStrUtils.isNotNull(loginUser) && ProconStrUtils.isNotEmpty(loginUser.getToken()))
         {
             refreshToken(loginUser);
         }
@@ -126,7 +126,7 @@ public class TokenService
      */
     public void delLoginUser(String token)
     {
-        if (ProconStringUtils.isNotEmpty(token))
+        if (ProconStrUtils.isNotEmpty(token))
         {
             String userkey = JwtUtils.getUserKey(token);
             redisService.deleteObject(getTokenKey(userkey));

@@ -2,7 +2,7 @@ package com.huangpuguang.system.controller;
 
 import com.huangpuguang.common.core.constant.UserConstants;
 import com.huangpuguang.common.core.domain.ResultModel;
-import com.huangpuguang.common.core.utils.ProconStringUtils;
+import com.huangpuguang.common.core.utils.ProconStrUtils;
 import com.huangpuguang.common.core.utils.poi.ExcelUtil;
 import com.huangpuguang.common.core.web.controller.BaseController;
 import com.huangpuguang.common.core.web.domain.AjaxResult;
@@ -101,7 +101,7 @@ public class SysUserController extends BaseController
     public ResultModel<LoginUser> info(@PathVariable("username") String username)
     {
         SysUser sysUser = userService.selectUserByUserName(username);
-        if (ProconStringUtils.isNull(sysUser))
+        if (ProconStrUtils.isNull(sysUser))
         {
             return ResultModel.fail("用户名或密码错误");
         }
@@ -167,7 +167,7 @@ public class SysUserController extends BaseController
         List<SysRole> roles = roleService.selectRoleAll();
         ajax.put("roles", SysUser.isAdmin(userId) ? roles : roles.stream().filter(r -> !r.isAdmin()).collect(Collectors.toList()));
         ajax.put("posts", postService.selectPostAll());
-        if (ProconStringUtils.isNotNull(userId))
+        if (ProconStrUtils.isNotNull(userId))
         {
             SysUser sysUser = userService.selectUserById(userId);
             ajax.put(AjaxResult.DATA_TAG, sysUser);
@@ -189,12 +189,12 @@ public class SysUserController extends BaseController
         {
             return AjaxResult.error("新增用户'" + user.getUserName() + "'失败，登录账号已存在");
         }
-        else if (ProconStringUtils.isNotEmpty(user.getPhonenumber())
+        else if (ProconStrUtils.isNotEmpty(user.getPhonenumber())
                 && UserConstants.NOT_UNIQUE.equals(userService.checkPhoneUnique(user)))
         {
             return AjaxResult.error("新增用户'" + user.getUserName() + "'失败，手机号码已存在");
         }
-        else if (ProconStringUtils.isNotEmpty(user.getEmail())
+        else if (ProconStrUtils.isNotEmpty(user.getEmail())
                 && UserConstants.NOT_UNIQUE.equals(userService.checkEmailUnique(user)))
         {
             return AjaxResult.error("新增用户'" + user.getUserName() + "'失败，邮箱账号已存在");
@@ -218,7 +218,7 @@ public class SysUserController extends BaseController
         {
             return AjaxResult.error("修改用户'" + user.getUserName() + "'失败，手机号码已存在");
         }
-        else if (ProconStringUtils.isNotEmpty(user.getEmail())
+        else if (ProconStrUtils.isNotEmpty(user.getEmail())
                 && UserConstants.NOT_UNIQUE.equals(userService.checkEmailUnique(user)))
         {
             return AjaxResult.error("修改用户'" + user.getUserName() + "'失败，邮箱账号已存在");

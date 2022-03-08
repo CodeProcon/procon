@@ -3,7 +3,7 @@ package com.huangpuguang.common.core.web.domain;
 import java.util.HashMap;
 
 import com.huangpuguang.common.core.constant.HttpStatus;
-import com.huangpuguang.common.core.utils.ProconStringUtils;
+import com.huangpuguang.common.core.utils.ProconStrUtils;
 
 /**
  * 操作消息提醒
@@ -53,7 +53,7 @@ public class AjaxResult extends HashMap<String, Object>
     {
         super.put(CODE_TAG, code);
         super.put(MSG_TAG, msg);
-        if (ProconStringUtils.isNotNull(data))
+        if (ProconStrUtils.isNotNull(data))
         {
             super.put(DATA_TAG, data);
         }

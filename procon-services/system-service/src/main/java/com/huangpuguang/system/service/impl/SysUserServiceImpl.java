@@ -3,7 +3,7 @@ package com.huangpuguang.system.service.impl;
 import cn.hutool.core.collection.CollUtil;
 import com.huangpuguang.common.core.constant.UserConstants;
 import com.huangpuguang.common.core.exception.ServiceException;
-import com.huangpuguang.common.core.utils.ProconStringUtils;
+import com.huangpuguang.common.core.utils.ProconStrUtils;
 import com.huangpuguang.common.core.utils.SpringUtils;
 import com.huangpuguang.common.core.utils.bean.BeanValidators;
 import com.huangpuguang.common.datascope.annotation.DataScope;
@@ -181,9 +181,9 @@ public class SysUserServiceImpl implements SysUserService
     @Override
     public String checkPhoneUnique(SysUser user)
     {
-        Long userId = ProconStringUtils.isNull(user.getUserId()) ? -1L : user.getUserId();
+        Long userId = ProconStrUtils.isNull(user.getUserId()) ? -1L : user.getUserId();
         SysUser info = userMapper.checkPhoneUnique(user.getPhonenumber());
-        if (ProconStringUtils.isNotNull(info) && info.getUserId().longValue() != userId.longValue())
+        if (ProconStrUtils.isNotNull(info) && info.getUserId().longValue() != userId.longValue())
         {
             return UserConstants.NOT_UNIQUE;
         }
@@ -199,9 +199,9 @@ public class SysUserServiceImpl implements SysUserService
     @Override
     public String checkEmailUnique(SysUser user)
     {
-        Long userId = ProconStringUtils.isNull(user.getUserId()) ? -1L : user.getUserId();
+        Long userId = ProconStrUtils.isNull(user.getUserId()) ? -1L : user.getUserId();
         SysUser info = userMapper.checkEmailUnique(user.getEmail());
-        if (ProconStringUtils.isNotNull(info) && info.getUserId().longValue() != userId.longValue())
+        if (ProconStrUtils.isNotNull(info) && info.getUserId().longValue() != userId.longValue())
         {
             return UserConstants.NOT_UNIQUE;
         }
@@ -216,7 +216,7 @@ public class SysUserServiceImpl implements SysUserService
     @Override
     public void checkUserAllowed(SysUser user)
     {
-        if (ProconStringUtils.isNotNull(user.getUserId()) && user.isAdmin())
+        if (ProconStrUtils.isNotNull(user.getUserId()) && user.isAdmin())
         {
             throw new ServiceException("不允许操作超级管理员用户");
         }
@@ -379,7 +379,7 @@ public class SysUserServiceImpl implements SysUserService
     public void insertUserRole(SysUser user)
     {
         Long[] roles = user.getRoleIds();
-        if (ProconStringUtils.isNotNull(roles))
+        if (ProconStrUtils.isNotNull(roles))
         {
             // 新增用户与角色管理
             List<SysUserRole> list = new ArrayList<SysUserRole>();
@@ -405,7 +405,7 @@ public class SysUserServiceImpl implements SysUserService
     public void insertUserPost(SysUser user)
     {
         Long[] posts = user.getPostIds();
-        if (ProconStringUtils.isNotNull(posts))
+        if (ProconStrUtils.isNotNull(posts))
         {
             // 新增用户与岗位管理
             List<SysUserPost> list = new ArrayList<SysUserPost>();
@@ -431,7 +431,7 @@ public class SysUserServiceImpl implements SysUserService
      */
     public void insertUserRole(Long userId, Long[] roleIds)
     {
-        if (ProconStringUtils.isNotNull(roleIds))
+        if (ProconStrUtils.isNotNull(roleIds))
         {
             // 新增用户与角色管理
             List<SysUserRole> list = new ArrayList<SysUserRole>();
@@ -498,7 +498,7 @@ public class SysUserServiceImpl implements SysUserService
     @Override
     public String importUser(List<SysUser> userList, Boolean isUpdateSupport, String operName)
     {
-        if (ProconStringUtils.isNull(userList) || userList.size() == 0)
+        if (ProconStrUtils.isNull(userList) || userList.size() == 0)
         {
             throw new ServiceException("导入用户数据不能为空！");
         }
@@ -513,7 +513,7 @@ public class SysUserServiceImpl implements SysUserService
             {
                 // 验证是否存在这个用户
                 SysUser u = userMapper.selectUserByUserName(user.getUserName());
-                if (ProconStringUtils.isNull(u))
+                if (ProconStrUtils.isNull(u))
                 {
                     BeanValidators.validateWithException(validator, user);
                     user.setPassword(SecurityUtils.encryptPassword(password));

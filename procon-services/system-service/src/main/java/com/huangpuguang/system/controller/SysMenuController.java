@@ -3,7 +3,7 @@ package com.huangpuguang.system.controller;
 import com.huangpuguang.common.core.constant.UserConstants;
 import com.huangpuguang.common.security.annotation.RequiresPermissions;
 import com.huangpuguang.common.security.utils.SecurityUtils;
-import com.huangpuguang.common.core.utils.ProconStringUtils;
+import com.huangpuguang.common.core.utils.ProconStrUtils;
 import com.huangpuguang.common.core.web.controller.BaseController;
 import com.huangpuguang.common.core.web.domain.AjaxResult;
 import com.huangpuguang.common.log.annotation.Log;
@@ -88,7 +88,7 @@ public class SysMenuController extends BaseController
         {
             return AjaxResult.error("新增菜单'" + menu.getMenuName() + "'失败，菜单名称已存在");
         }
-        else if (UserConstants.YES_FRAME.equals(menu.getIsFrame()) && !ProconStringUtils.isHttp(menu.getPath()))
+        else if (UserConstants.YES_FRAME.equals(menu.getIsFrame()) && !ProconStrUtils.isHttp(menu.getPath()))
         {
             return AjaxResult.error("新增菜单'" + menu.getMenuName() + "'失败，地址必须以http(s)://开头");
         }
@@ -108,7 +108,7 @@ public class SysMenuController extends BaseController
         {
             return AjaxResult.error("修改菜单'" + menu.getMenuName() + "'失败，菜单名称已存在");
         }
-        else if (UserConstants.YES_FRAME.equals(menu.getIsFrame()) && !ProconStringUtils.isHttp(menu.getPath()))
+        else if (UserConstants.YES_FRAME.equals(menu.getIsFrame()) && !ProconStrUtils.isHttp(menu.getPath()))
         {
             return AjaxResult.error("修改菜单'" + menu.getMenuName() + "'失败，地址必须以http(s)://开头");
         }

@@ -1,7 +1,7 @@
 package com.huangpuguang.system.controller;
 
 import com.huangpuguang.common.core.constant.CacheConstants;
-import com.huangpuguang.common.core.utils.ProconStringUtils;
+import com.huangpuguang.common.core.utils.ProconStrUtils;
 import com.huangpuguang.common.core.web.controller.BaseController;
 import com.huangpuguang.common.core.web.domain.AjaxResult;
 import com.huangpuguang.common.core.web.page.TableDataInfo;
@@ -45,23 +45,23 @@ public class SysUserOnlineController extends BaseController
         for (String key : keys)
         {
             LoginUser user = redisService.getCacheObject(key);
-            if (ProconStringUtils.isNotEmpty(ipaddr) && ProconStringUtils.isNotEmpty(userName))
+            if (ProconStrUtils.isNotEmpty(ipaddr) && ProconStrUtils.isNotEmpty(userName))
             {
-                if (ProconStringUtils.equals(ipaddr, user.getIpaddr()) && ProconStringUtils.equals(userName, user.getUsername()))
+                if (ProconStrUtils.equals(ipaddr, user.getIpaddr()) && ProconStrUtils.equals(userName, user.getUsername()))
                 {
                     userOnlineList.add(userOnlineService.selectOnlineByInfo(ipaddr, userName, user));
                 }
             }
-            else if (ProconStringUtils.isNotEmpty(ipaddr))
+            else if (ProconStrUtils.isNotEmpty(ipaddr))
             {
-                if (ProconStringUtils.equals(ipaddr, user.getIpaddr()))
+                if (ProconStrUtils.equals(ipaddr, user.getIpaddr()))
                 {
                     userOnlineList.add(userOnlineService.selectOnlineByIpaddr(ipaddr, user));
                 }
             }
-            else if (ProconStringUtils.isNotEmpty(userName))
+            else if (ProconStrUtils.isNotEmpty(userName))
             {
-                if (ProconStringUtils.equals(userName, user.getUsername()))
+                if (ProconStrUtils.equals(userName, user.getUsername()))
                 {
                     userOnlineList.add(userOnlineService.selectOnlineByUserName(userName, user));
                 }

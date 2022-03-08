@@ -19,7 +19,7 @@ import com.huangpuguang.common.core.constant.Constants;
 import com.huangpuguang.common.core.constant.HttpStatus;
 import com.huangpuguang.common.core.utils.DateUtils;
 import com.huangpuguang.common.core.utils.JsonUtils;
-import com.huangpuguang.common.core.utils.ProconStringUtils;
+import com.huangpuguang.common.core.utils.ProconStrUtils;
 import com.huangpuguang.common.core.web.page.PageOper;
 import com.huangpuguang.common.core.web.page.TableDataInfo;
 import com.huangpuguang.common.redis.service.RedisService;
@@ -393,7 +393,7 @@ public class BlogContentServiceImpl extends PageOper<BlogContent> implements Blo
         //从Redis中获取内容
         String monthResult = redisService.getCacheObject(BlogConstants.MONTH_SET);
         //判断redis中时候包含归档的内容
-        if (ProconStringUtils.isNotEmpty(monthResult)) {
+        if (ProconStrUtils.isNotEmpty(monthResult)) {
             List list = JsonUtils.jsonArrayToArrayList(monthResult);
             return new HashSet<String>(list);
         }
@@ -414,7 +414,7 @@ public class BlogContentServiceImpl extends PageOper<BlogContent> implements Blo
         String contentResult = redisService.getCacheObject(BlogConstants.BLOG_SORT_BY_MONTH + BlogConstants.REDIS_SEGMENTATION + monthDate);
 
         //判断redis中时候包含该日期下的文章
-        if (ProconStringUtils.isNotEmpty(contentResult)) {
+        if (ProconStrUtils.isNotEmpty(contentResult)) {
             ArrayList list = JsonUtils.jsonArrayToArrayList(contentResult);
             return list;
         }

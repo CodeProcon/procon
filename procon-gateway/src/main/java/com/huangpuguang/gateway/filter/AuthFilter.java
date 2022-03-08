@@ -6,7 +6,7 @@ import com.huangpuguang.common.core.constant.HttpStatus;
 import com.huangpuguang.common.core.constant.SecurityConstants;
 import com.huangpuguang.common.core.constant.TokenConstants;
 import com.huangpuguang.common.core.utils.JwtUtils;
-import com.huangpuguang.common.core.utils.ProconStringUtils;
+import com.huangpuguang.common.core.utils.ProconStrUtils;
 import com.huangpuguang.common.core.utils.ServletUtils;
 import com.huangpuguang.common.redis.service.RedisService;
 import com.huangpuguang.gateway.config.properties.IgnoreWhiteProperties;
@@ -49,7 +49,7 @@ public class AuthFilter implements GlobalFilter, Ordered
 
         String url = request.getURI().getPath();
         // 跳过不需要验证的路径
-        if (ProconStringUtils.matches(url, ignoreWhite.getWhites()))
+        if (ProconStrUtils.matches(url, ignoreWhite.getWhites()))
         {
             return chain.filter(exchange);
         }
@@ -122,7 +122,7 @@ public class AuthFilter implements GlobalFilter, Ordered
     {
         String token = request.getHeaders().getFirst(TokenConstants.AUTHENTICATION);
         // 如果前端设置了令牌前缀，则裁剪掉前缀
-        if (ProconStringUtils.isNotEmpty(token) && token.startsWith(TokenConstants.PREFIX))
+        if (ProconStrUtils.isNotEmpty(token) && token.startsWith(TokenConstants.PREFIX))
         {
             token = token.replaceFirst(TokenConstants.PREFIX, StringUtils.EMPTY);
         }

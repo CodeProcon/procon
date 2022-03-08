@@ -3,7 +3,7 @@ package com.huangpuguang.system.service.impl;
 import com.huangpuguang.system.domain.SysUserOnline;
 import com.huangpuguang.system.service.SysUserOnlineService;
 import org.springframework.stereotype.Service;
-import com.huangpuguang.common.core.utils.ProconStringUtils;
+import com.huangpuguang.common.core.utils.ProconStrUtils;
 import com.huangpuguang.system.api.model.LoginUser;
 
 /**
@@ -24,7 +24,7 @@ public class SysUserOnlineServiceImpl implements SysUserOnlineService
     @Override
     public SysUserOnline selectOnlineByIpaddr(String ipaddr, LoginUser user)
     {
-        if (ProconStringUtils.equals(ipaddr, user.getIpaddr()))
+        if (ProconStrUtils.equals(ipaddr, user.getIpaddr()))
         {
             return loginUserToUserOnline(user);
         }
@@ -41,7 +41,7 @@ public class SysUserOnlineServiceImpl implements SysUserOnlineService
     @Override
     public SysUserOnline selectOnlineByUserName(String userName, LoginUser user)
     {
-        if (ProconStringUtils.equals(userName, user.getUsername()))
+        if (ProconStrUtils.equals(userName, user.getUsername()))
         {
             return loginUserToUserOnline(user);
         }
@@ -59,7 +59,7 @@ public class SysUserOnlineServiceImpl implements SysUserOnlineService
     @Override
     public SysUserOnline selectOnlineByInfo(String ipaddr, String userName, LoginUser user)
     {
-        if (ProconStringUtils.equals(ipaddr, user.getIpaddr()) && ProconStringUtils.equals(userName, user.getUsername()))
+        if (ProconStrUtils.equals(ipaddr, user.getIpaddr()) && ProconStrUtils.equals(userName, user.getUsername()))
         {
             return loginUserToUserOnline(user);
         }
@@ -75,7 +75,7 @@ public class SysUserOnlineServiceImpl implements SysUserOnlineService
     @Override
     public SysUserOnline loginUserToUserOnline(LoginUser user)
     {
-        if (ProconStringUtils.isNull(user))
+        if (ProconStrUtils.isNull(user))
         {
             return null;
         }

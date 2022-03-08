@@ -2,7 +2,7 @@ package com.huangpuguang.common.security.utils;
 
 import com.huangpuguang.common.core.constant.Constants;
 import com.huangpuguang.common.core.utils.SpringUtils;
-import com.huangpuguang.common.core.utils.ProconStringUtils;
+import com.huangpuguang.common.core.utils.ProconStrUtils;
 import com.huangpuguang.common.redis.service.RedisService;
 import com.huangpuguang.system.api.domain.SysDictData;
 
@@ -36,9 +36,9 @@ public class DictUtils
     public static List<SysDictData> getDictCache(String key)
     {
         Object cacheObj = SpringUtils.getBean(RedisService.class).getCacheObject(getCacheKey(key));
-        if (ProconStringUtils.isNotNull(cacheObj))
+        if (ProconStrUtils.isNotNull(cacheObj))
         {
-            List<SysDictData> dictDatas = ProconStringUtils.cast(cacheObj);
+            List<SysDictData> dictDatas = ProconStrUtils.cast(cacheObj);
             return dictDatas;
         }
         return null;
