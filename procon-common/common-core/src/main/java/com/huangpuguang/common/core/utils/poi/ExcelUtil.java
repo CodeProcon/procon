@@ -1,9 +1,6 @@
 package com.huangpuguang.common.core.utils.poi;
 
-
 import com.huangpuguang.common.core.annotation.Excel;
-import com.huangpuguang.common.core.annotation.Excel.ColumnType;
-import com.huangpuguang.common.core.annotation.Excel.Type;
 import com.huangpuguang.common.core.annotation.Excels;
 import com.huangpuguang.common.core.text.Convert;
 import com.huangpuguang.common.core.utils.DateUtils;
@@ -29,22 +26,26 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
 /**
  * Excel相关处理
  *
- * @author huangpuguang
+ * @author ruoyi
  */
 public class ExcelUtil<T>
 {
     private static final Logger log = LoggerFactory.getLogger(ExcelUtil.class);
 
+    public static final String[] FORMULA_STR = { "=", "-", "+", "@" };
+
     /**
      * Excel sheet最大行数，默认65536
      */
-    public static final int SHEET_SIZE = 65536;
+    public static final int sheetSize = 65536;
 
     /**
      * 工作表名称
@@ -54,7 +55,7 @@ public class ExcelUtil<T>
     /**
      * 导出类型（EXPORT:导出数据；IMPORT：导入模板）
      */
-    private Type type;
+    private Excel.Type type;
 
     /**
      * 工作薄对象
@@ -84,7 +85,7 @@ public class ExcelUtil<T>
     /**
      * 当前行号
      */
-    private int rowNum;
+    private int rownum;
 
     /**
      * 标题
@@ -99,7 +100,7 @@ public class ExcelUtil<T>
     /**
      * 统计列表
      */
-    private Map<Integer, Double> statistics = new HashMap<>();
+    private Map<Integer, Double> statistics = new HashMap<Integer, Double>();
 
     /**
      * 数字格式
@@ -116,11 +117,11 @@ public class ExcelUtil<T>
         this.clazz = clazz;
     }
 
-    public void init(List<T> list, String sheetName, String title, Type type)
+    public void init(List<T> list, String sheetName, String title, Excel.Type type)
     {
         if (list == null)
         {
-            list = new ArrayList<>();
+            list = new ArrayList<T>();
         }
         this.list = list;
         this.sheetName = sheetName;
@@ -136,9 +137,9 @@ public class ExcelUtil<T>
      */
     public void createTitle()
     {
-        if (ProconStrUtils.isNotEmpty(title))
+        if (StringUtils.isNotEmpty(title))
         {
-            Row titleRow = sheet.createRow(rowNum == 0 ? rowNum++ : 0);
+            Row titleRow = sheet.createRow(rownum == 0 ? rownum++ : 0);
             titleRow.setHeightInPoints(30);
             Cell titleCell = titleRow.createCell(0);
             titleCell.setCellStyle(styles.get("title"));
@@ -181,11 +182,11 @@ public class ExcelUtil<T>
      */
     public List<T> importExcel(String sheetName, InputStream is, int titleNum) throws Exception
     {
-        this.type = Type.IMPORT;
+        this.type = Excel.Type.IMPORT;
         this.wb = WorkbookFactory.create(is);
         List<T> list = new ArrayList<T>();
         // 如果指定sheet名,则取指定sheet中的内容 否则默认指向第1个sheet
-        Sheet sheet = ProconStrUtils.isNotEmpty(sheetName) ? wb.getSheet(sheetName) : wb.getSheetAt(0);
+        Sheet sheet = StringUtils.isNotEmpty(sheetName) ? wb.getSheet(sheetName) : wb.getSheetAt(0);
         if (sheet == null)
         {
             throw new IOException("文件sheet不存在");
@@ -249,16 +250,16 @@ public class ExcelUtil<T>
                     if (String.class == fieldType)
                     {
                         String s = Convert.toStr(val);
-                        if (ProconStrUtils.endsWith(s, ".0"))
+                        if (StringUtils.endsWith(s, ".0"))
                         {
-                            val = ProconStrUtils.substringBefore(s, ".0");
+                            val = StringUtils.substringBefore(s, ".0");
                         }
                         else
                         {
                             String dateFormat = field.getAnnotation(Excel.class).dateFormat();
-                            if (ProconStrUtils.isNotEmpty(dateFormat))
+                            if (StringUtils.isNotEmpty(dateFormat))
                             {
-                                val = DateUtils.parseDateToStr(dateFormat, (Date) val);
+                                val = parseDateToStr(dateFormat, (Date) val);
                             }
                             else
                             {
@@ -266,11 +267,11 @@ public class ExcelUtil<T>
                             }
                         }
                     }
-                    else if ((Integer.TYPE == fieldType || Integer.class == fieldType) && ProconStrUtils.isNumeric(Convert.toStr(val)))
+                    else if ((Integer.TYPE == fieldType || Integer.class == fieldType) && StringUtils.isNumeric(Convert.toStr(val)))
                     {
                         val = Convert.toInt(val);
                     }
-                    else if (Long.TYPE == fieldType || Long.class == fieldType)
+                    else if ((Long.TYPE == fieldType || Long.class == fieldType) && StringUtils.isNumeric(Convert.toStr(val)))
                     {
                         val = Convert.toLong(val);
                     }
@@ -304,11 +305,11 @@ public class ExcelUtil<T>
                     if (ProconStrUtils.isNotNull(fieldType))
                     {
                         String propertyName = field.getName();
-                        if (ProconStrUtils.isNotEmpty(attr.targetAttr()))
+                        if (StringUtils.isNotEmpty(attr.targetAttr()))
                         {
                             propertyName = field.getName() + "." + attr.targetAttr();
                         }
-                        else if (ProconStrUtils.isNotEmpty(attr.readConverterExp()))
+                        else if (StringUtils.isNotEmpty(attr.readConverterExp()))
                         {
                             val = reverseByExp(Convert.toStr(val), attr.readConverterExp(), attr.separator());
                         }
@@ -349,10 +350,11 @@ public class ExcelUtil<T>
      * @return 结果
      * @throws IOException
      */
-    public void exportExcel(HttpServletResponse response, List<T> list, String sheetName, String title){
+    public void exportExcel(HttpServletResponse response, List<T> list, String sheetName, String title)
+    {
         response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
         response.setCharacterEncoding("utf-8");
-        this.init(list, sheetName, title, Type.EXPORT);
+        this.init(list, sheetName, title, Excel.Type.EXPORT);
         exportExcel(response);
     }
 
@@ -384,13 +386,14 @@ public class ExcelUtil<T>
     {
         response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
         response.setCharacterEncoding("utf-8");
-        this.init(null, sheetName, title, Type.IMPORT);
+        this.init(null, sheetName, title, Excel.Type.IMPORT);
         exportExcel(response);
     }
 
     /**
      * 对list数据源将其里面的数据导入到excel表单
      *
+     * @return 结果
      */
     public void exportExcel(HttpServletResponse response)
     {
@@ -415,13 +418,13 @@ public class ExcelUtil<T>
     public void writeSheet()
     {
         // 取出一共有多少个sheet.
-        int sheetNo = Math.max(1, (int) Math.ceil(list.size() * 1.0 / SHEET_SIZE));
+        int sheetNo = Math.max(1, (int) Math.ceil(list.size() * 1.0 / sheetSize));
         for (int index = 0; index < sheetNo; index++)
         {
             createSheet(sheetNo, index);
 
             // 产生一行
-            Row row = sheet.createRow(rowNum);
+            Row row = sheet.createRow(rownum);
             int column = 0;
             // 写入各个字段的列头名称
             for (Object[] os : fields)
@@ -429,7 +432,7 @@ public class ExcelUtil<T>
                 Excel excel = (Excel) os[1];
                 this.createCell(excel, row, column++);
             }
-            if (Type.EXPORT.equals(type))
+            if (Excel.Type.EXPORT.equals(type))
             {
                 fillExcelData(index, row);
                 addStatisticsRow();
@@ -445,11 +448,11 @@ public class ExcelUtil<T>
      */
     public void fillExcelData(int index, Row row)
     {
-        int startNo = index * SHEET_SIZE;
-        int endNo = Math.min(startNo + SHEET_SIZE, list.size());
+        int startNo = index * sheetSize;
+        int endNo = Math.min(startNo + sheetSize, list.size());
         for (int i = startNo; i < endNo; i++)
         {
-            row = sheet.createRow(i + 1 + rowNum - startNo);
+            row = sheet.createRow(i + 1 + rownum - startNo);
             // 得到导出对象.
             T vo = (T) list.get(i);
             int column = 0;
@@ -563,22 +566,28 @@ public class ExcelUtil<T>
      */
     public void setCellVo(Object value, Excel attr, Cell cell)
     {
-        if (ColumnType.STRING == attr.cellType())
+        if (Excel.ColumnType.STRING == attr.cellType())
         {
-            cell.setCellValue(ProconStrUtils.isNull(value) ? attr.defaultValue() : value + attr.suffix());
+            String cellValue = Convert.toStr(value);
+            // 对于任何以表达式触发字符 =-+@开头的单元格，直接使用tab字符作为前缀，防止CSV注入。
+            if (StringUtils.containsAny(cellValue, FORMULA_STR))
+            {
+                cellValue = StringUtils.replaceEach(cellValue, FORMULA_STR, new String[] { "\t=", "\t-", "\t+", "\t@" });
+            }
+            cell.setCellValue(ProconStrUtils.isNull(cellValue) ? attr.defaultValue() : cellValue + attr.suffix());
         }
-        else if (ColumnType.NUMERIC == attr.cellType())
+        else if (Excel.ColumnType.NUMERIC == attr.cellType())
         {
             if (ProconStrUtils.isNotNull(value))
             {
-                cell.setCellValue(ProconStrUtils.contains(Convert.toStr(value), ".") ? Convert.toDouble(value) : Convert.toInt(value));
+                cell.setCellValue(StringUtils.contains(Convert.toStr(value), ".") ? Convert.toDouble(value) : Convert.toInt(value));
             }
         }
-        else if (ColumnType.IMAGE == attr.cellType())
+        else if (Excel.ColumnType.IMAGE == attr.cellType())
         {
             ClientAnchor anchor = new XSSFClientAnchor(0, 0, 0, 0, (short) cell.getColumnIndex(), cell.getRow().getRowNum(), (short) (cell.getColumnIndex() + 1), cell.getRow().getRowNum() + 1);
             String imagePath = Convert.toStr(value);
-            if (ProconStrUtils.isNotEmpty(imagePath))
+            if (StringUtils.isNotEmpty(imagePath))
             {
                 byte[] data = ImageUtils.getImage(imagePath);
                 getDrawingPatriarch(cell.getSheet()).createPicture(anchor,
@@ -631,7 +640,7 @@ public class ExcelUtil<T>
             sheet.setColumnWidth(column, (int) ((attr.width() + 0.72) * 256));
         }
         // 如果设置了提示信息则鼠标放上去提示.
-        if (ProconStrUtils.isNotEmpty(attr.prompt()))
+        if (StringUtils.isNotEmpty(attr.prompt()))
         {
             // 这里默认设了2-101列提示.
             setXSSFPrompt(sheet, "", attr.prompt(), 1, 100, column, column);
@@ -667,11 +676,11 @@ public class ExcelUtil<T>
                 String dateFormat = attr.dateFormat();
                 String readConverterExp = attr.readConverterExp();
                 String separator = attr.separator();
-                if (ProconStrUtils.isNotEmpty(dateFormat) && ProconStrUtils.isNotNull(value))
+                if (StringUtils.isNotEmpty(dateFormat) && ProconStrUtils.isNotNull(value))
                 {
-                    cell.setCellValue(DateUtils.parseDateToStr(dateFormat, (Date) value));
+                    cell.setCellValue(parseDateToStr(dateFormat, (Date) value));
                 }
-                else if (ProconStrUtils.isNotEmpty(readConverterExp) && ProconStrUtils.isNotNull(value))
+                else if (StringUtils.isNotEmpty(readConverterExp) && ProconStrUtils.isNotNull(value))
                 {
                     cell.setCellValue(convertByExp(Convert.toStr(value), readConverterExp, separator));
                 }
@@ -770,7 +779,7 @@ public class ExcelUtil<T>
         for (String item : convertSource)
         {
             String[] itemArray = item.split("=");
-            if (ProconStrUtils.containsAny(separator, propertyValue))
+            if (StringUtils.containsAny(separator, propertyValue))
             {
                 for (String value : propertyValue.split(separator))
                 {
@@ -789,7 +798,7 @@ public class ExcelUtil<T>
                 }
             }
         }
-        return ProconStrUtils.stripEnd(propertyString.toString(), separator);
+        return StringUtils.stripEnd(propertyString.toString(), separator);
     }
 
     /**
@@ -807,7 +816,7 @@ public class ExcelUtil<T>
         for (String item : convertSource)
         {
             String[] itemArray = item.split("=");
-            if (ProconStrUtils.containsAny(separator, propertyValue))
+            if (StringUtils.containsAny(separator, propertyValue))
             {
                 for (String value : propertyValue.split(separator))
                 {
@@ -826,7 +835,7 @@ public class ExcelUtil<T>
                 }
             }
         }
-        return ProconStrUtils.stripEnd(propertyString.toString(), separator);
+        return StringUtils.stripEnd(propertyString.toString(), separator);
     }
 
     /**
@@ -909,10 +918,10 @@ public class ExcelUtil<T>
     private Object getTargetValue(T vo, Field field, Excel excel) throws Exception
     {
         Object o = field.get(vo);
-        if (ProconStrUtils.isNotEmpty(excel.targetAttr()))
+        if (StringUtils.isNotEmpty(excel.targetAttr()))
         {
             String target = excel.targetAttr();
-            if (target.indexOf(".") > -1)
+            if (target.contains("."))
             {
                 String[] targets = target.split("[.]");
                 for (String name : targets)
@@ -938,7 +947,7 @@ public class ExcelUtil<T>
      */
     private Object getValue(Object o, String name) throws Exception
     {
-        if (ProconStrUtils.isNotNull(o) && ProconStrUtils.isNotEmpty(name))
+        if (ProconStrUtils.isNotNull(o) && StringUtils.isNotEmpty(name))
         {
             Class<?> clazz = o.getClass();
             Field field = clazz.getDeclaredField(name);
@@ -973,7 +982,7 @@ public class ExcelUtil<T>
             if (field.isAnnotationPresent(Excel.class))
             {
                 Excel attr = field.getAnnotation(Excel.class);
-                if (attr != null && (attr.type() == Type.ALL || attr.type() == type))
+                if (attr != null && (attr.type() == Excel.Type.ALL || attr.type() == type))
                 {
                     field.setAccessible(true);
                     fields.add(new Object[] { field, attr });
@@ -987,7 +996,7 @@ public class ExcelUtil<T>
                 Excel[] excels = attrs.value();
                 for (Excel attr : excels)
                 {
-                    if (attr != null && (attr.type() == Type.ALL || attr.type() == type))
+                    if (attr != null && (attr.type() == Excel.Type.ALL || attr.type() == type))
                     {
                         field.setAccessible(true);
                         fields.add(new Object[] { field, attr });
@@ -1007,7 +1016,7 @@ public class ExcelUtil<T>
         for (Object[] os : this.fields)
         {
             Excel excel = (Excel) os[1];
-            maxHeight = maxHeight > excel.height() ? maxHeight : excel.height();
+            maxHeight = Math.max(maxHeight, excel.height());
         }
         return (short) (maxHeight * 20);
     }
@@ -1121,5 +1130,38 @@ public class ExcelUtil<T>
             }
         }
         return true;
+    }
+
+    /**
+     * 格式化不同类型的日期对象
+     *
+     * @param dateFormat 日期格式
+     * @param val 被格式化的日期对象
+     * @return 格式化后的日期字符
+     */
+    public String parseDateToStr(String dateFormat, Object val)
+    {
+        if (val == null)
+        {
+            return "";
+        }
+        String str;
+        if (val instanceof Date)
+        {
+            str = DateUtils.parseDateToStr(dateFormat, (Date) val);
+        }
+        else if (val instanceof LocalDateTime)
+        {
+            str = DateUtils.parseDateToStr(dateFormat, DateUtils.toDate((LocalDateTime) val));
+        }
+        else if (val instanceof LocalDate)
+        {
+            str = DateUtils.parseDateToStr(dateFormat, DateUtils.toDate((LocalDate) val));
+        }
+        else
+        {
+            str = val.toString();
+        }
+        return str;
     }
 }

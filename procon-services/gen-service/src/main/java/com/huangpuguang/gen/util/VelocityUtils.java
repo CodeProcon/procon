@@ -17,7 +17,7 @@ import java.util.Set;
 /**
  * 模板工具类
  *
- * @author procon
+ * @author ruoyi
  */
 public class VelocityUtils
 {
@@ -46,11 +46,11 @@ public class VelocityUtils
         VelocityContext velocityContext = new VelocityContext();
         velocityContext.put("tplCategory", genTable.getTplCategory());
         velocityContext.put("tableName", genTable.getTableName());
-        velocityContext.put("functionName", ProconStrUtils.isNotEmpty(functionName) ? functionName : "【请填写功能名称】");
+        velocityContext.put("functionName", StringUtils.isNotEmpty(functionName) ? functionName : "【请填写功能名称】");
         velocityContext.put("ClassName", genTable.getClassName());
-        velocityContext.put("className", ProconStrUtils.uncapitalize(genTable.getClassName()));
+        velocityContext.put("className", StringUtils.uncapitalize(genTable.getClassName()));
         velocityContext.put("moduleName", genTable.getModuleName());
-        velocityContext.put("BusinessName", ProconStrUtils.capitalize(genTable.getBusinessName()));
+        velocityContext.put("BusinessName", StringUtils.capitalize(genTable.getBusinessName()));
         velocityContext.put("businessName", genTable.getBusinessName());
         velocityContext.put("basePackage", getPackagePrefix(packageName));
         velocityContext.put("packageName", packageName);
@@ -116,9 +116,9 @@ public class VelocityUtils
         context.put("subTableName", subTableName);
         context.put("subTableFkName", subTableFkName);
         context.put("subTableFkClassName", subTableFkClassName);
-        context.put("subTableFkclassName", ProconStrUtils.uncapitalize(subTableFkClassName));
+        context.put("subTableFkclassName", StringUtils.uncapitalize(subTableFkClassName));
         context.put("subClassName", subClassName);
-        context.put("subclassName", ProconStrUtils.uncapitalize(subClassName));
+        context.put("subclassName", StringUtils.uncapitalize(subClassName));
         context.put("subImportList", getImportList(genTable.getSubTable()));
     }
 
@@ -170,7 +170,7 @@ public class VelocityUtils
         // 业务名称
         String businessName = genTable.getBusinessName();
 
-        String javaPath = PROJECT_PATH + "/" + ProconStrUtils.replace(packageName, ".", "/");
+        String javaPath = PROJECT_PATH + "/" + StringUtils.replace(packageName, ".", "/");
         String mybatisPath = MYBATIS_PATH + "/" + moduleName;
         String vuePath = "vue";
 
@@ -178,7 +178,7 @@ public class VelocityUtils
         {
             fileName = ProconStrUtils.format("{}/domain/{}.java", javaPath, className);
         }
-        if (template.contains("sub-domain.java.vm") && ProconStrUtils.equals(GenConstants.TPL_SUB, genTable.getTplCategory()))
+        if (template.contains("sub-domain.java.vm") && StringUtils.equals(GenConstants.TPL_SUB, genTable.getTplCategory()))
         {
             fileName = ProconStrUtils.format("{}/domain/{}.java", javaPath, genTable.getSubTable().getClassName());
         }
@@ -230,8 +230,7 @@ public class VelocityUtils
     public static String getPackagePrefix(String packageName)
     {
         int lastIndex = packageName.lastIndexOf(".");
-        String basePackage = ProconStrUtils.substring(packageName, 0, lastIndex);
-        return basePackage;
+        return StringUtils.substring(packageName, 0, lastIndex);
     }
 
     /**
@@ -273,17 +272,35 @@ public class VelocityUtils
     public static String getDicts(GenTable genTable)
     {
         List<GenTableColumn> columns = genTable.getColumns();
-        Set<String> dicts = new HashSet<>();
+        Set<String> dicts = new HashSet<String>();
+        addDicts(dicts, columns);
+        if (ProconStrUtils.isNotNull(genTable.getSubTable()))
+        {
+            List<GenTableColumn> subColumns = genTable.getSubTable().getColumns();
+            addDicts(dicts, subColumns);
+        }
+        return StringUtils.join(dicts, ", ");
+    }
+
+    /**
+     * 添加字典列表
+     *
+     * @param dicts 字典列表
+     * @param columns 列集合
+     */
+    public static void addDicts(Set<String> dicts, List<GenTableColumn> columns)
+    {
         for (GenTableColumn column : columns)
         {
-            if (!column.isSuperColumn() && ProconStrUtils.isNotEmpty(column.getDictType()) && ProconStrUtils.equalsAny(
-                    column.getHtmlType(), new String[] { GenConstants.HTML_SELECT, GenConstants.HTML_RADIO }))
+            if (!column.isSuperColumn() && StringUtils.isNotEmpty(column.getDictType()) && StringUtils.equalsAny(
+                    column.getHtmlType(),
+                    new String[] { GenConstants.HTML_SELECT, GenConstants.HTML_RADIO, GenConstants.HTML_CHECKBOX }))
             {
                 dicts.add("'" + column.getDictType() + "'");
             }
         }
-        return ProconStrUtils.join(dicts, ", ");
     }
+
     /**
      * 获取权限前缀
      *
@@ -305,7 +322,7 @@ public class VelocityUtils
     public static String getParentMenuId(JSONObject paramsObj)
     {
         if (ProconStrUtils.isNotEmpty(paramsObj) && paramsObj.containsKey(GenConstants.PARENT_MENU_ID)
-                && ProconStrUtils.isNotEmpty(paramsObj.getString(GenConstants.PARENT_MENU_ID)))
+                && StringUtils.isNotEmpty(paramsObj.getString(GenConstants.PARENT_MENU_ID)))
         {
             return paramsObj.getString(GenConstants.PARENT_MENU_ID);
         }

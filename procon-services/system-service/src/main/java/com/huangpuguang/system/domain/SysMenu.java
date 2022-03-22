@@ -31,7 +31,7 @@ public class SysMenu extends BaseEntity
     private Long parentId;
 
     /** 显示顺序 */
-    private String orderNum;
+    private Integer orderNum;
 
     /** 路由地址 */
     private String path;
@@ -109,12 +109,12 @@ public class SysMenu extends BaseEntity
     }
 
     @NotBlank(message = "显示顺序不能为空")
-    public String getOrderNum()
+    public Integer getOrderNum()
     {
         return orderNum;
     }
 
-    public void setOrderNum(String orderNum)
+        public void setOrderNum(Integer orderNum)
     {
         this.orderNum = orderNum;
     }

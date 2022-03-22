@@ -1,11 +1,11 @@
 package com.huangpuguang.gen.controller;
 
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import javax.servlet.http.HttpServletResponse;
-
+import com.huangpuguang.common.core.text.Convert;
+import com.huangpuguang.common.core.web.controller.BaseController;
+import com.huangpuguang.common.core.web.domain.AjaxResult;
+import com.huangpuguang.common.core.web.page.TableDataInfo;
+import com.huangpuguang.common.log.annotation.Log;
+import com.huangpuguang.common.log.enums.BusinessType;
 import com.huangpuguang.common.security.annotation.RequiresPermissions;
 import com.huangpuguang.gen.domain.GenTable;
 import com.huangpuguang.gen.domain.GenTableColumn;
@@ -14,20 +14,13 @@ import com.huangpuguang.gen.service.GenTableService;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import com.huangpuguang.common.core.text.Convert;
-import com.huangpuguang.common.core.web.controller.BaseController;
-import com.huangpuguang.common.core.web.domain.AjaxResult;
-import com.huangpuguang.common.core.web.page.TableDataInfo;
-import com.huangpuguang.common.log.annotation.Log;
-import com.huangpuguang.common.log.enums.BusinessType;
+import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -61,7 +54,7 @@ public class GenController extends BaseController
      * 修改代码生成业务
      */
     @RequiresPermissions("tool:gen:query")
-    @GetMapping(value = "/{talbleId}")
+    @GetMapping(value = "/{tableId}")
     public AjaxResult getInfo(@PathVariable Long talbleId)
     {
         GenTable table = genTableService.selectGenTableById(talbleId);
@@ -89,7 +82,7 @@ public class GenController extends BaseController
     /**
      * 查询数据表字段列表
      */
-    @GetMapping(value = "/column/{talbleId}")
+    @GetMapping(value = "/column/{tableId}")
     public TableDataInfo columnList(Long tableId)
     {
         TableDataInfo dataInfo = new TableDataInfo();

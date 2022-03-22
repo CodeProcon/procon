@@ -1,11 +1,13 @@
 package com.huangpuguang.common.core.utils;
 
+import org.apache.commons.lang3.time.DateFormatUtils;
+
 import java.lang.management.ManagementFactory;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.*;
 import java.util.Calendar;
 import java.util.Date;
-import org.apache.commons.lang3.time.DateFormatUtils;
 
 /**
  * 时间工具类
@@ -49,32 +51,32 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils
         return dateTimeNow(YYYY_MM_DD);
     }
 
-    public static final String getTime()
+    public static String getTime()
     {
         return dateTimeNow(YYYY_MM_DD_HH_MM_SS);
     }
 
-    public static final String dateTimeNow()
+    public static String dateTimeNow()
     {
         return dateTimeNow(YYYYMMDDHHMMSS);
     }
 
-    public static final String dateTimeNow(final String format)
+    public static String dateTimeNow(final String format)
     {
         return parseDateToStr(format, new Date());
     }
 
-    public static final String dateTime(final Date date)
+    public static String dateTime(final Date date)
     {
         return parseDateToStr(YYYY_MM_DD, date);
     }
 
-    public static final String parseDateToStr(final String format, final Date date)
+    public static String parseDateToStr(final String format, final Date date)
     {
         return new SimpleDateFormat(format).format(date);
     }
 
-    public static final Date dateTime(final String format, final String ts)
+    public static Date dateTime(final String format, final String ts)
     {
         try
         {
@@ -89,7 +91,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils
     /**
      * 日期路径 即年/月/日 如2018/08/08
      */
-    public static final String datePath()
+    public static String datePath()
     {
         Date now = new Date();
         return DateFormatUtils.format(now, "yyyy/MM/dd");
@@ -98,7 +100,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils
     /**
      * 日期路径 即年/月/日 如20180808
      */
-    public static final String dateTime()
+    public static String dateTime()
     {
         Date now = new Date();
         return DateFormatUtils.format(now, "yyyyMMdd");
@@ -159,11 +161,31 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils
      * @param origDate 基准日期
      * @param amount 基准日期
      * @param timeUnit 时间单位，如年、月、日等。用Calendar中的常量代表
-     * @return
+     * @return 指定日期之后一段时期的日期
      */
     public static Date dateAfter(Date origDate, int amount, int timeUnit) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(origDate);
         calendar.add(timeUnit, amount);
         return calendar.getTime();
-    }}
+    }
+
+    /**
+     * 增加 LocalDateTime ==> Date
+     */
+    public static Date toDate(LocalDateTime temporalAccessor)
+    {
+        ZonedDateTime zdt = temporalAccessor.atZone(ZoneId.systemDefault());
+        return Date.from(zdt.toInstant());
+    }
+
+    /**
+     * 增加 LocalDate ==> Date
+     */
+    public static Date toDate(LocalDate temporalAccessor)
+    {
+        LocalDateTime localDateTime = LocalDateTime.of(temporalAccessor, LocalTime.of(0, 0, 0));
+        ZonedDateTime zdt = localDateTime.atZone(ZoneId.systemDefault());
+        return Date.from(zdt.toInstant());
+    }
+}

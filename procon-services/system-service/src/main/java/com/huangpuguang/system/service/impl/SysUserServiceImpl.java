@@ -181,9 +181,9 @@ public class SysUserServiceImpl implements SysUserService
     @Override
     public String checkPhoneUnique(SysUser user)
     {
-        Long userId = ProconStrUtils.isNull(user.getUserId()) ? -1L : user.getUserId();
+        long userId = ProconStrUtils.isNull(user.getUserId()) ? -1L : user.getUserId();
         SysUser info = userMapper.checkPhoneUnique(user.getPhonenumber());
-        if (ProconStrUtils.isNotNull(info) && info.getUserId().longValue() != userId.longValue())
+        if (ProconStrUtils.isNotNull(info) && info.getUserId() != userId)
         {
             return UserConstants.NOT_UNIQUE;
         }
@@ -199,9 +199,9 @@ public class SysUserServiceImpl implements SysUserService
     @Override
     public String checkEmailUnique(SysUser user)
     {
-        Long userId = ProconStrUtils.isNull(user.getUserId()) ? -1L : user.getUserId();
+        long userId = ProconStrUtils.isNull(user.getUserId()) ? -1L : user.getUserId();
         SysUser info = userMapper.checkEmailUnique(user.getEmail());
-        if (ProconStrUtils.isNotNull(info) && info.getUserId().longValue() != userId.longValue())
+        if (ProconStrUtils.isNotNull(info) && info.getUserId() != userId)
         {
             return UserConstants.NOT_UNIQUE;
         }
@@ -249,7 +249,7 @@ public class SysUserServiceImpl implements SysUserService
      * @return 结果
      */
     @Override
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public int insertUser(SysUser user)
     {
         // 新增用户信息
@@ -382,7 +382,7 @@ public class SysUserServiceImpl implements SysUserService
         if (ProconStrUtils.isNotNull(roles))
         {
             // 新增用户与角色管理
-            List<SysUserRole> list = new ArrayList<SysUserRole>();
+            List<SysUserRole> list = new ArrayList<>();
             for (Long roleId : roles)
             {
                 SysUserRole ur = new SysUserRole();
@@ -479,6 +479,7 @@ public class SysUserServiceImpl implements SysUserService
         for (Long userId : userIds)
         {
             checkUserAllowed(new SysUser(userId));
+            checkUserDataScope(userId);
         }
         // 删除用户与角色关联
         userRoleMapper.deleteUserRole(userIds);

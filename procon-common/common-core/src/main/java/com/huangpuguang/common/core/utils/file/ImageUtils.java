@@ -3,9 +3,9 @@ package com.huangpuguang.common.core.utils.file;
 import org.apache.poi.util.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.Assert;
 
 import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
@@ -44,6 +44,7 @@ public class ImageUtils
         try
         {
             byte[] result = readFile(imagePath);
+            Assert.notNull(result, "图片不存在");
             result = Arrays.copyOf(result, result.length);
             return new ByteArrayInputStream(result);
         }
@@ -63,7 +64,6 @@ public class ImageUtils
     public static byte[] readFile(String url)
     {
         InputStream in = null;
-        ByteArrayOutputStream baos = null;
         try
         {
             // 网络地址
@@ -82,7 +82,7 @@ public class ImageUtils
         }
         finally
         {
-            IOUtils.closeQuietly(baos);
+            IOUtils.closeQuietly(in);
         }
     }
 }

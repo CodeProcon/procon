@@ -21,7 +21,7 @@ public interface BlogCommentService
      * @param id 评论ID
      * @return 评论
      */
-    public BlogComment selectBlogCommentById(Long id);
+    BlogComment selectBlogCommentById(Long id);
 
     /**
      * 查询评论列表
@@ -29,7 +29,7 @@ public interface BlogCommentService
      * @param blogComment 评论
      * @return 评论集合
      */
-    public List<BlogComment> selectBlogCommentList(BlogComment blogComment);
+    List<BlogComment> selectBlogCommentList(BlogComment blogComment);
 
     /**
      * 新增评论
@@ -37,7 +37,7 @@ public interface BlogCommentService
      * @param blogComment 评论
      * @return 结果
      */
-    public int insertBlogComment(BlogComment blogComment);
+    int insertBlogComment(BlogComment blogComment);
 
     /**
      * 修改评论
@@ -45,7 +45,7 @@ public interface BlogCommentService
      * @param blogComment 评论
      * @return 结果
      */
-    public int updateBlogComment(BlogComment blogComment);
+    int updateBlogComment(BlogComment blogComment);
 
     /**
      * 批量删除评论
@@ -53,7 +53,7 @@ public interface BlogCommentService
      * @param ids 需要删除的评论ID
      * @return 结果
      */
-    public int deleteBlogCommentByIds(Long[] ids);
+    int deleteBlogCommentByIds(Long[] ids);
 
     /**
      * 删除评论信息
@@ -61,14 +61,14 @@ public interface BlogCommentService
      * @param id 评论ID
      * @return 结果
      */
-    public int deleteBlogCommentById(Long id);
+    int deleteBlogCommentById(Long id);
 
     /**
      * 博客列表
      * @param blogComment 参数
      * @return com.huangpuguang.common.core.web.page.TableDataInfo
      */
-    public TableDataInfo getBlogCommentResp(BlogComment blogComment);
+    TableDataInfo getBlogCommentResp(BlogComment blogComment);
 
     /**
      * 获取用户的评论列表
@@ -76,14 +76,14 @@ public interface BlogCommentService
      * @param blogComment 用户
      * @return java.lang.String
      */
-    public Map<String, Object> getListByUser(HttpServletRequest request, BlogComment blogComment);
+    Map<String, Object> getListByUser(HttpServletRequest request, BlogComment blogComment);
 
     /**
      * 获取用户点赞列表
      * @param blogComment 参数
      * @return 点赞列表
      */
-    public List<BlogComment> getPraiseListByUser(BlogComment blogComment);
+    List<BlogComment> getPraiseListByUser(BlogComment blogComment);
 
     /**
      * 添加博客
@@ -91,19 +91,18 @@ public interface BlogCommentService
      * @param userId 用户id
      * @return com.huangpuguang.blog.domain.BlogComment
      */
-    public BlogComment add(BlogComment comment,Long userId);
+    BlogComment add(BlogComment comment, Long userId);
 
     /**
      * 举报评论
      * @param comment 评论
      * @return void
      */
-    public void reportComment(BlogComment comment);
+    void reportComment(BlogComment comment);
 
     /**
      * 删除评论
      * @param comment
-     * @return void
      */
-    public void deleteComment(BlogComment comment);
+    void deleteComment(BlogComment comment);
 }

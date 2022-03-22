@@ -352,12 +352,13 @@ public class SysRoleServiceImpl implements SysRoleService
      * @return 结果
      */
     @Override
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public int deleteRoleByIds(Long[] roleIds)
     {
         for (Long roleId : roleIds)
         {
             checkRoleAllowed(new SysRole(roleId));
+            checkRoleDataScope(roleId);
             SysRole role = selectRoleById(roleId);
             if (countUserRoleByRoleId(roleId) > 0)
             {

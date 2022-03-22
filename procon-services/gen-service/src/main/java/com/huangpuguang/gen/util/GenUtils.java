@@ -1,13 +1,13 @@
 package com.huangpuguang.gen.util;
 
-import java.util.Arrays;
-
-import com.huangpuguang.gen.domain.GenTable;
-import org.apache.commons.lang3.RegExUtils;
 import com.huangpuguang.common.core.constant.GenConstants;
 import com.huangpuguang.common.core.utils.ProconStrUtils;
 import com.huangpuguang.gen.config.GenConfig;
+import com.huangpuguang.gen.domain.GenTable;
 import com.huangpuguang.gen.domain.GenTableColumn;
+import org.apache.commons.lang3.RegExUtils;
+
+import java.util.Arrays;
 
 /**
  * 代码生成器 工具类
@@ -43,6 +43,7 @@ public class GenUtils
         column.setJavaField(ProconStrUtils.toCamelCase(columnName));
         // 设置默认类型
         column.setJavaType(GenConstants.TYPE_STRING);
+        column.setQueryType(GenConstants.QUERY_EQ);
 
         if (arraysContains(GenConstants.COLUMNTYPE_STR, dataType) || arraysContains(GenConstants.COLUMNTYPE_TEXT, dataType))
         {
@@ -165,8 +166,7 @@ public class GenUtils
     {
         int lastIndex = tableName.lastIndexOf("_");
         int nameLength = tableName.length();
-        String businessName = ProconStrUtils.substring(tableName, lastIndex + 1, nameLength);
-        return businessName;
+        return ProconStrUtils.substring(tableName, lastIndex + 1, nameLength);
     }
 
     /**
@@ -192,7 +192,6 @@ public class GenUtils
      *
      * @param replacementm 替换值
      * @param searchList 替换列表
-     * @return
      */
     public static String replaceFirst(String replacementm, String[] searchList)
     {

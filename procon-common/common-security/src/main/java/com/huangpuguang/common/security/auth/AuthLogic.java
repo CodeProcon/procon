@@ -1,22 +1,22 @@
 package com.huangpuguang.common.security.auth;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
-
-import com.huangpuguang.common.security.utils.SecurityUtils;
-import org.springframework.util.PatternMatchUtils;
 import com.huangpuguang.common.core.exception.auth.NotLoginException;
 import com.huangpuguang.common.core.exception.auth.NotPermissionException;
 import com.huangpuguang.common.core.exception.auth.NotRoleException;
-import com.huangpuguang.common.core.utils.SpringUtils;
 import com.huangpuguang.common.core.utils.ProconStrUtils;
+import com.huangpuguang.common.core.utils.SpringUtils;
 import com.huangpuguang.common.security.annotation.Logical;
 import com.huangpuguang.common.security.annotation.RequiresLogin;
 import com.huangpuguang.common.security.annotation.RequiresPermissions;
 import com.huangpuguang.common.security.annotation.RequiresRoles;
 import com.huangpuguang.common.security.service.TokenService;
+import com.huangpuguang.common.security.utils.SecurityUtils;
 import com.huangpuguang.system.api.model.LoginUser;
+import org.springframework.util.PatternMatchUtils;
+
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Token 权限验证，逻辑实现类
@@ -94,7 +94,7 @@ public class AuthLogic
     }
 
     /**
-     * 验证当前用户有效期, 如果相差不足360分钟，自动刷新缓存
+     * 验证当前用户有效期, 如果相差不足120分钟，自动刷新缓存
      * 
      * @param loginUser 当前用户信息
      */
@@ -118,7 +118,7 @@ public class AuthLogic
      * 验证用户是否具备某权限, 如果验证未通过，则抛出异常: NotPermissionException
      * 
      * @param permission 权限字符串
-     * @return 用户是否具备某权限
+     *
      */
     public void checkPermi(String permission)
     {

@@ -30,7 +30,7 @@ public class ValidateCodeHandler implements HandlerFunction<ServerResponse>
         AjaxResult ajax;
         try
         {
-            ajax = validateCodeService.createCapcha();
+            ajax = validateCodeService.createCaptcha();
         }
         catch (CaptchaException | IOException e)
         {
