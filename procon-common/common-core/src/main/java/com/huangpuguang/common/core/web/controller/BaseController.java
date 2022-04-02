@@ -1,5 +1,6 @@
 package com.huangpuguang.common.core.web.controller;
 
+import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.huangpuguang.common.core.constant.HttpStatus;
 import com.huangpuguang.common.core.utils.DateUtils;
@@ -48,7 +49,13 @@ public class BaseController
     {
         PageUtils.startPage();
     }
-
+    /**
+     * 清理分页的线程变量
+     */
+    public static void clearPage()
+    {
+        PageHelper.clearPage();
+    }
     /**
      * 响应请求分页数据
      */
