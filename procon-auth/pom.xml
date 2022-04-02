@@ -46,6 +46,11 @@
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-all</artifactId>
+        </dependency>
+
         <!--第三方auth登录-->
         <dependency>
             <groupId>me.zhyd.oauth</groupId>

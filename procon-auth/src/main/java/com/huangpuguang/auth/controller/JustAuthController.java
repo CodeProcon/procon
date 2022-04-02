@@ -1,5 +1,6 @@
 package com.huangpuguang.auth.controller;
 
+import cn.hutool.core.bean.BeanUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.huangpuguang.auth.cache.AuthStateRedisCache;
@@ -8,7 +9,6 @@ import com.huangpuguang.common.core.domain.ResultModel;
 import com.huangpuguang.common.core.exception.ServiceException;
 import com.huangpuguang.common.core.utils.JsonUtils;
 import com.huangpuguang.common.core.utils.JwtUtils;
-import com.huangpuguang.common.core.utils.bean.BeanUtils;
 import com.huangpuguang.common.core.utils.ip.IpUtils;
 import com.huangpuguang.common.redis.service.RedisService;
 import com.huangpuguang.common.security.service.TokenService;
@@ -23,7 +23,6 @@ import me.zhyd.oauth.enums.scope.AuthGiteeScope;
 import me.zhyd.oauth.model.AuthCallback;
 import me.zhyd.oauth.model.AuthResponse;
 import me.zhyd.oauth.model.AuthToken;
-import me.zhyd.oauth.model.AuthUser;
 import me.zhyd.oauth.request.AuthGiteeRequest;
 import me.zhyd.oauth.request.AuthGithubRequest;
 import me.zhyd.oauth.request.AuthRequest;
@@ -33,6 +32,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -52,6 +52,7 @@ import java.util.*;
  * @version 1.0
  * @since 2020/12/7
  */
+@RefreshScope
 @RestController
 @RequestMapping("justAuth")
 public class JustAuthController {
@@ -107,7 +108,7 @@ public class JustAuthController {
     public void login(@PathVariable("source") String source, AuthCallback callback, HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws IOException {
         log.info("进入callback：" + source + " callback params：" + JSONObject.toJSONString(callback));
         AuthRequest authRequest = getAuthRequest(source);
-        AuthResponse<AuthUser> response = authRequest.login(callback);
+        AuthResponse response = authRequest.login(callback);
         log.info(JSON.toJSONString(response));
         if (response.getCode() == Constants.NUM_5000) {
             // 跳转到500错误页面
@@ -129,7 +130,8 @@ public class JustAuthController {
         }
 
         String jwtToken = setUserInfo(data, accessToken, httpServletRequest);
-        httpServletResponse.sendRedirect(webSiteUrl + "?token=" + jwtToken);
+        httpServletResponse.setHeader("token",jwtToken);
+        httpServletResponse.sendRedirect(webSiteUrl+"?token=" + jwtToken);
     }
 
 
@@ -254,9 +256,9 @@ public class JustAuthController {
     }
 
     /** 获取用户信息*/
-    @GetMapping("/verify/{accessToken}")
-    public ResultModel<Map<String, Object>> verifyUser(@PathVariable("accessToken") String token) {
-
+    @GetMapping("/verify")
+    public ResultModel<Map<String, Object>> verifyUser(HttpServletRequest request) {
+        String token = request.getHeader("token");
         Claims claims = JwtUtils.parseToken(token);
         if (claims == null)
         {
@@ -289,7 +291,8 @@ public class JustAuthController {
         loginUser.setSysUser(sysUser);
         loginUser.setUsername(username);
         loginUser.setUserid(Long.parseLong(userid));
-        Map<String, Object> map = BeanUtils.beanToMap(loginUser);
+        Map<String, Object> map =   BeanUtil.beanToMap(loginUser);
+
         return ResultModel.ok(map, "获取用户成功！");
     }
 

@@ -1,5 +1,6 @@
 package com.huangpuguang.blog.controller.web;
 
+import com.github.pagehelper.PageHelper;
 import com.huangpuguang.blog.domain.BlogContent;
 import com.huangpuguang.blog.domain.BlogLink;
 import com.huangpuguang.blog.domain.BlogTag;
@@ -10,7 +11,9 @@ import com.huangpuguang.blog.service.BlogWebConfigService;
 import com.huangpuguang.blog.vo.BlogContentVo;
 import com.huangpuguang.common.core.web.controller.BaseController;
 import com.huangpuguang.common.core.web.domain.AjaxResult;
+import com.huangpuguang.common.core.web.page.PageDomain;
 import com.huangpuguang.common.core.web.page.TableDataInfo;
+import com.huangpuguang.common.core.web.page.TableSupport;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -60,11 +63,11 @@ public class IndexController extends BaseController {
     @GetMapping("/getBlogList")
     public TableDataInfo getBlogList(BlogContent blogContent) {
         //TODO: pageHelper 分页问题
-        List<BlogContentVo> blogContentList = blogContentService.selectBlogContentList(blogContent,null);
-        startPage();
+        PageDomain pageDomain = TableSupport.buildPageRequest();
+        PageHelper.startPage(pageDomain.getPageNum(),pageDomain.getPageSize(),pageDomain.getOrderBy());
         List<BlogContentVo> blogContents = blogContentService.selectBlogContentList(blogContent,null);
         TableDataInfo dataTable = getDataTable(blogContents);
-        dataTable.setTotal(blogContentList.size());
+        dataTable.setTotal(blogContents.size());
         return dataTable;
     }
 
