@@ -1,6 +1,7 @@
 package com.huangpuguang.common.core.utils;
 
-import com.alibaba.fastjson.JSONObject;
+
+import com.alibaba.fastjson2.JSON;
 import com.huangpuguang.common.core.constant.Constants;
 import com.huangpuguang.common.core.domain.ResultModel;
 import com.huangpuguang.common.core.text.Convert;
@@ -302,7 +303,7 @@ public class ServletUtils
         response.setStatusCode(status);
         response.getHeaders().add(HttpHeaders.CONTENT_TYPE, contentType);
         ResultModel<?> result = ResultModel.fail(code, value.toString());
-        DataBuffer dataBuffer = response.bufferFactory().wrap(JSONObject.toJSONString(result).getBytes());
+        DataBuffer dataBuffer = response.bufferFactory().wrap(JSON.toJSONString(result).getBytes());
         return response.writeWith(Mono.just(dataBuffer));
     }
 }

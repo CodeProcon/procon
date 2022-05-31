@@ -1,6 +1,7 @@
 package com.huangpuguang.gateway.filter;
 
-import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson2.JSON;
+import com.alibaba.fastjson2.JSONObject;
 import com.huangpuguang.gateway.config.properties.CaptchaProperties;
 import com.huangpuguang.gateway.service.ValidateCodeService;
 import com.huangpuguang.common.core.utils.ServletUtils;
@@ -53,7 +54,7 @@ public class ValidateCodeFilter extends AbstractGatewayFilterFactory<Object>
             try
             {
                 String rspStr = resolveBodyFromRequest(request);
-                JSONObject obj = JSONObject.parseObject(rspStr);
+                JSONObject obj = JSON.parseObject(rspStr);
                 validateCodeService.checkCaptcha(obj.getString(CODE), obj.getString(UUID));
             }
             catch (Exception e)

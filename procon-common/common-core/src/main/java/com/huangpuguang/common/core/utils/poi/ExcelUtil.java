@@ -1,6 +1,8 @@
 package com.huangpuguang.common.core.utils.poi;
 
 import com.huangpuguang.common.core.annotation.Excel;
+import com.huangpuguang.common.core.annotation.Excel.ColumnType;
+import com.huangpuguang.common.core.annotation.Excel.Type;
 import com.huangpuguang.common.core.annotation.Excels;
 import com.huangpuguang.common.core.text.Convert;
 import com.huangpuguang.common.core.utils.DateUtils;
@@ -35,15 +37,15 @@ import java.util.stream.Collectors;
 /**
  * Excel相关处理
  *
- * @author ruoyi
+ * @author huangpuguang
  */
 public class ExcelUtil<T>
 {
     private static final Logger log = LoggerFactory.getLogger(ExcelUtil.class);
 
-    public static final String[] FORMULA_STR = { "=", "-", "+", "@" };
-
     public static final String FORMULA_REGEX_STR = "=|-|\\+|@";
+
+    public static final String[] FORMULA_STR = { "=", "-", "+", "@" };
 
     /**
      * Excel sheet最大行数，默认65536
@@ -58,7 +60,7 @@ public class ExcelUtil<T>
     /**
      * 导出类型（EXPORT:导出数据；IMPORT：导入模板）
      */
-    private Excel.Type type;
+    private Type type;
 
     /**
      * 工作薄对象
@@ -120,7 +122,7 @@ public class ExcelUtil<T>
         this.clazz = clazz;
     }
 
-    public void init(List<T> list, String sheetName, String title, Excel.Type type)
+    public void init(List<T> list, String sheetName, String title, Type type)
     {
         if (list == null)
         {
@@ -140,7 +142,7 @@ public class ExcelUtil<T>
      */
     public void createTitle()
     {
-        if (StringUtils.isNotEmpty(title))
+        if (ProconStrUtils.isNotEmpty(title))
         {
             Row titleRow = sheet.createRow(rownum == 0 ? rownum++ : 0);
             titleRow.setHeightInPoints(30);
@@ -172,7 +174,7 @@ public class ExcelUtil<T>
      */
     public List<T> importExcel(InputStream is, int titleNum) throws Exception
     {
-        return importExcel(StringUtils.EMPTY, is, titleNum);
+        return importExcel(ProconStrUtils.EMPTY, is, titleNum);
     }
 
     /**
@@ -185,11 +187,11 @@ public class ExcelUtil<T>
      */
     public List<T> importExcel(String sheetName, InputStream is, int titleNum) throws Exception
     {
-        this.type = Excel.Type.IMPORT;
+        this.type = Type.IMPORT;
         this.wb = WorkbookFactory.create(is);
         List<T> list = new ArrayList<T>();
         // 如果指定sheet名,则取指定sheet中的内容 否则默认指向第1个sheet
-        Sheet sheet = StringUtils.isNotEmpty(sheetName) ? wb.getSheet(sheetName) : wb.getSheetAt(0);
+        Sheet sheet = ProconStrUtils.isNotEmpty(sheetName) ? wb.getSheet(sheetName) : wb.getSheetAt(0);
         if (sheet == null)
         {
             throw new IOException("文件sheet不存在");
@@ -253,16 +255,16 @@ public class ExcelUtil<T>
                     if (String.class == fieldType)
                     {
                         String s = Convert.toStr(val);
-                        if (StringUtils.endsWith(s, ".0"))
+                        if (ProconStrUtils.endsWith(s, ".0"))
                         {
-                            val = StringUtils.substringBefore(s, ".0");
+                            val = ProconStrUtils.substringBefore(s, ".0");
                         }
                         else
                         {
                             String dateFormat = field.getAnnotation(Excel.class).dateFormat();
-                            if (StringUtils.isNotEmpty(dateFormat))
+                            if (ProconStrUtils.isNotEmpty(dateFormat))
                             {
-                                val = parseDateToStr(dateFormat, (Date) val);
+                                val = parseDateToStr(dateFormat, val);
                             }
                             else
                             {
@@ -270,11 +272,11 @@ public class ExcelUtil<T>
                             }
                         }
                     }
-                    else if ((Integer.TYPE == fieldType || Integer.class == fieldType) && StringUtils.isNumeric(Convert.toStr(val)))
+                    else if ((Integer.TYPE == fieldType || Integer.class == fieldType) && ProconStrUtils.isNumeric(Convert.toStr(val)))
                     {
                         val = Convert.toInt(val);
                     }
-                    else if ((Long.TYPE == fieldType || Long.class == fieldType) && StringUtils.isNumeric(Convert.toStr(val)))
+                    else if ((Long.TYPE == fieldType || Long.class == fieldType) && ProconStrUtils.isNumeric(Convert.toStr(val)))
                     {
                         val = Convert.toLong(val);
                     }
@@ -357,7 +359,7 @@ public class ExcelUtil<T>
     {
         response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
         response.setCharacterEncoding("utf-8");
-        this.init(list, sheetName, title, Excel.Type.EXPORT);
+        this.init(list, sheetName, title, Type.EXPORT);
         exportExcel(response);
     }
 
@@ -389,7 +391,7 @@ public class ExcelUtil<T>
     {
         response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
         response.setCharacterEncoding("utf-8");
-        this.init(null, sheetName, title, Excel.Type.IMPORT);
+        this.init(null, sheetName, title, Type.IMPORT);
         exportExcel(response);
     }
 
@@ -435,7 +437,7 @@ public class ExcelUtil<T>
                 Excel excel = (Excel) os[1];
                 this.createCell(excel, row, column++);
             }
-            if (Excel.Type.EXPORT.equals(type))
+            if (Type.EXPORT.equals(type))
             {
                 fillExcelData(index, row);
                 addStatisticsRow();
@@ -528,21 +530,46 @@ public class ExcelUtil<T>
         style.setFont(totalFont);
         styles.put("total", style);
 
-        style = wb.createCellStyle();
-        style.cloneStyleFrom(styles.get("data"));
-        style.setAlignment(HorizontalAlignment.LEFT);
-        styles.put("data1", style);
+        styles.putAll(annotationStyles(wb));
 
-        style = wb.createCellStyle();
-        style.cloneStyleFrom(styles.get("data"));
-        style.setAlignment(HorizontalAlignment.CENTER);
-        styles.put("data2", style);
+        return styles;
+    }
 
-        style = wb.createCellStyle();
-        style.cloneStyleFrom(styles.get("data"));
-        style.setAlignment(HorizontalAlignment.RIGHT);
-        styles.put("data3", style);
-
+    /**
+     * 根据Excel注解创建表格样式
+     *
+     * @param wb 工作薄对象
+     * @return 自定义样式列表
+     */
+    private Map<String, CellStyle> annotationStyles(Workbook wb)
+    {
+        Map<String, CellStyle> styles = new HashMap<String, CellStyle>();
+        for (Object[] os : fields)
+        {
+            Excel excel = (Excel) os[1];
+            String key = "data_" + excel.align() + "_" + excel.color();
+            if (!styles.containsKey(key))
+            {
+                CellStyle style = wb.createCellStyle();
+                style = wb.createCellStyle();
+                style.setAlignment(excel.align());
+                style.setVerticalAlignment(VerticalAlignment.CENTER);
+                style.setBorderRight(BorderStyle.THIN);
+                style.setRightBorderColor(IndexedColors.GREY_50_PERCENT.getIndex());
+                style.setBorderLeft(BorderStyle.THIN);
+                style.setLeftBorderColor(IndexedColors.GREY_50_PERCENT.getIndex());
+                style.setBorderTop(BorderStyle.THIN);
+                style.setTopBorderColor(IndexedColors.GREY_50_PERCENT.getIndex());
+                style.setBorderBottom(BorderStyle.THIN);
+                style.setBottomBorderColor(IndexedColors.GREY_50_PERCENT.getIndex());
+                Font dataFont = wb.createFont();
+                dataFont.setFontName("Arial");
+                dataFont.setFontHeightInPoints((short) 10);
+                dataFont.setColor(excel.color().index);
+                style.setFont(dataFont);
+                styles.put(key, style);
+            }
+        }
         return styles;
     }
 
@@ -569,7 +596,7 @@ public class ExcelUtil<T>
      */
     public void setCellVo(Object value, Excel attr, Cell cell)
     {
-        if (Excel.ColumnType.STRING == attr.cellType())
+        if (ColumnType.STRING == attr.cellType())
         {
             String cellValue = Convert.toStr(value);
             // 对于任何以表达式触发字符 =-+@开头的单元格，直接使用tab字符作为前缀，防止CSV注入。
@@ -579,14 +606,14 @@ public class ExcelUtil<T>
             }
             cell.setCellValue(ProconStrUtils.isNull(cellValue) ? attr.defaultValue() : cellValue + attr.suffix());
         }
-        else if (Excel.ColumnType.NUMERIC == attr.cellType())
+        else if (ColumnType.NUMERIC == attr.cellType())
         {
             if (ProconStrUtils.isNotNull(value))
             {
                 cell.setCellValue(StringUtils.contains(Convert.toStr(value), ".") ? Convert.toDouble(value) : Convert.toInt(value));
             }
         }
-        else if (Excel.ColumnType.IMAGE == attr.cellType())
+        else if (ColumnType.IMAGE == attr.cellType())
         {
             ClientAnchor anchor = new XSSFClientAnchor(0, 0, 0, 0, (short) cell.getColumnIndex(), cell.getRow().getRowNum(), (short) (cell.getColumnIndex() + 1), cell.getRow().getRowNum() + 1);
             String imagePath = Convert.toStr(value);
@@ -642,17 +669,10 @@ public class ExcelUtil<T>
             // 设置列宽
             sheet.setColumnWidth(column, (int) ((attr.width() + 0.72) * 256));
         }
-        // 如果设置了提示信息则鼠标放上去提示.
-        if (StringUtils.isNotEmpty(attr.prompt()))
+        if (StringUtils.isNotEmpty(attr.prompt()) || attr.combo().length > 0)
         {
-            // 这里默认设了2-101列提示.
-            setXSSFPrompt(sheet, "", attr.prompt(), 1, 100, column, column);
-        }
-        // 如果设置了combo属性则本列只能选择不能输入
-        if (attr.combo().length > 0)
-        {
-            // 这里默认设了2-101列只能选择不能输入.
-            setXSSFValidation(sheet, attr.combo(), 1, 100, column, column);
+            // 提示信息或只能选择不能输入的列内容.
+            setPromptOrValidation(sheet, attr.combo(), attr.prompt(), 1, 100, column, column);
         }
     }
 
@@ -671,8 +691,7 @@ public class ExcelUtil<T>
             {
                 // 创建cell
                 cell = row.createCell(column);
-                int align = attr.align().value();
-                cell.setCellStyle(styles.get("data" + (align >= 1 && align <= 3 ? align : "")));
+                cell.setCellStyle(styles.get("data_" + attr.align() + "_" + attr.color()));
 
                 // 用于读取对象中的属性
                 Object value = getTargetValue(vo, field, attr);
@@ -681,7 +700,7 @@ public class ExcelUtil<T>
                 String separator = attr.separator();
                 if (StringUtils.isNotEmpty(dateFormat) && ProconStrUtils.isNotNull(value))
                 {
-                    cell.setCellValue(parseDateToStr(dateFormat, (Date) value));
+                    cell.setCellValue(parseDateToStr(dateFormat, value));
                 }
                 else if (StringUtils.isNotEmpty(readConverterExp) && ProconStrUtils.isNotNull(value))
                 {
@@ -711,48 +730,29 @@ public class ExcelUtil<T>
     }
 
     /**
-     * 设置 POI XSSFSheet 单元格提示
+     * 设置 POI XSSFSheet 单元格提示或选择框
      *
      * @param sheet 表单
-     * @param promptTitle 提示标题
+     * @param textlist 下拉框显示的内容
      * @param promptContent 提示内容
      * @param firstRow 开始行
      * @param endRow 结束行
      * @param firstCol 开始列
      * @param endCol 结束列
      */
-    public void setXSSFPrompt(Sheet sheet, String promptTitle, String promptContent, int firstRow, int endRow,
-                              int firstCol, int endCol)
+    public void setPromptOrValidation(Sheet sheet, String[] textlist, String promptContent, int firstRow, int endRow,
+                                      int firstCol, int endCol)
     {
         DataValidationHelper helper = sheet.getDataValidationHelper();
-        DataValidationConstraint constraint = helper.createCustomConstraint("DD1");
+        DataValidationConstraint constraint = textlist.length > 0 ? helper.createExplicitListConstraint(textlist) : helper.createCustomConstraint("DD1");
         CellRangeAddressList regions = new CellRangeAddressList(firstRow, endRow, firstCol, endCol);
         DataValidation dataValidation = helper.createValidation(constraint, regions);
-        dataValidation.createPromptBox(promptTitle, promptContent);
-        dataValidation.setShowPromptBox(true);
-        sheet.addValidationData(dataValidation);
-    }
-
-    /**
-     * 设置某些列的值只能输入预制的数据,显示下拉框.
-     *
-     * @param sheet 要设置的sheet.
-     * @param textlist 下拉框显示的内容
-     * @param firstRow 开始行
-     * @param endRow 结束行
-     * @param firstCol 开始列
-     * @param endCol 结束列
-     * @return 设置好的sheet.
-     */
-    public void setXSSFValidation(Sheet sheet, String[] textlist, int firstRow, int endRow, int firstCol, int endCol)
-    {
-        DataValidationHelper helper = sheet.getDataValidationHelper();
-        // 加载下拉列表内容
-        DataValidationConstraint constraint = helper.createExplicitListConstraint(textlist);
-        // 设置数据有效性加载在哪个单元格上,四个参数分别是：起始行、终止行、起始列、终止列
-        CellRangeAddressList regions = new CellRangeAddressList(firstRow, endRow, firstCol, endCol);
-        // 数据有效性对象
-        DataValidation dataValidation = helper.createValidation(constraint, regions);
+        if (StringUtils.isNotEmpty(promptContent))
+        {
+            // 如果设置了提示信息则鼠标放上去提示
+            dataValidation.createPromptBox("", promptContent);
+            dataValidation.setShowPromptBox(true);
+        }
         // 处理Excel兼容性问题
         if (dataValidation instanceof XSSFDataValidation)
         {
@@ -763,7 +763,6 @@ public class ExcelUtil<T>
         {
             dataValidation.setSuppressDropDownArrow(false);
         }
-
         sheet.addValidationData(dataValidation);
     }
 
@@ -985,7 +984,7 @@ public class ExcelUtil<T>
             if (field.isAnnotationPresent(Excel.class))
             {
                 Excel attr = field.getAnnotation(Excel.class);
-                if (attr != null && (attr.type() == Excel.Type.ALL || attr.type() == type))
+                if (attr != null && (attr.type() == Type.ALL || attr.type() == type))
                 {
                     field.setAccessible(true);
                     fields.add(new Object[] { field, attr });
@@ -999,7 +998,7 @@ public class ExcelUtil<T>
                 Excel[] excels = attrs.value();
                 for (Excel attr : excels)
                 {
-                    if (attr != null && (attr.type() == Excel.Type.ALL || attr.type() == type))
+                    if (attr != null && (attr.type() == Type.ALL || attr.type() == type))
                     {
                         field.setAccessible(true);
                         fields.add(new Object[] { field, attr });
