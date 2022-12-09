@@ -3,7 +3,7 @@ package com.huangpuguang.blog.service.impl;
 import com.huangpuguang.blog.domain.BlogLink;
 import com.huangpuguang.blog.mapper.BlogLinkMapper;
 import com.huangpuguang.blog.service.BlogLinkService;
-import com.huangpuguang.common.core.utils.DateUtils;
+import com.huangpuguang.common.core.utils.ProconDateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -54,7 +54,7 @@ public class BlogLinkServiceImpl implements BlogLinkService
     @Override
     public int insertBlogLink(BlogLink blogLink)
     {
-        blogLink.setCreateTime(DateUtils.getNowDate());
+        blogLink.setCreateTime(ProconDateUtils.getNowDate());
         return blogLinkMapper.insertBlogLink(blogLink);
     }
 
@@ -67,7 +67,7 @@ public class BlogLinkServiceImpl implements BlogLinkService
     @Override
     public int updateBlogLink(BlogLink blogLink)
     {
-        blogLink.setUpdateTime(DateUtils.getNowDate());
+        blogLink.setUpdateTime(ProconDateUtils.getNowDate());
         return blogLinkMapper.updateBlogLink(blogLink);
     }
 

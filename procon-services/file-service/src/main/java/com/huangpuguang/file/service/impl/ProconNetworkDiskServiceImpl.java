@@ -1,6 +1,6 @@
 package com.huangpuguang.file.service.impl;
 
-import com.huangpuguang.common.core.utils.DateUtils;
+import com.huangpuguang.common.core.utils.ProconDateUtils;
 import com.huangpuguang.file.mapper.ProconNetworkDiskMapper;
 import com.huangpuguang.file.service.ProconNetworkDiskService;
 import com.huangpuguang.system.api.domain.ProconNetworkDisk;
@@ -55,7 +55,7 @@ public class ProconNetworkDiskServiceImpl implements ProconNetworkDiskService
     @Override
     public int insertNetworkDisk(ProconNetworkDisk networkDisk)
     {
-        networkDisk.setCreateTime(DateUtils.getNowDate());
+        networkDisk.setCreateTime(ProconDateUtils.getNowDate());
         return networkDiskMapper.insertNetworkDisk(networkDisk);
     }
 
@@ -68,7 +68,7 @@ public class ProconNetworkDiskServiceImpl implements ProconNetworkDiskService
     @Override
     public int updateNetworkDisk(ProconNetworkDisk networkDisk)
     {
-        networkDisk.setUpdateTime(DateUtils.getNowDate());
+        networkDisk.setUpdateTime(ProconDateUtils.getNowDate());
         return networkDiskMapper.updateNetworkDisk(networkDisk);
     }
 

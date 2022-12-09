@@ -102,7 +102,7 @@ public class ProconFileServiceImpl implements ProconFileService {
 
         //文件路径问题
         log.info("path====" + destPath);
-        String newPath = destPath + FILE_SEPARATOR + picExpandedName + FILE_SEPARATOR + DateUtils.dateTime() + FILE_SEPARATOR;
+        String newPath = destPath + FILE_SEPARATOR + picExpandedName + FILE_SEPARATOR + ProconDateUtils.dateTime() + FILE_SEPARATOR;
         log.info("newPath====" + newPath);
         String saveUrl = newPath + newFileName;
         ProconFileSort fileSort = new ProconFileSort();
@@ -140,7 +140,7 @@ public class ProconFileServiceImpl implements ProconFileService {
 
 
 
-        fileStorage.setCreateTime(DateUtils.getNowDate());
+        fileStorage.setCreateTime(ProconDateUtils.getNowDate());
         fileStorage.setFileSortId(fileSort.getId().toString());
         insertFileStorage(userUid, adminUid, oldName, size, picExpandedName, newFileName, saveUrl, fileStorage);
         if(notSave){
@@ -158,7 +158,7 @@ public class ProconFileServiceImpl implements ProconFileService {
      */
     @Override
     public int updateFile(ProconFile file) {
-        file.setUpdateTime(DateUtils.getNowDate());
+        file.setUpdateTime(ProconDateUtils.getNowDate());
         return fileMapper.updateFile(file);
     }
 

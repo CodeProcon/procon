@@ -1,6 +1,6 @@
 package com.huangpuguang.file.service.impl;
 
-import com.huangpuguang.common.core.utils.DateUtils;
+import com.huangpuguang.common.core.utils.ProconDateUtils;
 import com.huangpuguang.common.core.web.service.impl.BaseServiceImpl;
 import com.huangpuguang.file.mapper.ProconFileSortMapper;
 import com.huangpuguang.file.service.ProconFileSortService;
@@ -61,7 +61,7 @@ public class ProconFileSortServiceImpl extends BaseServiceImpl<ProconFileSortMap
     @Override
     public int insertFileSort(ProconFileSort fileSort)
     {
-        fileSort.setCreateTime(DateUtils.getNowDate());
+        fileSort.setCreateTime(ProconDateUtils.getNowDate());
         return fileSortMapper.insertFileSort(fileSort);
     }
 
@@ -74,7 +74,7 @@ public class ProconFileSortServiceImpl extends BaseServiceImpl<ProconFileSortMap
     @Override
     public int updateFileSort(ProconFileSort fileSort)
     {
-        fileSort.setUpdateTime(DateUtils.getNowDate());
+        fileSort.setUpdateTime(ProconDateUtils.getNowDate());
         return fileSortMapper.updateFileSort(fileSort);
     }
 

@@ -3,7 +3,7 @@ package com.huangpuguang.blog.service.impl;
 import com.huangpuguang.blog.domain.BlogVisitor;
 import com.huangpuguang.blog.mapper.BlogVisitorMapper;
 import com.huangpuguang.blog.service.BlogVisitorService;
-import com.huangpuguang.common.core.utils.DateUtils;
+import com.huangpuguang.common.core.utils.ProconDateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -54,7 +54,7 @@ public class BlogVisitorServiceImpl implements BlogVisitorService
     @Override
     public int insertBlogVisitor(BlogVisitor blogVisitor)
     {
-        blogVisitor.setCreateTime(DateUtils.getNowDate());
+        blogVisitor.setCreateTime(ProconDateUtils.getNowDate());
         return blogVisitorMapper.insertBlogVisitor(blogVisitor);
     }
 
@@ -67,7 +67,7 @@ public class BlogVisitorServiceImpl implements BlogVisitorService
     @Override
     public int updateBlogVisitor(BlogVisitor blogVisitor)
     {
-        blogVisitor.setUpdateTime(DateUtils.getNowDate());
+        blogVisitor.setUpdateTime(ProconDateUtils.getNowDate());
         return blogVisitorMapper.updateBlogVisitor(blogVisitor);
     }
 

@@ -13,7 +13,7 @@ import org.apache.poi.ss.usermodel.DateUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.huangpuguang.common.core.text.Convert;
-import com.huangpuguang.common.core.utils.DateUtils;
+import com.huangpuguang.common.core.utils.ProconDateUtils;
 
 /**
  * 反射工具类. 提供调用getter/setter方法, 访问私有变量, 调用私有方法, 获取泛型类型Class, 被AOP过的真实类等工具函数.
@@ -197,7 +197,7 @@ public class ReflectUtils
                     {
                         if (args[i] instanceof String)
                         {
-                            args[i] = DateUtils.parseDate(args[i]);
+                            args[i] = ProconDateUtils.parseDate(args[i]);
                         }
                         else
                         {

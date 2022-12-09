@@ -4,7 +4,7 @@ import cn.hutool.core.date.DateUtil;
 import com.huangpuguang.blog.domain.BlogSort;
 import com.huangpuguang.blog.mapper.BlogSortMapper;
 import com.huangpuguang.blog.service.BlogSortService;
-import com.huangpuguang.common.core.utils.DateUtils;
+import com.huangpuguang.common.core.utils.ProconDateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -55,7 +55,7 @@ public class BlogSortServiceImpl implements BlogSortService
     @Override
     public int insertBlogSort(BlogSort blogSort)
     {
-        blogSort.setCreateTime(DateUtils.getNowDate());
+        blogSort.setCreateTime(ProconDateUtils.getNowDate());
         blogSort.setUpdateTime(DateUtil.date());
         return blogSortMapper.insertBlogSort(blogSort);
     }
@@ -69,7 +69,7 @@ public class BlogSortServiceImpl implements BlogSortService
     @Override
     public int updateBlogSort(BlogSort blogSort)
     {
-        blogSort.setUpdateTime(DateUtils.getNowDate());
+        blogSort.setUpdateTime(ProconDateUtils.getNowDate());
         return blogSortMapper.updateBlogSort(blogSort);
     }
 

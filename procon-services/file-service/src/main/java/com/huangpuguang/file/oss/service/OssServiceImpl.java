@@ -6,7 +6,7 @@ import com.aliyun.oss.model.GetObjectRequest;
 import com.aliyun.oss.model.OSSObject;
 import com.aliyun.oss.model.ObjectMetadata;
 import com.huangpuguang.common.core.exception.ServiceException;
-import com.huangpuguang.common.core.utils.DateUtils;
+import com.huangpuguang.common.core.utils.ProconDateUtils;
 import com.huangpuguang.file.oss.config.OssConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -51,7 +51,7 @@ public class OssServiceImpl implements OssService {
             // 上传文件流。
             InputStream inputStream = file.getInputStream();
             //构建日期路径：category/20200801文件名
-            String datePath = DateUtils.dateTime();
+            String datePath = ProconDateUtils.dateTime();
             //文件名：uuid.扩展名
             String original = file.getOriginalFilename();
             String fileName = UUID.randomUUID().toString();
@@ -163,7 +163,7 @@ public class OssServiceImpl implements OssService {
     @Override
     public  String getFileUrl(String ossFileKey, int expires) {
         OSS client=new OSSClientBuilder().build(endpoint, accessKeyId, accessKeySecret);
-        URL url = client.generatePresignedUrl(bucketName, ossFileKey, DateUtils.dateAfter(new Date(),expires, Calendar.MINUTE));
+        URL url = client.generatePresignedUrl(bucketName, ossFileKey, ProconDateUtils.dateAfter(new Date(),expires, Calendar.MINUTE));
 
         String path = url.toString();
         try {

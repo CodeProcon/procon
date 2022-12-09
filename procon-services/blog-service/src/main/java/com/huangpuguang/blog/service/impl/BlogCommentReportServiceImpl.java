@@ -3,7 +3,7 @@ package com.huangpuguang.blog.service.impl;
 import com.huangpuguang.blog.domain.BlogCommentReport;
 import com.huangpuguang.blog.mapper.BlogCommentReportMapper;
 import com.huangpuguang.blog.service.BlogCommentReportService;
-import com.huangpuguang.common.core.utils.DateUtils;
+import com.huangpuguang.common.core.utils.ProconDateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -54,7 +54,7 @@ public class BlogCommentReportServiceImpl implements BlogCommentReportService
     @Override
     public int insertBlogCommentReport(BlogCommentReport blogCommentReport)
     {
-        blogCommentReport.setCreateTime(DateUtils.getNowDate());
+        blogCommentReport.setCreateTime(ProconDateUtils.getNowDate());
         return blogCommentReportMapper.insertBlogCommentReport(blogCommentReport);
     }
 
@@ -67,7 +67,7 @@ public class BlogCommentReportServiceImpl implements BlogCommentReportService
     @Override
     public int updateBlogCommentReport(BlogCommentReport blogCommentReport)
     {
-        blogCommentReport.setUpdateTime(DateUtils.getNowDate());
+        blogCommentReport.setUpdateTime(ProconDateUtils.getNowDate());
         return blogCommentReportMapper.updateBlogCommentReport(blogCommentReport);
     }
 

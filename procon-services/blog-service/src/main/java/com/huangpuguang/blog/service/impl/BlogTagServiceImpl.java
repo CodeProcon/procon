@@ -3,7 +3,7 @@ package com.huangpuguang.blog.service.impl;
 import com.huangpuguang.blog.domain.BlogTag;
 import com.huangpuguang.blog.mapper.BlogTagMapper;
 import com.huangpuguang.blog.service.BlogTagService;
-import com.huangpuguang.common.core.utils.DateUtils;
+import com.huangpuguang.common.core.utils.ProconDateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -54,7 +54,7 @@ public class BlogTagServiceImpl implements BlogTagService
     @Override
     public int insertBlogTag(BlogTag blogTag)
     {
-        blogTag.setCreateTime(DateUtils.getNowDate());
+        blogTag.setCreateTime(ProconDateUtils.getNowDate());
         return blogTagMapper.insertBlogTag(blogTag);
     }
 
@@ -67,7 +67,7 @@ public class BlogTagServiceImpl implements BlogTagService
     @Override
     public int updateBlogTag(BlogTag blogTag)
     {
-        blogTag.setUpdateTime(DateUtils.getNowDate());
+        blogTag.setUpdateTime(ProconDateUtils.getNowDate());
         return blogTagMapper.updateBlogTag(blogTag);
     }
 

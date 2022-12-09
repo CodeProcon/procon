@@ -17,7 +17,7 @@ import com.huangpuguang.blog.vo.BlogContentVo;
 import com.huangpuguang.common.core.constant.BlogConstants;
 import com.huangpuguang.common.core.constant.Constants;
 import com.huangpuguang.common.core.constant.HttpStatus;
-import com.huangpuguang.common.core.utils.DateUtils;
+import com.huangpuguang.common.core.utils.ProconDateUtils;
 import com.huangpuguang.common.core.utils.JsonUtils;
 import com.huangpuguang.common.core.utils.ProconStrUtils;
 import com.huangpuguang.common.core.web.page.PageOper;
@@ -222,7 +222,7 @@ public class BlogContentServiceImpl extends PageOper<BlogContent> implements Blo
     @Override
     public int insertBlogContent(BlogContent blogContent)
     {
-        blogContent.setCreateTime(DateUtils.getNowDate());
+        blogContent.setCreateTime(ProconDateUtils.getNowDate());
         return blogContentMapper.insertBlogContent(blogContent);
     }
 
@@ -235,7 +235,7 @@ public class BlogContentServiceImpl extends PageOper<BlogContent> implements Blo
     @Override
     public int updateBlogContent(BlogContent blogContent)
     {
-        blogContent.setUpdateTime(DateUtils.getNowDate());
+        blogContent.setUpdateTime(ProconDateUtils.getNowDate());
         return blogContentMapper.updateBlogContent(blogContent);
     }
 

@@ -4,7 +4,7 @@ import com.huangpuguang.blog.domain.BlogPicture;
 import com.huangpuguang.blog.mapper.BlogPictureMapper;
 import com.huangpuguang.blog.service.BlogPictureService;
 import com.huangpuguang.common.core.constant.Constants;
-import com.huangpuguang.common.core.utils.DateUtils;
+import com.huangpuguang.common.core.utils.ProconDateUtils;
 import com.huangpuguang.system.api.RemoteFileService;
 import com.huangpuguang.system.api.domain.ProconFile;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -71,7 +71,7 @@ public class BlogPictureServiceImpl implements BlogPictureService
     @Override
     public int insertBlogPicture(BlogPicture blogPicture)
     {
-        blogPicture.setCreateTime(DateUtils.getNowDate());
+        blogPicture.setCreateTime(ProconDateUtils.getNowDate());
         return blogPictureMapper.insertBlogPicture(blogPicture);
     }
 
@@ -84,7 +84,7 @@ public class BlogPictureServiceImpl implements BlogPictureService
     @Override
     public int updateBlogPicture(BlogPicture blogPicture)
     {
-        blogPicture.setUpdateTime(DateUtils.getNowDate());
+        blogPicture.setUpdateTime(ProconDateUtils.getNowDate());
         return blogPictureMapper.updateBlogPicture(blogPicture);
     }
 

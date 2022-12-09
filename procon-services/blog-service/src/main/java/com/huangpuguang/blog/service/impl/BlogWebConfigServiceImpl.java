@@ -4,7 +4,7 @@ import com.huangpuguang.blog.domain.BlogWebConfig;
 import com.huangpuguang.blog.mapper.BlogWebConfigMapper;
 import com.huangpuguang.blog.service.BlogWebConfigService;
 import com.huangpuguang.common.core.constant.Constants;
-import com.huangpuguang.common.core.utils.DateUtils;
+import com.huangpuguang.common.core.utils.ProconDateUtils;
 import com.huangpuguang.system.api.RemoteFileService;
 import com.huangpuguang.system.api.domain.ProconFile;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -81,7 +81,7 @@ public class BlogWebConfigServiceImpl implements BlogWebConfigService
     @Override
     public int insertBlogWebConfig(BlogWebConfig blogWebConfig)
     {
-        blogWebConfig.setCreateTime(DateUtils.getNowDate());
+        blogWebConfig.setCreateTime(ProconDateUtils.getNowDate());
         return blogWebConfigMapper.insertBlogWebConfig(blogWebConfig);
     }
 
@@ -94,7 +94,7 @@ public class BlogWebConfigServiceImpl implements BlogWebConfigService
     @Override
     public int updateBlogWebConfig(BlogWebConfig blogWebConfig)
     {
-        blogWebConfig.setUpdateTime(DateUtils.getNowDate());
+        blogWebConfig.setUpdateTime(ProconDateUtils.getNowDate());
         return blogWebConfigMapper.updateBlogWebConfig(blogWebConfig);
     }
 

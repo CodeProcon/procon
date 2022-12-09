@@ -12,7 +12,7 @@ import com.huangpuguang.blog.vo.BlogContentVo;
 import com.huangpuguang.common.core.constant.BlogConstants;
 import com.huangpuguang.common.core.constant.Constants;
 import com.huangpuguang.common.core.constant.HttpStatus;
-import com.huangpuguang.common.core.utils.DateUtils;
+import com.huangpuguang.common.core.utils.ProconDateUtils;
 import com.huangpuguang.common.core.web.page.PageOper;
 import com.huangpuguang.common.core.web.page.TableDataInfo;
 import com.huangpuguang.system.api.RemoteUserService;
@@ -85,7 +85,7 @@ public class BlogCommentServiceImpl extends PageOper<BlogComment> implements Blo
      */
     @Override
     public int updateBlogComment(BlogComment blogComment) {
-        blogComment.setUpdateTime(DateUtils.getNowDate());
+        blogComment.setUpdateTime(ProconDateUtils.getNowDate());
         return blogCommentMapper.updateBlogComment(blogComment);
     }
 
@@ -224,7 +224,7 @@ public class BlogCommentServiceImpl extends PageOper<BlogComment> implements Blo
         comment.setSource(blogComment.getSource());
         comment.setBlogId(blogComment.getBlogId());
         comment.setContent(blogComment.getContent());
-        comment.setCreateTime(DateUtils.getNowDate());
+        comment.setCreateTime(ProconDateUtils.getNowDate());
 
         // 当该评论不是一级评论时，需要设置一级评论UID字段
         if (blogComment.getToId() != null) {

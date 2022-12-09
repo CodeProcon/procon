@@ -5,7 +5,7 @@ import com.aliyun.oss.OSS;
 import com.aliyun.oss.OSSClientBuilder;
 import com.aliyun.oss.model.ObjectMetadata;
 import com.huangpuguang.common.core.exception.ServiceException;
-import com.huangpuguang.common.core.utils.DateUtils;
+import com.huangpuguang.common.core.utils.ProconDateUtils;
 import com.huangpuguang.file.oss.config.OssConfig;
 import com.huangpuguang.file.oss.service.OssService;
 import com.huangpuguang.file.service.SysFileService;
@@ -49,7 +49,7 @@ public class OSSFileServiceImpl implements SysFileService {
             // 上传文件流。
             InputStream inputStream = file.getInputStream();
             //构建日期路径：category/20200801文件名
-            String datePath = DateUtils.dateTime();
+            String datePath = ProconDateUtils.dateTime();
             //文件名：uuid.扩展名
             String fileName = UUID.randomUUID().toString();
             String fileType = FileUploadUtils.getExtension(file);

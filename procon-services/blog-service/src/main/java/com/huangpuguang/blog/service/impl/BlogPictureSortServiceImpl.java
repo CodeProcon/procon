@@ -7,7 +7,7 @@ import com.huangpuguang.blog.mapper.BlogPictureMapper;
 import com.huangpuguang.blog.mapper.BlogPictureSortMapper;
 import com.huangpuguang.blog.service.BlogPictureSortService;
 import com.huangpuguang.common.core.constant.Constants;
-import com.huangpuguang.common.core.utils.DateUtils;
+import com.huangpuguang.common.core.utils.ProconDateUtils;
 import com.huangpuguang.system.api.RemoteFileService;
 import com.huangpuguang.system.api.domain.ProconFile;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -81,7 +81,7 @@ public class BlogPictureSortServiceImpl implements BlogPictureSortService
     @Override
     public int insertBlogPictureSort(BlogPictureSort blogPictureSort)
     {
-        blogPictureSort.setCreateTime(DateUtils.getNowDate());
+        blogPictureSort.setCreateTime(ProconDateUtils.getNowDate());
         return blogPictureSortMapper.insertBlogPictureSort(blogPictureSort);
     }
 
@@ -94,7 +94,7 @@ public class BlogPictureSortServiceImpl implements BlogPictureSortService
     @Override
     public int updateBlogPictureSort(BlogPictureSort blogPictureSort)
     {
-        blogPictureSort.setUpdateTime(DateUtils.getNowDate());
+        blogPictureSort.setUpdateTime(ProconDateUtils.getNowDate());
         return blogPictureSortMapper.updateBlogPictureSort(blogPictureSort);
     }
 

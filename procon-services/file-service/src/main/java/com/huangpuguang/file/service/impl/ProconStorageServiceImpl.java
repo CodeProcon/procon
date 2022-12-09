@@ -1,6 +1,6 @@
 package com.huangpuguang.file.service.impl;
 
-import com.huangpuguang.common.core.utils.DateUtils;
+import com.huangpuguang.common.core.utils.ProconDateUtils;
 import com.huangpuguang.file.mapper.ProconStorageMapper;
 import com.huangpuguang.file.service.ProconStorageService;
 import com.huangpuguang.system.api.domain.ProconStorage;
@@ -55,7 +55,7 @@ public class ProconStorageServiceImpl implements ProconStorageService
     @Override
     public int insertStorage(ProconStorage storage)
     {
-        storage.setCreateTime(DateUtils.getNowDate());
+        storage.setCreateTime(ProconDateUtils.getNowDate());
         return storageMapper.insertStorage(storage);
     }
 
@@ -68,7 +68,7 @@ public class ProconStorageServiceImpl implements ProconStorageService
     @Override
     public int updateStorage(ProconStorage storage)
     {
-        storage.setUpdateTime(DateUtils.getNowDate());
+        storage.setUpdateTime(ProconDateUtils.getNowDate());
         return storageMapper.updateStorage(storage);
     }
 

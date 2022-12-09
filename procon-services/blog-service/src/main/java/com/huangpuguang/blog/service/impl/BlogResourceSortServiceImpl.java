@@ -3,7 +3,7 @@ package com.huangpuguang.blog.service.impl;
 import com.huangpuguang.blog.domain.BlogResourceSort;
 import com.huangpuguang.blog.mapper.BlogResourceSortMapper;
 import com.huangpuguang.blog.service.BlogResourceSortService;
-import com.huangpuguang.common.core.utils.DateUtils;
+import com.huangpuguang.common.core.utils.ProconDateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -54,7 +54,7 @@ public class BlogResourceSortServiceImpl implements BlogResourceSortService
     @Override
     public int insertBlogResourceSort(BlogResourceSort blogResourceSort)
     {
-        blogResourceSort.setCreateTime(DateUtils.getNowDate());
+        blogResourceSort.setCreateTime(ProconDateUtils.getNowDate());
         return blogResourceSortMapper.insertBlogResourceSort(blogResourceSort);
     }
 
@@ -67,7 +67,7 @@ public class BlogResourceSortServiceImpl implements BlogResourceSortService
     @Override
     public int updateBlogResourceSort(BlogResourceSort blogResourceSort)
     {
-        blogResourceSort.setUpdateTime(DateUtils.getNowDate());
+        blogResourceSort.setUpdateTime(ProconDateUtils.getNowDate());
         return blogResourceSortMapper.updateBlogResourceSort(blogResourceSort);
     }
 

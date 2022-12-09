@@ -3,7 +3,7 @@ package com.huangpuguang.blog.service.impl;
 import com.huangpuguang.blog.domain.BlogCollect;
 import com.huangpuguang.blog.mapper.BlogCollectMapper;
 import com.huangpuguang.blog.service.BlogCollectService;
-import com.huangpuguang.common.core.utils.DateUtils;
+import com.huangpuguang.common.core.utils.ProconDateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -54,7 +54,7 @@ public class BlogCollectServiceImpl implements BlogCollectService
     @Override
     public int insertBlogCollect(BlogCollect blogCollect)
     {
-        blogCollect.setCreateTime(DateUtils.getNowDate());
+        blogCollect.setCreateTime(ProconDateUtils.getNowDate());
         return blogCollectMapper.insertBlogCollect(blogCollect);
     }
 
@@ -67,7 +67,7 @@ public class BlogCollectServiceImpl implements BlogCollectService
     @Override
     public int updateBlogCollect(BlogCollect blogCollect)
     {
-        blogCollect.setUpdateTime(DateUtils.getNowDate());
+        blogCollect.setUpdateTime(ProconDateUtils.getNowDate());
         return blogCollectMapper.updateBlogCollect(blogCollect);
     }
 

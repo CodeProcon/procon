@@ -3,7 +3,7 @@ package com.huangpuguang.blog.service.impl;
 import com.huangpuguang.blog.domain.BlogFeedback;
 import com.huangpuguang.blog.mapper.BlogFeedbackMapper;
 import com.huangpuguang.blog.service.BlogFeedbackService;
-import com.huangpuguang.common.core.utils.DateUtils;
+import com.huangpuguang.common.core.utils.ProconDateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -54,7 +54,7 @@ public class BlogFeedbackServiceImpl implements BlogFeedbackService
     @Override
     public int insertBlogFeedback(BlogFeedback blogFeedback)
     {
-        blogFeedback.setCreateTime(DateUtils.getNowDate());
+        blogFeedback.setCreateTime(ProconDateUtils.getNowDate());
         return blogFeedbackMapper.insertBlogFeedback(blogFeedback);
     }
 
@@ -67,7 +67,7 @@ public class BlogFeedbackServiceImpl implements BlogFeedbackService
     @Override
     public int updateBlogFeedback(BlogFeedback blogFeedback)
     {
-        blogFeedback.setUpdateTime(DateUtils.getNowDate());
+        blogFeedback.setUpdateTime(ProconDateUtils.getNowDate());
         return blogFeedbackMapper.updateBlogFeedback(blogFeedback);
     }
 

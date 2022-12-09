@@ -3,7 +3,7 @@ package com.huangpuguang.file.utils;
 import com.huangpuguang.common.core.exception.file.FileNameLengthLimitExceededException;
 import com.huangpuguang.common.core.exception.file.FileSizeLimitExceededException;
 import com.huangpuguang.common.core.exception.file.InvalidExtensionException;
-import com.huangpuguang.common.core.utils.DateUtils;
+import com.huangpuguang.common.core.utils.ProconDateUtils;
 import com.huangpuguang.common.core.utils.IdUtils;
 import com.huangpuguang.common.core.utils.file.MimeTypeUtils;
 import org.apache.commons.io.FilenameUtils;
@@ -88,7 +88,7 @@ public class FileUploadUtils
      */
     public static String extractFilename(MultipartFile file)
     {
-        return DateUtils.datePath() + "/" + IdUtils.fastUUID() + "." + getExtension(file);
+        return ProconDateUtils.datePath() + "/" + IdUtils.fastUUID() + "." + getExtension(file);
     }
 
     private static File getAbsoluteFile(String uploadDir, String fileName) throws IOException

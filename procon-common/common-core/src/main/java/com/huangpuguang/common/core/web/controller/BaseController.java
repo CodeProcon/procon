@@ -3,7 +3,7 @@ package com.huangpuguang.common.core.web.controller;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.huangpuguang.common.core.constant.HttpStatus;
-import com.huangpuguang.common.core.utils.DateUtils;
+import com.huangpuguang.common.core.utils.ProconDateUtils;
 import com.huangpuguang.common.core.utils.PageUtils;
 import com.huangpuguang.common.core.web.domain.AjaxResult;
 import com.huangpuguang.common.core.web.page.TableDataInfo;
@@ -37,7 +37,7 @@ public class BaseController
             @Override
             public void setAsText(String text)
             {
-                setValue(DateUtils.parseDate(text));
+                setValue(ProconDateUtils.parseDate(text));
             }
         });
     }

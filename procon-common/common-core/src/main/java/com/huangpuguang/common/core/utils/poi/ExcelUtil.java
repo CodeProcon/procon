@@ -5,7 +5,7 @@ import com.huangpuguang.common.core.annotation.Excel.ColumnType;
 import com.huangpuguang.common.core.annotation.Excel.Type;
 import com.huangpuguang.common.core.annotation.Excels;
 import com.huangpuguang.common.core.text.Convert;
-import com.huangpuguang.common.core.utils.DateUtils;
+import com.huangpuguang.common.core.utils.ProconDateUtils;
 import com.huangpuguang.common.core.utils.ProconStrUtils;
 import com.huangpuguang.common.core.utils.file.FileTypeUtils;
 import com.huangpuguang.common.core.utils.file.ImageUtils;
@@ -296,7 +296,7 @@ public class ExcelUtil<T>
                     {
                         if (val instanceof String)
                         {
-                            val = DateUtils.parseDate(val);
+                            val = ProconDateUtils.parseDate(val);
                         }
                         else if (val instanceof Double)
                         {
@@ -1150,15 +1150,15 @@ public class ExcelUtil<T>
         String str;
         if (val instanceof Date)
         {
-            str = DateUtils.parseDateToStr(dateFormat, (Date) val);
+            str = ProconDateUtils.parseDateToStr(dateFormat, (Date) val);
         }
         else if (val instanceof LocalDateTime)
         {
-            str = DateUtils.parseDateToStr(dateFormat, DateUtils.toDate((LocalDateTime) val));
+            str = ProconDateUtils.parseDateToStr(dateFormat, ProconDateUtils.toDate((LocalDateTime) val));
         }
         else if (val instanceof LocalDate)
         {
-            str = DateUtils.parseDateToStr(dateFormat, DateUtils.toDate((LocalDate) val));
+            str = ProconDateUtils.parseDateToStr(dateFormat, ProconDateUtils.toDate((LocalDate) val));
         }
         else
         {
